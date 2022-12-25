@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
+import { clientID } from "../utils/constants";
 import { useDiscordUser } from "../utils/hooks/useDiscordUser";
 
 export const Navbar = () => {
@@ -47,7 +48,7 @@ export const Navbar = () => {
         href={
           user
             ? `/dashboard`
-            : `https://discord.com/api/oauth2/authorize?client_id=747901310749245561&redirect_uri=${encodeURIComponent(
+            : `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
                 location
               )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
         }
