@@ -78,7 +78,6 @@ export class GuildDataManager extends EventEmitter {
       this.guildMap = this.guildMap ?? new Map();
       guildsData.forEach((guildData) => {
         if (guildData.guild) {
-          console.log({ guildData });
           this.guildMap!.set(guildData.id, guildData.guild);
           // this.emit("guildDataUpdate", guildData.guild);
         }
