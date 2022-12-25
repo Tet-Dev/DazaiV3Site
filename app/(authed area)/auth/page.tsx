@@ -2,6 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { DiscordAuthData } from "../../../pages/api/authorize";
+import { clientID } from "../../../utils/constants";
 import { DiscordOauthBundle } from "../../../utils/types";
 
 export const blankPage = () => {
@@ -9,7 +10,7 @@ export const blankPage = () => {
   const query = useSearchParams();
   const debounce = useRef(0);
   useEffect(() => {
-    if (!query.get("code") || debounce.current) {
+    if (!query || !query.get("code") || debounce.current) {
       return;
     }
     debounce.current = 1;
@@ -26,14 +27,11 @@ export const blankPage = () => {
         const requiredScopes = [
           "identify",
           "guilds",
-          "guilds.join",
-          "rpc",
           "email",
-          "gdm.join",
           "connections",
         ];
         if (!data || requiredScopes.find((s) => !data.scope.includes(s))) {
-          window.location.href = `https://discord.com/api/oauth2/authorize?client_id=747901310749245561&redirect_uri=${encodeURIComponent(
+          window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
             window.location.origin
           )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`;
           console.info("DATA", data);
