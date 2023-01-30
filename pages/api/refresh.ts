@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { clientID, discordAPI } from "../../utils/constants";
-import nfetch from "../../utils/nFetch";
 import { DiscordOauthBundle } from "../../utils/types";
 import { DiscordAuthData } from "./authorize";
 
@@ -9,7 +8,7 @@ export default async (
   res: NextApiResponse<DiscordAuthData>
 ) => {
   const { refreshToken } = JSON.parse(req.body);
-  const data = (await nfetch(`${discordAPI}/oauth2/token`, {
+  const data = (await fetch(`${discordAPI}/oauth2/token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
