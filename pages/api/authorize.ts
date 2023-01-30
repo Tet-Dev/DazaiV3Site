@@ -27,6 +27,13 @@ export default async (
       redirect_uri: uri,
     }).toString(),
   }).then((data) => (data.ok ? data.json() : null))) as DiscordOauthBundle;
+  console.log(data, {
+    client_id: clientID,
+    client_secret: process.env.CLIENT_SECRET!,
+    grant_type: "authorization_code",
+    code: code,
+    redirect_uri: uri,
+  });
   res.status(200).json(
     !data
       ? null
