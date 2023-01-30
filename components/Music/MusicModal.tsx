@@ -144,6 +144,7 @@ export const MusicModal = (props: {
             {searchResult?.tracks?.map((track, i) => (
               <MusicResult
                 track={track}
+                key={`search-result-${track.title}-${track.url}`}
                 onSelected={
                   searchResult.type === "search"
                     ? () => {

@@ -72,6 +72,7 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
           {queue?.map((track, i) => (
             <div
               className={`relative w-full h-32 bg-gray-800 rounded-3xl p-4 overflow-hidden flex flex-row gap-4`}
+              key={`guild-queue-${track.url}-${i}`}
             >
               <div
                 className={`cardBackground w-full h-full absolute top-0 left-0 overflow-hidden`}
