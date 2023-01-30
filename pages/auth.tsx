@@ -5,7 +5,7 @@ import { clientID } from "../utils/constants";
 import { DiscordOauthBundle } from "../utils/types";
 import { useRouter } from "next/router";
 
-export const blankPage = () => {
+export const BlankPage = () => {
   const router = useRouter();
   const debounce = useRef(0);
   useEffect(() => {
@@ -42,4 +42,4 @@ export const blankPage = () => {
   }, [router.query]);
   return <div className={`w-full h-full bg-black`} />;
 };
-export default blankPage;
+export default BlankPage;
