@@ -1,5 +1,5 @@
 import { APIGuild } from "discord-api-types/v10";
-import { BotGuildData } from "../../../../../utils/types";
+import { BotGuildData } from "../../utils/types";
 
 export const MusicCard = (props: {
   guildID: string;
