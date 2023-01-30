@@ -188,7 +188,7 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
         </div>
         <div className={`flex flex-col justify-evenly grow relative`}>
           <span className={`text-lg font-medium leading-snug font-wsans`}>
-            {!user ? `Login to add` : `Add`} a song to the queue
+            {!user ? `Login to add` : `Add`} a song or playlist to the queue
           </span>
         </div>
       </div>
