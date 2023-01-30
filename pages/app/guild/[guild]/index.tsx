@@ -26,11 +26,11 @@ const GuildDashboard = () => {
       <div
         className={`grid grid-cols-10 w-[65rem] max-w-[90%] h-max pt-16 gap-8 bg-gray-600`}
       >
-        <div className={`col-span-7 xl:col-span-5 br80 flex flex-col`}>
+        <div className={`col-span-7 2xl:col-span-5 br80 flex flex-col`}>
           <TopModuleBar guildID={guildID} guildData={guildData} guild={guild} />
           {/* <MusicCard guildID={guildID} guildData={guildData} guild={guild} /> */}
         </div>
-        <div className={`col-span-3 xl:col-span-4`}>
+        <div className={`col-span-3 2xl:col-span-4`}>
           <div
             className={`flex flex-col gap-2 p-4 py-4 w-full rounded-2xl bg-gray-900/50`}
           >

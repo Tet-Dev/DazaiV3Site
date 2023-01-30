@@ -71,13 +71,13 @@ export const GuildSidebarUser = (props: {
         </div>
       </div>
       <div
-        className={`flex flex-row gap-4 xl:gap-1 xl:p-2 items-center relative group p-3 border border-gray-100/20 rounded-xl hover:bg-gray-100/10 cursor-pointer transition-colors`}
+        className={`flex flex-row gap-4 2xl:gap-1 2xl:p-2 items-center relative group p-3 border border-gray-100/20 rounded-xl hover:bg-gray-100/10 cursor-pointer transition-colors`}
         onClick={() => setPopout(!popout)}
       >
         <div
           // width={64}
           // height={64}
-          className={`rounded-full flex-shrink-0 w-12 h-12 xl:w-6 xl:h-6 transition-all duration-500 bg-center bg-cover relative group ${
+          className={`rounded-full flex-shrink-0 w-12 h-12 2xl:w-6 2xl:h-6 transition-all duration-500 bg-center bg-cover relative group ${
             !user && `pointer-events-none`
           }`}
           onClick={() => setPopout(!popout)}
@@ -92,11 +92,11 @@ export const GuildSidebarUser = (props: {
           }}
         />
         <div className={`flex flex-col gap-1 flex-grow`}>
-          <div className={`text-lg font-bold text-gray-100 font-poppins xl:text-xs xl:font-medium`}>
+          <div className={`text-lg font-bold text-gray-100 font-poppins 2xl:text-xs 2xl:font-medium`}>
             {user?.username}#{user?.discriminator}
           </div>
           <div
-            className={`bg-black text-gray-300 rounded-lg px-2 py-1 text-sm xl:text-xs w-fit flex flex-row gap-2 items-center xl:hidden`}
+            className={`bg-black text-gray-300 rounded-lg px-2 py-1 text-sm 2xl:text-xs w-fit flex flex-row gap-2 items-center 2xl:hidden`}
           >
             <div
               className={`rounded-md w-3 h-3`}

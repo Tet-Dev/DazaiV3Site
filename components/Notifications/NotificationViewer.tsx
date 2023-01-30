@@ -95,7 +95,7 @@ export const NotificationViewer = (props: {
         ></div>
       </div>
       {/* <div
-        className={`flex flex-col inf:w-128 2xl:w-112 xl:w-96 xl:w-full rounded-lg overflow-hidden cursor-pointer z-50 shadow-md xl:p-2 xl:px-4 dark:bg-neutral-700 dark:drop-shadow-md  bg-white`}
+        className={`flex flex-col inf:w-128 2xl:w-112 2xl:w-96 2xl:w-full rounded-lg overflow-hidden cursor-pointer z-50 shadow-md 2xl:p-2 2xl:px-4 dark:bg-neutral-700 dark:drop-shadow-md  bg-white`}
         onClick={() => {
           setIsVisible(false)
           notification.onClick && notification.onClick()
@@ -105,7 +105,7 @@ export const NotificationViewer = (props: {
         }}
       >
         <div
-          className={`flex flex-row flex-grow-0 inf:p-4 xl:p-3 xl:p-2 md:p-2 sm:p-1 w-full items-center inf:gap-4 xl:gap-2 wrap`}
+          className={`flex flex-row flex-grow-0 inf:p-4 2xl:p-3 2xl:p-2 md:p-2 sm:p-1 w-full items-center inf:gap-4 2xl:gap-2 wrap`}
         >
           {notification.image ? (
             <img src={notification.image} className="w-8 h-8" />
@@ -113,11 +113,11 @@ export const NotificationViewer = (props: {
             <Icon className={`w-10 h-10 flex-shrink-0 text-${iconColor}-500 stroke-current`} />
           )}
           <div className={`flex flex-row basis-full flex-shrink-0`}>
-            <span className={`text-lg w-full whitespace-normal xl:text-base`}>{notification.title}</span>
+            <span className={`text-lg w-full whitespace-normal 2xl:text-base`}>{notification.title}</span>
             <div className={`text-xs whitespace-pre-wrap w-max`}></div>
           </div>
         </div>
-        <div className={`w-full xl:py-2 bg-transparent `}>
+        <div className={`w-full 2xl:py-2 bg-transparent `}>
           <div className={`w-full bg-gray-200 dark:bg-neutral-800 overflow-hidden rounded-full`}>
             <div
               style={{ transitionDuration: `${duration}ms` }}

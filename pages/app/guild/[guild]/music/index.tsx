@@ -98,7 +98,7 @@ const GuildDashboard = (props: {
     <div className={`flex-grow h-screen flex flex-row justify-center`}>
       <div
         className={`grid grid-cols-12 flex-grow h-full  ${
-          user ? `xl:ml-2 ml-[10%] gap-8 xl:gap-0` : `ml-[5%] gap-8`
+          user ? `2xl:ml-2 ml-[10%] gap-8 2xl:gap-0` : `ml-[5%] gap-8`
         } relative`}
       >
         <GuildMusicQueue queue={musicData.queue!} />

@@ -31,5 +31,5 @@ a {
 }
 
 .ctain {
-  @apply xl:w-[90%] 2xl:max-w-6xl mx-auto;
+  @apply 2xl:w-[90%] 2xl:max-w-6xl mx-auto;
 }
