@@ -40,10 +40,10 @@ export const GuildMusicNowPlaying = (props: {
         <div className="absolute w-full h-full top-0 left-0 z-0">
           <div className={`relative h-full w-full overflow-hidden opacity-50`}>
             <div
-              className={`w-full h-full absolute z-10 bg-gradient-to-t from-gray-800 via-gray-800/90 to-gray-800/70`}
+              className={`w-full h-full absolute z-10 bg-gradient-to-t from-gray-800 via-gray-800/90 to-gray-800/40`}
             />
             <MusicThumbnailRenderer
-              className={`absolute left-1/2 -translate-x-1/2 -z-0 bg-cover min-w-[300%] pointer-events-none blur-xl`}
+              className={`absolute left-1/2 -translate-x-1/2 -translate-y-[12.5%] -z-0 bg-cover min-w-[300%] pointer-events-none blur-xl`}
               src={musicData.track?.thumbnail!}
             />
           </div>
@@ -90,6 +90,31 @@ export const GuildMusicNowPlaying = (props: {
           >
             <div
               className={`p-4 bg-gray-900 hover:bg-gray-750 rounded-full flex flex-row justify-center items-center cursor-pointer transition-all`}
+              onClick={() => {
+                fetcher(
+                  `${getGuildShardURL(guildID)}/guilds/${guildID}/music/status`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      disconnect: true,
+                    }),
+                  }
+                ).then((res) => {
+                  if (res.ok) {
+                    console.log("success");
+                    NotificationsClass.getInstance().addNotif({
+                      title: `Disconnected from voice channel`,
+                      message: `Successfully disconnected from voice channel`,
+                      type: "success",
+                    });
+                  } else {
+                    console.log("error");
+                  }
+                });
+              }}
             >
               <PhoneXMarkIcon className={`w-6 h-6 text-gray-300`} />
             </div>

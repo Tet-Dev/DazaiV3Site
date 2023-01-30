@@ -70,6 +70,31 @@ export const MusicModal = (props: {
               className={`bg-gray-800 text-gray-100 rounded-2xl px-4 py-4 w-full focus:!outline-none border border-gray-100/10 focus:border-transparent focus:ring-4 ring-0 transition-all ring-indigo-700`}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onPaste={(e) => {
+                e.preventDefault();
+                let text = e.clipboardData.getData("text");
+                console.log(
+                  e.clipboardData.getData("text"),
+                  text.match(
+                    /https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|open\.spotify\.com\/track\/|open\.spotify\.com\/playlist\/|open\.spotify\.com\/album\/)([a-zA-Z0-9_-]+)/
+                  )
+                );
+                setQuery(text);
+                // if text is a valid youtube or spotify url, set it as the query
+                if (
+                  text.match(
+                    /https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtube\.com\/playlist\?list=|youtu\.be\/|open\.spotify\.com\/track\/|open\.spotify\.com\/playlist\/|open\.spotify\.com\/album\/)([a-zA-Z0-9_-]+)/
+                  )
+                ) {
+                  setSelected(-1);
+                  console;
+                  setTimeout(() => {
+                    globalThis?.document
+                      ?.getElementById("music-search")
+                      ?.click();
+                  }, 10);
+                }
+              }}
               onKeyDown={(e) => {
                 // close if escape is pressed
                 if (e.key === "Escape") {
@@ -159,7 +184,7 @@ export const MusicModal = (props: {
             searchResult?.type === "track") && (
             <div className={`flex flex-row gap-4 justify-end w-full`}>
               <button
-                className={`bg-indigo-600 text-gray-100 rounded-full p-1.5 px-3`}
+                className={`bg-indigo-600 text-gray-100 rounded-full p-1.5 px-3 disabled:opacity-50`}
                 onClick={() => {
                   let url =
                     searchResult.type === "search"
@@ -169,6 +194,7 @@ export const MusicModal = (props: {
                       : searchResult.type === "track"
                       ? searchResult.tracks[0].url
                       : "";
+                  setFetching(true);
                   fetcher(
                     `${getGuildShardURL(
                       guildID
@@ -186,8 +212,10 @@ export const MusicModal = (props: {
                       setQuery("");
                       setSelected(-1);
                     }
+                    setFetching(false);
                   });
                 }}
+                disabled={fetching}
                 id="music-add-to-queue"
               >
                 {searchResult.type === "search"
@@ -252,7 +280,7 @@ const MusicResult = (props: {
           src={track.thumbnail!}
         />
       </div>
-      <div className={`flex flex-col justify-evenly grow relative`}>
+      <div className={`flex flex-col justify-evenly gap-4 grow relative`}>
         <span className={`text-base font-bold leading-snug font-poppins`}>
           {track.title}
         </span>

@@ -42,7 +42,7 @@ export const GuildSidebarUser = (props: {
       <div
         className={`absolute right-0 translate-x-[calc(100%+1rem)] -translate-y-1/2 top-1/2 w-max bg-black p-4 text-white rounded-lg ${
           popout ? `scale-100` : `scale-0`
-        } origin-left duration-200 transition-all flex flex-col gap-2`}
+        } origin-left duration-200 transition-all flex flex-col gap-2 z-50`}
       >
         <div
           className={`flex flex-row gap-2 p-2 text-yellow-400 hover:bg-yellow-900/60 transition-colors cursor-pointer rounded-lg`}

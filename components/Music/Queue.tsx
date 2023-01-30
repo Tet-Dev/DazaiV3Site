@@ -26,11 +26,48 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
       <div
         className={` flex flex-col h-full overflow-auto pb-40 gap-2 absolute w-full`}
       >
-        <span
-          className={`text-base font-bold font-poppins text-gray-100/20 sticky top-0 z-50 bg-gray-850/80 pt-8 pb-4 backdrop-blur-xl`}
+        <div
+          className={`flex flex-row gap-4 sticky top-0 z-40 bg-gray-850/80 pt-8 pb-4 items-center backdrop-blur-xl`}
         >
-          Queue
-        </span>
+          <span
+            className={`text-base font-bold font-poppins text-gray-100/20  `}
+          >
+            Queue ({queue?.length ?? 0})
+          </span>
+          {user && (
+            <span
+              className={`text-sm font-wsans bg-red-900/50 hover:bg-red-500 p-1.5 px-3 w-fit text-center rounded-2xl items-center opacity-80 h-fit cursor-pointer z-30 ${
+                queue.length === 0 && `!opacity-10 pointer-events-none`
+              }`}
+              onClick={() => {
+                fetcher(
+                  `${getGuildShardURL(guildID)}/guilds/${guildID}/music/status`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      purgeQueue: true,
+                    }),
+                  }
+                ).then((res) => {
+                  if (res.ok) {
+                    console.log("success");
+                    NotificationsClass.getInstance().addNotif({
+                      title: `Purged Queue`,
+                      message: `Removed all songs from the queue`,
+                      type: "success",
+                      duration: 2000,
+                    });
+                  }
+                });
+              }}
+            >
+              Remove All Songs From Queue
+            </span>
+          )}
+        </div>
         <div className={`flex flex-col gap-4`}>
           {queue?.map((track, i) => (
             <div
@@ -127,8 +164,10 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
       </div>
       <div
         className={`absolute ${
-          queue?.length ? `bottom-6` : `bottom-1/2 translate-y-1/2`
-        } right-0 w-full bg-gray-750/60 border border-gray-100/20 hover:bg-gray-600/80 transition-all cursor-pointer z-50 rounded-2xl backdrop-blur-xl flex flex-row gap-4 p-4 overflow-hidden items-center`}
+          queue?.length
+            ? `bottom-6 bg-gray-750/60 border border-gray-100/20`
+            : `bottom-1/2 translate-y-1/2 bg-gray-800/60 border border-gray-100/10`
+        } right-0 w-full  hover:bg-gray-600/80 transition-all cursor-pointer z-30 rounded-2xl backdrop-blur-xl flex flex-row gap-4 p-4 overflow-hidden items-center`}
         onClick={() => {
           if (!user) {
             localStorage.setItem("redirect", globalThis?.location?.href);

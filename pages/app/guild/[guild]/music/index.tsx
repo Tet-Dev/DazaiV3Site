@@ -22,6 +22,10 @@ import {
 import { fetcher } from "../../../../../utils/discordFetcher";
 import { GuildMusicNowPlaying } from "../../../../../components/Music/NowPlaying";
 import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
+import {
+  JoinableChannelsPayload,
+  MusicChannelSelect,
+} from "../../../../../components/Music/MusicSelectChannel";
 const GuildDashboard = (props: {
   guild: string;
   musicData: {
@@ -31,14 +35,16 @@ const GuildDashboard = (props: {
     queue?: MusicTrack[];
     error?: string;
   };
+  joinableChannels?: JoinableChannelsPayload;
 }) => {
-  const { musicData: md } = props;
+  const { musicData: md, joinableChannels } = props;
   const router = useRouter();
   const guildID = router.query.guild as string;
   const [musicData, setMusicData] = useState(md);
   const [position, setPosition] = useState(md.position!);
   const user = useDiscordUser();
-
+  const [joinableChannelPayload, setJoinableChannelPayload] =
+    useState(joinableChannels);
   useEffect(() => {
     if (musicData.status !== "playing") return;
     console.log("setting position", musicData.position);
@@ -69,8 +75,25 @@ const GuildDashboard = (props: {
     const interval = setInterval(poll, 1000);
     return () => clearInterval(interval);
   }, [guildID]);
+  useEffect(() => {
+    if (!musicData.error) {
+      fetch(`${getGuildShardURL(guildID)}/guilds/${guildID}/music/channels`)
+        .then((x) => x.json())
+        .then((x) => setJoinableChannelPayload(x));
+    }
+  }, [musicData]);
   const guild = useDiscordGuild(guildID);
   const guildData = useGuildData(guildID);
+  if (musicData.error) {
+    return (
+      <div className={`flex-grow h-screen flex flex-row justify-center`}>
+        <MusicChannelSelect
+          guildID={guildID}
+          joinableChannels={joinableChannelPayload!}
+        />
+      </div>
+    );
+  }
   return (
     <div className={`flex-grow h-screen flex flex-row justify-center`}>
       <div
@@ -102,7 +125,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const shardURL = getGuildShardURL(guild as string);
   const musicData = await fetch(`${shardURL}/guilds/${guild}/music/status`);
   const musicDataJSON = await musicData.json();
-
+  if (musicData.status === 404) {
+    const joinableChannelsPayload = await fetch(
+      `${shardURL}/guilds/${guild}/music/channels`
+    );
+    const joinableChannels = await joinableChannelsPayload.json();
+    return {
+      props: {
+        guild,
+        musicData: musicDataJSON,
+        joinableChannels,
+      },
+    };
+  }
   return {
     props: {
       guild,

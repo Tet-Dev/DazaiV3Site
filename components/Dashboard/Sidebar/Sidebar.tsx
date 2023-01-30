@@ -20,7 +20,7 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
   const user = useDiscordUser();
   if (!user) return null;
   return (
-    <div className={`h-screen p-6 xl:p-2`}>
+    <div className={`h-screen p-6 xl:p-2 z-50`}>
       <div
         className={`flex flex-col gap-12 p-8 bg-gray-800 rounded-3xl shadow-2xl h-full`}
       >
