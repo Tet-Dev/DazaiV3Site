@@ -1,12 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { GuildDataManager } from "../../../utils/classes/GuildDataManager";
-import { useAllBotGuilds } from "../../../utils/hooks/useAllBotGuilds";
-import { useAllGuilds } from "../../../utils/hooks/useAllGuilds";
-import { DashboardCard } from "./components/DashboardCard";
+import { GuildDataManager } from "../../utils/classes/GuildDataManager";
+import { useAllBotGuilds } from "../../utils/hooks/useAllBotGuilds";
+import { useAllGuilds } from "../../utils/hooks/useAllGuilds";
+import { DashboardCard } from "../../components/Dashboard/DashboardCard";
+import { GetServerSideProps } from "next";
 
-export const DashboardIndex = () => {
+const DashboardIndex = () => {
   const guilds = useAllGuilds();
   const botGuilds = useAllBotGuilds();
   const botGuildSet = useMemo(
@@ -18,16 +19,18 @@ export const DashboardIndex = () => {
     () =>
       !!guilds &&
       !!botGuildSet &&
-      [...guilds].sort((a, b) => {
-        if (botGuildSet.has(a.id!) && !botGuildSet.has(b.id!)) return -1;
-        if (!botGuildSet.has(a.id!) && botGuildSet.has(b.id!)) return 1;
-        return a.name!.localeCompare(b.name!);
-      }),
+      [...guilds]
+        .filter((g) => botGuildSet?.has(g.id!) || parseInt(g.permissions!) & 8)
+        .sort((a, b) => {
+          if (botGuildSet.has(a.id!) && !botGuildSet.has(b.id!)) return -1;
+          if (!botGuildSet.has(a.id!) && botGuildSet.has(b.id!)) return 1;
+          return a.name!.localeCompare(b.name!);
+        }),
     [guilds, botGuildSet]
   );
   return (
     <div
-      className={`w-full h-full bg-gray-900 flex flex-col gap-16 py-16 overflow-auto`}
+      className={`w-full h-screen bg-gray-900 flex flex-col gap-16 py-16 overflow-auto`}
     >
       <button
         className={`px-6 py-3 bg-black hover:bg-purple-800 disabled:opacity-50 disabled:backdrop-blur-2xl bottom-4 left-4 w-fit absolute z-10 rounded-2xl text-gray-50/80 cursor-pointer transition-all`}
@@ -52,7 +55,7 @@ export const DashboardIndex = () => {
         className={`w-full flex-grow text-white flex flex-row items-start justify-center`}
       >
         <div
-          className={`flex flex-row gap-8 flex-wrap justify-center max-w-[90%]`}
+          className={`flex flex-row gap-8 flex-wrap justify-center max-w-[90%] h-full`}
         >
           {sortedGuilds
             ? sortedGuilds?.map((guild) => (
@@ -73,4 +76,6 @@ export const DashboardIndex = () => {
     </div>
   );
 };
+
+
 export default DashboardIndex;

@@ -4,7 +4,7 @@ import localforage from "localforage";
 import { discordAPI } from "../constants";
 import { fetcher } from "../discordFetcher";
 import { getGuildShardURL } from "../ShardLib";
-import { DiscordGuildData } from "../types";
+import { BotGuildData } from "../types";
 
 export class GuildDataManager extends EventEmitter {
   static instance: GuildDataManager;
@@ -14,7 +14,7 @@ export class GuildDataManager extends EventEmitter {
     }
     return GuildDataManager.instance;
   }
-  guildMap: Map<string, DiscordGuildData> | undefined;
+  guildMap: Map<string, BotGuildData> | undefined;
   guildRegistrations: Map<string, Partial<APIGuild>> | undefined;
   private constructor() {
     super();
@@ -24,7 +24,7 @@ export class GuildDataManager extends EventEmitter {
   async loadCache() {
     localforage.getItem("guildMap").then((guildMap) => {
       if (guildMap) {
-        this.guildMap = new Map(guildMap as Map<string, DiscordGuildData>);
+        this.guildMap = new Map(guildMap as Map<string, BotGuildData>);
         console.log("Loaded guildMap from cache", guildMap);
         this.emit("guildDataBulkUpdate", Array.from(this.guildMap.values()));
         // this.emit("guildDataUpdate", Array.from(this.guildMap.values()));
@@ -42,13 +42,13 @@ export class GuildDataManager extends EventEmitter {
       }
     });
   }
-  async getGuildData(guildID: string): Promise<DiscordGuildData | null> {
+  async getGuildData(guildID: string): Promise<BotGuildData | null> {
     const guildData = (await fetcher(
-      `http://${getGuildShardURL(guildID)}/api/guilds/${guildID}`,
+      `${getGuildShardURL(guildID)}/api/guilds/${guildID}`,
       {
         method: "GET",
       }
-    ).then((res) => (res.ok ? res.json() : null))) as DiscordGuildData;
+    ).then((res) => (res.ok ? res.json() : null))) as BotGuildData;
     this.guildMap = this.guildMap ?? new Map();
     if (guildData) {
       this.guildMap.set(guildID, guildData);
@@ -59,9 +59,9 @@ export class GuildDataManager extends EventEmitter {
   }
   async getGuildsData(
     guildIDs: string[]
-  ): Promise<(DiscordGuildData | undefined)[]> {
+  ): Promise<(BotGuildData | undefined)[]> {
     const guildsData = (await fetcher(
-      `http://${getGuildShardURL(guildIDs[0])}/api/guilds/multi`,
+      `${getGuildShardURL(guildIDs[0])}/api/guilds/multi`,
 
       {
         method: "POST",
@@ -71,7 +71,7 @@ export class GuildDataManager extends EventEmitter {
       }
     ).then((res) => (res.ok ? res.json() : null))) as {
       id: string;
-      guild?: DiscordGuildData;
+      guild?: BotGuildData;
       error?: string;
     }[];
     if (guildsData) {
@@ -79,9 +79,9 @@ export class GuildDataManager extends EventEmitter {
       guildsData.forEach((guildData) => {
         if (guildData.guild) {
           this.guildMap!.set(guildData.id, guildData.guild);
-          // this.emit("guildDataUpdate", guildData.guild);
+          this.emit("guildDataUpdate", guildData.guild, true);
         }
-        if (guildData.error){
+        if (guildData.error) {
           this.guildMap!.delete(guildData.id);
         }
       });
@@ -100,17 +100,36 @@ export class GuildDataManager extends EventEmitter {
         method: "GET",
       }
     ).then((res) => (res.ok ? res.json() : null))) as Partial<APIGuild>[];
-    if (guildRegistrations) {
+  if (guildRegistrations) {
       this.guildRegistrations = this.guildRegistrations ?? new Map();
       guildRegistrations.forEach((guild) => {
         this.guildRegistrations!.set(guild.id!, guild);
+        this.emit("guildRegistrationUpdate", guild, true);
       });
       this.emit("guildRegistrationsUpdate", guildRegistrations);
       await localforage.setItem("guildRegistrations", this.guildRegistrations);
+      if (updateGuildData) {
+        await this.getGuildsData(guildRegistrations.map((guild) => guild.id!));
+      }
     }
-    if (updateGuildData) {
-      await this.getGuildsData(guildRegistrations.map((guild) => guild.id!));
-    }
+
     return guildRegistrations;
+  }
+  async getGuildRegistration(
+    guildID: string
+  ): Promise<Partial<APIGuild> | null> {
+    const guildRegistration = (await fetcher(
+      `${discordAPI}/users/@me/guilds/${guildID}`,
+      {
+        method: "GET",
+      }
+    ).then((res) => (res.ok ? res.json() : null))) as Partial<APIGuild>;
+    if (guildRegistration) {
+      this.guildRegistrations = this.guildRegistrations ?? new Map();
+      this.guildRegistrations!.set(guildID, guildRegistration);
+      this.emit("guildRegistrationUpdate", guildRegistration);
+      await localforage.setItem("guildRegistrations", this.guildRegistrations);
+    }
+    return guildRegistration;
   }
 }

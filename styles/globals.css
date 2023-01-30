@@ -12,6 +12,7 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   width: 100%;
   height: 100%;
+  @apply text-gray-50
 }
 
 a {
@@ -21,9 +22,14 @@ a {
 
 * {
   box-sizing: border-box;
+  
 }
 
 /* attribute data-nextjs-scroll-focus-boundary */
 [data-nextjs-scroll-focus-boundary] {
   @apply w-full h-full;
+}
+
+.ctain {
+  @apply xl:w-[90%] 2xl:max-w-6xl mx-auto;
 }

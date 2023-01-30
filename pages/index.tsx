@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { Navbar } from "../components/Navbar";
 
-export const LandingPage = () => {
+const LandingPage = () => {
   const paraRef = useRef<IParallax | null>(null);
   const router = useRouter();
   return (

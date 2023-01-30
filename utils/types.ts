@@ -6,9 +6,28 @@ export type DiscordOauthBundle = {
   refresh_token: string;
   scope: string;
 };
-export type DiscordGuildData = {
+export type BotGuildData = {
   name: string;
   id: string;
   icon: string | null;
   roles: APIRole[];
+  member: {
+    nickname: string | null;
+    roles: string[];
+  };
+};
+
+// MUSIC
+export type MusicTrack = {
+  title: string;
+  url: string | undefined;
+  duration: number | undefined;
+  thumbnail: string | null | undefined;
+  author: string | undefined;
+  requestedBy?: {
+    id: string;
+    username: string;
+    discriminator: string;
+    avatar: string;
+  };
 };

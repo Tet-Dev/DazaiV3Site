@@ -5,6 +5,9 @@ import { UserDataManager } from "../classes/UserDataManager";
 export const useDiscordUser = () => {
   const [user, setUser] = useState(undefined as APIUser | null | undefined);
   useEffect(() => {
+    if (UserDataManager.getInstance().discordSelf)
+      setUser(UserDataManager.getInstance().discordSelf);
+    
     const listener = (user: APIUser) => {
       setUser(user);
     };

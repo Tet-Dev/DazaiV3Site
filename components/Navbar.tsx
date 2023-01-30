@@ -47,7 +47,7 @@ export const Navbar = () => {
       <Link
         href={
           user
-            ? `/dashboard`
+            ? `/app`
             : `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
                 location
               )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`

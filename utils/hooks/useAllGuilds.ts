@@ -11,14 +11,14 @@ export const useAllGuilds = (filterPerms: boolean = true) => {
       setGuilds(
         Array.from(
           GuildDataManager.getInstance().guildRegistrations!.values() ?? []
-        ).filter((g) => parseInt(g.permissions!) & 8 || !filterPerms)
+        ).filter((g) => parseInt(g.permissions!) || !filterPerms)
       );
     const listener = (guildData: Partial<APIGuild>) => {
       if (GuildDataManager.getInstance().guildRegistrations?.values())
         setGuilds(
           Array.from(
             GuildDataManager.getInstance().guildRegistrations!.values() ?? []
-          ).filter((g) => parseInt(g.permissions!) & 8 || !filterPerms)
+          ).filter((g) => parseInt(g.permissions!)|| !filterPerms)
         );
     };
     GuildDataManager.getInstance().on("guildRegistrationsUpdate", listener);

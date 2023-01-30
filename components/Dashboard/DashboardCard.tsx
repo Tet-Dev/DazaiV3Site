@@ -1,9 +1,11 @@
 import { APIGuild } from "discord-api-types/v10";
 import Link from "next/link";
-import { DiscordGuildData } from "../../../../utils/types";
+import { GuildIconRenderer } from "../GuildIconRenderer";
+import { clientID } from "../../utils/constants";
+import { BotGuildData } from "../../utils/types";
 
 export const DashboardCard = (props: {
-  guild?: DiscordGuildData | Partial<APIGuild> | null;
+  guild?: BotGuildData | Partial<APIGuild> | null;
   skeleton?: boolean;
   botSetup?: boolean;
 }) => {
@@ -40,31 +42,11 @@ export const DashboardCard = (props: {
       <div
         className={`absolute bottom-4 left-4 w-[calc(100%-2rem)] h-20 flex flex-row gap-6`}
       >
-        <div
-          style={{
-            backgroundImage: `url(${
-              guild?.icon?.match(/http(s)?:\/\//)
-                ? guild.icon
-                : `https://cdn.discordapp.com/icons/${guild?.id}/${
-                    guild?.icon
-                  }.${guild?.icon?.startsWith("a_") ? "gif" : "png"}?size=256`
-            })`,
-            backgroundSize: "cover",
-          }}
-          className={`rounded-3xl w-20 h-20 flex flex-row items-center justify-center bg-gray-800 ${
-            skeleton && "animate-pulse"
-          } shrink-0`}
-        >
-          {guild && !guild?.icon && (
-            <span
-              className={`text-xl font-poppins font-bold`}
-            >{`${guild?.name?.charAt(0)}${Array.from(
-              guild?.name?.matchAll(/\s(.)/g) ?? []
-            )
-              .map((x) => x[1])
-              ?.join("")}`}</span>
-          )}
-        </div>
+        <GuildIconRenderer
+          guild={guild}
+          skeleton={skeleton}
+          className={`rounded-3xl w-20 h-20 flex flex-row items-center justify-center bg-gray-850 shrink-0`}
+        />
         <div className={`flex flex-col gap-1 justify-center w-full`}>
           <span
             className={`text-xl font-poppins font-bold ${
@@ -87,17 +69,19 @@ export const DashboardCard = (props: {
       <div className={`absolute top-4 right-4`}>
         {guild &&
           (botSetup ? (
-            <button
-              className={`py-4 px-6 h-fit w-36 rounded-2xl font-bold uppercase text-sm text-white bg-purple-600 hover:bg-purple-500 transition-all`}
-            >
-              Dashboard
-            </button>
+            <Link href={`/app/guild/${guild?.id}`}>
+              <button
+                className={`py-4 px-6 h-fit w-36 rounded-2xl font-bold uppercase text-sm text-white bg-purple-600 hover:bg-purple-500 transition-all`}
+              >
+                Dashboard
+              </button>
+            </Link>
           ) : (
             <button
               className={`py-4 px-6 h-fit w-36 rounded-2xl font-bold uppercase text-sm text-white bg-neutral-800 hover:bg-purple-900 transition-all shadow-lg`}
               onClick={() => {
                 window.open(
-                  `https://discord.com/oauth2/authorize?client_id=747901310749245561&permissions=8&scope=bot%20applications.commands&guild_id=${guild?.id}`,
+                  `https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot%20applications.commands&guild_id=${guild?.id}`,
                   "_blank",
                   "noopener,noreferrer,width=625,height=970"
                 );
