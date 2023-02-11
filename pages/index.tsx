@@ -2,7 +2,7 @@
 import { IParallax, Parallax, ParallaxLayer } from "@react-spring/parallax";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useRef } from "react";
 import { Navbar } from "../components/Navbar";
 

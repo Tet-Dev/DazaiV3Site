@@ -6,6 +6,7 @@ import React from "react";
 import { GuildSidebar } from "../components/Dashboard/Sidebar/Sidebar";
 import { useRouter } from "next/router";
 import { NotificationsManager } from "../components/Notifications/NotificationManager";
+import { HiddenColorLoader } from "../components/HiddenColorLoader";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -19,9 +20,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Dazai</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <link rel="icon" href="/volant.svg" />
+        {/* <link rel="icon" href="/volant.svg" /> */}
       </Head>
       <div className={`w-full min-h-screen flex flex-row bg-gray-850`}>
+        <HiddenColorLoader /> 
         <NotificationsManager />
         {router.query.guild && (
           <GuildSidebar guildID={router.query.guild as string} />

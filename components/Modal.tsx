@@ -8,8 +8,9 @@ export const Modal = (props: {
   visible: boolean;
   hideBG?: boolean;
   className?: string;
+  noAnimation?: boolean;
 }) => {
-  const { children, onClose, visible, hideBG, className } = props;
+  const { children, onClose, visible, hideBG, className, noAnimation } = props;
   const [document, setDocument] = useState(null as Document | null);
   useEffect(() => {
     setDocument(window.document);
@@ -26,24 +27,34 @@ export const Modal = (props: {
         }`}
         onClick={onClose}
       />
-      <Transition
-        show={visible}
-        enter="transition ease-out duration-200"
-        enterFrom="opacity-0 scale-0"
-        enterTo="opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-0"
-        as={React.Fragment}
-      >
+      {noAnimation ? (
         <div
           className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 ${
             !hideBG && `dark:bg-gray-800 bg-gray-150`
-          } p-2 rounded-xl dark:text-gray-100 ${className}`}
+          } p-2 rounded-xl dark:text-gray-100 ${className} ${visible ? `` : `hidden`}`}
         >
           {children}
         </div>
-      </Transition>
+      ) : (
+        <Transition
+          show={visible}
+          enter="transition ease-out duration-200"
+          enterFrom="opacity-0 scale-0"
+          enterTo="opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-0"
+          as={React.Fragment}
+        >
+          <div
+            className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 ${
+              !hideBG && `dark:bg-gray-800 bg-gray-150`
+            } p-2 rounded-xl dark:text-gray-100 ${className}`}
+          >
+            {children}
+          </div>
+        </Transition>
+      )}
     </>,
     document.getElementById("__next")!
   );

@@ -3,6 +3,57 @@ module.exports = {
   content: ["./components/**/*.{html,jsx,tsx}","./components/**/**/*.{html,jsx,tsx}","./components/**/**/**/*.{html,jsx,tsx}", "pages/**/*.{html,jsx,tsx}"],
   theme: {
     extend: {
+      transitionTimingFunction: {
+        'bounce': 'cubic-bezier(0.555, -0.005, 0.000, 1.650)',
+      },
+      animation: {
+        'reverse-spin': 'reverse-spin 1s linear infinite',
+        shake: 'shake 1s cubic-bezier(.36,.07,.19,.97) infinite',
+        gradient: 'gradient 1s linear infinite',
+        'gradient-medium': 'gradient 2s linear infinite',
+        'gradient-slow': 'gradient 3s linear infinite',
+        'bounce-mini': 'bounce-mini 8s ease-in-out infinite',
+      },
+      keyframes: {
+        'reverse-spin': {
+          from: {
+            transform: 'rotate(360deg)',
+          },
+        },
+        'bounce-mini': {
+          '0%, 100%': {
+            transform: 'translateY(0px)',
+            // 'animation-timing-function': 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateY(15px)',
+            // 'animation-timing-function': 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
+        shake: {
+          '10%, 90%': {
+            transform: 'translate3d(-1px, 0, 0)',
+          },
+          '20%, 80%': {
+            transform: 'translate3d(2px, 0, 0)',
+          },
+          '30%, 50%, 70%': {
+            transform: 'translate3d(-4px, 0, 0)',
+          },
+          '40%, 60%': {
+            transform: 'translate3d(4px, 0, 0)',
+          },
+        },
+        gradient: {
+          from: {
+            'background-size': '200%',
+          },
+          to: {
+            'background-position': '200% center',
+            'background-size': '200%',
+          },
+        },
+      },
       colors: {
         gray: {
           ...require("tailwindcss/colors").zinc,

@@ -71,14 +71,14 @@ export const DashboardCard = (props: {
           (botSetup ? (
             <Link href={`/app/guild/${guild?.id}`}>
               <button
-                className={`py-4 px-6 h-fit w-36 rounded-2xl font-bold uppercase text-sm text-white bg-purple-600 hover:bg-purple-500 transition-all`}
+                className={`py-4 px-6 h-fit w-36 rounded-2xl font-bold uppercase text-sm text-white bg-purple-700 hover:bg-purple-500 transition-all`}
               >
                 Dashboard
               </button>
             </Link>
           ) : (
             <button
-              className={`py-4 px-6 h-fit w-36 rounded-2xl font-bold uppercase text-sm text-white bg-neutral-800 hover:bg-purple-900 transition-all shadow-lg`}
+              className={`py-4 px-6 h-fit w-36 rounded-2xl font-bold uppercase text-sm text-white bg-neutral-900 hover:bg-purple-900 transition-all shadow-lg`}
               onClick={() => {
                 window.open(
                   `https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot%20applications.commands&guild_id=${guild?.id}`,

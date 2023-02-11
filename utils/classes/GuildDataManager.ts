@@ -44,7 +44,7 @@ export class GuildDataManager extends EventEmitter {
   }
   async getGuildData(guildID: string): Promise<BotGuildData | null> {
     const guildData = (await fetcher(
-      `${getGuildShardURL(guildID)}/api/guilds/${guildID}`,
+      `${getGuildShardURL(guildID)}/guilds/${guildID}`,
       {
         method: "GET",
       }
@@ -61,7 +61,7 @@ export class GuildDataManager extends EventEmitter {
     guildIDs: string[]
   ): Promise<(BotGuildData | undefined)[]> {
     const guildsData = (await fetcher(
-      `${getGuildShardURL(guildIDs[0])}/api/guilds/multi`,
+      `${getGuildShardURL(guildIDs[0])}/guilds/multi`,
 
       {
         method: "POST",

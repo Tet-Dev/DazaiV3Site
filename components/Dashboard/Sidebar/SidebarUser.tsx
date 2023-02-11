@@ -5,7 +5,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { APIGuild, APIRole, APIUser } from "discord-api-types/v10";
 import localforage from "localforage";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import { BotGuildData } from "../../../utils/types";
 

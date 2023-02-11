@@ -1,9 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  // reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    appDir: true,
+    // appDir: true,
+  },
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.resolve = {
+      ...config.resolve,
+      fallback: {
+        fs: false,
+      },
+    }
+    return config
   },
 };
 

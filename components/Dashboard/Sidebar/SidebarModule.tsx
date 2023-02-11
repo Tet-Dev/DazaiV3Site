@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { NotificationsClass } from "../../../utils/classes/NotificationsClass";
 
 export const GuildSidebarModule = (props: {
@@ -7,9 +7,10 @@ export const GuildSidebarModule = (props: {
   icon: JSX.Element;
   route: string;
   disabled?: string;
+  onClick?: () => void;
 }) => {
-  const { name, icon, route, disabled } = props;
-  const pathname = usePathname();
+  const { name, icon, route, disabled, onClick } = props;
+  const pathname = useRouter().pathname;
   return (
     <Link href={route}>
       <div
@@ -19,9 +20,10 @@ export const GuildSidebarModule = (props: {
             : `hover:text-indigo-300 text-gray-100`
         } cursor-pointer transition-colors duration-200`}
         onClick={(e) => {
+          if (onClick) onClick();
           if (disabled) {
             e.stopPropagation();
-            e.preventDefault()
+            e.preventDefault();
             NotificationsClass.getInstance().addNotif({
               title: "Error",
               message: disabled,
@@ -32,7 +34,7 @@ export const GuildSidebarModule = (props: {
         }}
       >
         <div className={``}>{icon}</div>
-        <div className={``}>{name}</div>
+        <div className={`font-wsans font-medium`}>{name}</div>
       </div>
     </Link>
   );

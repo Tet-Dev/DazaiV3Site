@@ -36,6 +36,7 @@ export const BlankPage = () => {
         localStorage.setItem("expiresAt", `${data.expiresAt}`);
         localStorage.setItem("scope", data.scope);
         router.push(localStorage.getItem("redirect") || "/app");
+        localStorage.removeItem("redirect");
       });
 
     // const data =

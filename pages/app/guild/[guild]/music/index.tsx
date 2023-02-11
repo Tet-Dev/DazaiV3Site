@@ -75,22 +75,43 @@ const GuildDashboard = (props: {
     const interval = setInterval(poll, 1000);
     return () => clearInterval(interval);
   }, [guildID]);
-  useEffect(() => {
-    if (!musicData.error) {
-      fetch(`${getGuildShardURL(guildID)}/guilds/${guildID}/music/channels`)
-        .then((x) => x.json())
-        .then((x) => setJoinableChannelPayload(x));
-    }
-  }, [musicData]);
+  // useEffect(() => {
+  //   if (!musicData.error) {
+  //     fetch(`${getGuildShardURL(guildID)}/guilds/${guildID}/music/channels`)
+  //       .then((x) => x.json())
+  //       .then((x) => setJoinableChannelPayload(x));
+  //   }
+  // }, [musicData]);
   const guild = useDiscordGuild(guildID);
   const guildData = useGuildData(guildID);
   if (musicData.error) {
     return (
-      <div className={`flex-grow h-screen flex flex-row justify-center`}>
-        <MusicChannelSelect
+      <div
+        className={`flex-grow h-screen flex flex-col gap-4 justify-center items-center `}
+      >
+        <div className={`flex flex-col gap-4 w-min`}>
+          <span className={`text-2xl font-poppins font-bold whitespace-nowrap`}>
+            Dazai is not connected to a voice channel!
+          </span>
+          <p className={`text-base font-wsans w-full flex flex-col gap-2`}>
+            Please join a voice channel and use the command{" "}
+            <code className={`font-mono bg-gray-900 p-2 rounded-xl`}>
+              /connect
+            </code>{" "}
+            to begin!
+          </p>
+          <video
+            autoPlay
+            loop
+            muted
+            className={`w-full rounded-3xl shadow-lg contrast-125 brightness-75 border-2 border-indigo-400 shadow-indigo-900/50`}
+            src={`/demos/connectToVC.mp4`}
+          />
+        </div>
+        {/* <MusicChannelSelect
           guildID={guildID}
           joinableChannels={joinableChannelPayload!}
-        />
+        /> */}
       </div>
     );
   }

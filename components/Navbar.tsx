@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { clientID } from "../utils/constants";
 import { useDiscordUser } from "../utils/hooks/useDiscordUser";
