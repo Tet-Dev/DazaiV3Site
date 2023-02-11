@@ -29,8 +29,8 @@ export const RankCardSettings = (props: {
           Server-Wide Custom Rank Cards
         </h1>
         <span className={`text-gray-400 font-wsans`}>
-          Custom rank cards are a great way to boost your server's engagement
-          and add some flair to your server's ranks! You can create up to 10
+          Custom rank cards are a great way to boost your server&apos;s engagement
+          and add some flair to your server&apos;s ranks! You can create up to 10
           rank cards for free.
         </span>
 

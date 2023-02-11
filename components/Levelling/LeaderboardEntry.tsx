@@ -30,14 +30,14 @@ export const LeaderboardEntry = (props: {
   const { entry, index } = props;
   return (
     <div
-      className={`flex flex-row gap-4 p-4 bg-gray-800 rounded-3xl items-center relative overflow-hidden z-0 md:p-2 ${
+      className={`flex flex-row gap-4 p-4 bg-gray-800 rounded-3xl items-center relative overflow-hidden z-0 md:p-2 md:ring-2 ${
         index === 0
           ? `ring-4 ring-yellow-500`
           : index === 1
           ? `ring-4 ring-gray-300`
           : index === 2
           ? `ring-4 ring-orange-500 `
-          : `ring-2 ring-gray-500`
+          : `ring-2 md:!ring ring-gray-500`
       }`}
     >
       <div className={`absolute top-0 left-0 w-full h-full`}>
