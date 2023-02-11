@@ -85,6 +85,7 @@ export const RankCardSettings = (props: {
               setViewingCard(card);
               setCreateCard(false);
             }}
+            key={`card-slot-${card._id}`}
           >
             <img
               src={card.url}
