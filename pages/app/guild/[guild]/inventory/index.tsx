@@ -48,6 +48,7 @@ export const GuildInventoryPage = (props: {
             <InventoryCardRenderer
               card={card}
               selected={card.id === inventory.selectedCard}
+              key={`inventory-card-render-${card.id}`}
             />
           ))}
           {!inventory.cards.length && (
@@ -69,7 +70,11 @@ export const GuildInventoryPage = (props: {
               {crates
                 .filter((x) => !x.opened)
                 .map((crate, i) => (
-                  <InventoryCrateRenderer crate={crate} guildID={guild} />
+                  <InventoryCrateRenderer
+                    crate={crate}
+                    guildID={guild}
+                    key={`inventory-crate-render-${crate._id}`}
+                  />
                 ))}
             </div>
           </div>
@@ -85,7 +90,9 @@ export const GuildInventoryPage = (props: {
               if (inventory.cards.find((c) => c.cardID === card._id)) {
                 return null;
               }
-              return <InventoryCardRendererNotOwned card={card} />;
+              return (
+                <InventoryCardRendererNotOwned card={card} key={`inventory-card-render-notowned-${card._id}`} />
+              );
             })}
           </div>
         </div>
