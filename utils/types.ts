@@ -68,6 +68,16 @@ export enum CardRarity {
   EVENT_RARE = "event_rare",
   SECRET_RARE = "secret_rare",
 }
+export const rarityValue = {
+  [CardRarity.COMMON]: 1,
+  [CardRarity.RARE]: 2,
+  [CardRarity.SUPER_RARE]: 3,
+  [CardRarity.EPIC]: 4,
+  [CardRarity.MYTHIC]: 5,
+  [CardRarity.LEGENDARY]: 6,
+  [CardRarity.EVENT_RARE]: 7,
+  [CardRarity.SECRET_RARE]: 8,
+};
 
 export type CardType = {
   _id: string | ObjectId;

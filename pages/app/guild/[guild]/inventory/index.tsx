@@ -13,6 +13,7 @@ import {
   CardType,
   Crate,
   GuildInventory,
+  rarityValue,
 } from "../../../../../utils/types";
 
 export const GuildInventoryPage = (props: {
@@ -61,10 +62,11 @@ export const GuildInventoryPage = (props: {
             </div>
           )}
         </div>
-        {!!crates.filter((x) => !x.opened).length && (
+        {!!crates.filter((x) => !x.opened && x.guildID === guild).length && (
           <div className={`flex flex-col gap-4`}>
             <h2 className={`text-lg font-bold font-poppins`}>
-              Guild Crates ({crates.filter((x) => !x.opened && x.guildID === guild).length})
+              Guild Crates (
+              {crates.filter((x) => !x.opened && x.guildID === guild).length})
             </h2>
             <div className={`flex flex-row flex-wrap justify-start px-6 gap-4`}>
               {crates
@@ -82,8 +84,12 @@ export const GuildInventoryPage = (props: {
         <div className={`flex flex-col gap-4`}>
           <h2 className={`text-lg font-bold font-poppins`}>
             Collected Guild Cards (
-            {new Set(inventory.cards.filter((x) => x.card.guild).map(x=>x.cardID)).size}/
-            {guildCards.length})
+            {
+              new Set(
+                inventory.cards.filter((x) => x.card.guild).map((x) => x.cardID)
+              ).size
+            }
+            /{guildCards.length})
           </h2>
           <div className={`flex flex-row flex-wrap justify-start px-6 gap-4`}>
             {guildCards.map((card, i) => {
@@ -91,7 +97,10 @@ export const GuildInventoryPage = (props: {
                 return null;
               }
               return (
-                <InventoryCardRendererNotOwned card={card} key={`inventory-card-render-notowned-${card._id}`} />
+                <InventoryCardRendererNotOwned
+                  card={card}
+                  key={`inventory-card-render-notowned-${card._id}`}
+                />
               );
             })}
           </div>
@@ -140,7 +149,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const allCards = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`
   );
-  const allCardsJSON = await allCards.json();
+  const allCardsJSON = (await allCards.json()) as CardType[];
+  // sort by rarity
+
+  allCardsJSON.sort((a, b) => rarityValue[a.rarity] - rarityValue[b.rarity]);
 
   const crates = await fetch(`${getGuildShardURL(guildID)}/inventory/crates`, {
     method: "GET",
