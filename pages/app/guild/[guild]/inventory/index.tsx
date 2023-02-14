@@ -32,7 +32,7 @@ export const GuildInventoryPage = (props: {
       } relative flex flex-col items-center`}
     >
       <div
-        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[100ch] w-[95%]`}
+        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[100ch] min-w-[95%]`}
       >
         <h1 className={`text-3xl font-bold font-poppins`}>
           Rank Card Inventory
@@ -82,7 +82,7 @@ export const GuildInventoryPage = (props: {
         <div className={`flex flex-col gap-4`}>
           <h2 className={`text-lg font-bold font-poppins`}>
             Collected Guild Cards (
-            {inventory.cards.filter((x) => x.card.guild).length}/
+            {new Set(inventory.cards.filter((x) => x.card.guild).map(x=>x.cardID)).size}/
             {guildCards.length})
           </h2>
           <div className={`flex flex-row flex-wrap justify-start px-6 gap-4`}>
