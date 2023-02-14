@@ -18,6 +18,7 @@ import { getGuildShardURL } from "../../utils/ShardLib";
 import Mongo from "../../utils/classes/Mongo";
 import { ObjectId } from "mongodb";
 import { useRouter } from "next/router";
+import { clientID } from "../../utils/constants";
 
 const rarityParticleColorMap = {
   [CardRarity.LEGENDARY]: ["##818cf8", "#db2777", "#8b5cf6"],
@@ -97,6 +98,15 @@ export const CratePage = (props: { crate: Crate }) => {
               );
               if (res.ok) {
                 CrateTimer.getInstance().open();
+              } else {
+                if (res.status === 401) {
+                  localStorage.setItem("redirect", globalThis?.location?.href);
+                  return router.push(
+                    `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
+                      window?.location?.origin
+                    )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
+                  );
+                }
               }
               setOpening(false);
 
