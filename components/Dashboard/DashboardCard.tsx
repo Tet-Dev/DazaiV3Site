@@ -62,7 +62,7 @@ export const DashboardCard = (props: {
               `w-1/2 !text-transparent bg-gray-700 animate-pulse rounded-2xl`
             }`}
           >
-            Server Admin {skeleton && `.`}
+             {skeleton && `.`}
           </span>
         </div>
       </div>

@@ -33,7 +33,7 @@ export const GuildInventoryPage = (props: {
       } relative flex flex-col items-center`}
     >
       <div
-        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[100ch] min-w-[95%]`}
+        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[100ch] min-w-[95%] pb-8`}
       >
         <h1 className={`text-3xl font-bold font-poppins`}>
           Rank Card Inventory

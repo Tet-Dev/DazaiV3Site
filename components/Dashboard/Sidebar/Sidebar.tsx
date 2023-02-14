@@ -7,6 +7,7 @@ import {
   HomeIcon,
   MusicalNoteIcon,
   QueueListIcon,
+  RectangleStackIcon,
   ShieldCheckIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
@@ -38,7 +39,7 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
             {/* <div className={`text-gray-700`}>#{guild?.id}</div> */}
           </div>
         </div>
-        <div className={`flex flex-col gap-8 flex-grow`}>
+        <div className={`flex flex-col gap-8`}>
           {/* <GuildSidebarModule
             name="Dashboard"
             icon={<HomeIcon className={`w-6 h-6`} />}
@@ -67,13 +68,33 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
             route={`/app/guild/${guildID}/inventory`}
             // disabled={"Coming soon!"}
           />
-          <GuildSidebarModule
-            name="Permissions"
-            icon={<ShieldCheckIcon className={`w-6 h-6`} />}
-            route={`/app/guild/${guildID}/permissions`}
-            disabled={"Coming soon!"}
-          />
         </div>
+        <div className={`flex flex-col gap-6`}>
+          <span className={`text-gray-400 text-sm font-wsans font-bold`}>
+            Server Admin
+          </span>
+          <div className={`flex flex-col gap-8 px-2`}>
+            {/* <GuildSidebarModule
+            name="Dashboard"
+            icon={<HomeIcon className={`w-6 h-6`} />}
+            route={`/app/guild/${guildID}`}
+          /> */}
+            <GuildSidebarModule
+              name="Server Rank Cards"
+              icon={<RectangleStackIcon className={`w-6 h-6`} />}
+              route={`/app/guild/${guildID}/settings/rankcards`}
+              // disabled={"Coming soon!"}
+            />
+            <GuildSidebarModule
+              name="Permissions"
+              icon={<ShieldCheckIcon className={`w-6 h-6`} />}
+              route={`/app/guild/${guildID}/permissions`}
+              disabled={"Coming soon!"}
+            />
+          </div>
+        </div>
+
+        <div className={`flex flex-grow`} />
         <GuildSidebarUser user={user} guild={guild} guildData={guildData} />
       </div>
     </div>
