@@ -3,6 +3,7 @@ import { useDiscordGuild } from "../../../utils/hooks/useDiscordGuildData";
 import { useGuildData } from "../../../utils/hooks/useGuildData";
 import { GuildSidebarModule } from "./SidebarModule";
 import {
+  ArchiveBoxIcon,
   HomeIcon,
   MusicalNoteIcon,
   QueueListIcon,
@@ -58,6 +59,12 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
             name="Levelling & EXP"
             icon={<SparklesIcon className={`w-6 h-6`} />}
             route={`/app/guild/${guildID}/xp`}
+            // disabled={"Coming soon!"}
+          />
+          <GuildSidebarModule
+            name="Inventory"
+            icon={<ArchiveBoxIcon className={`w-6 h-6`} />}
+            route={`/app/guild/${guildID}/inventory`}
             // disabled={"Coming soon!"}
           />
           <GuildSidebarModule

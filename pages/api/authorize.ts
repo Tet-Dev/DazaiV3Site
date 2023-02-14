@@ -34,6 +34,12 @@ export default async (
     code: code,
     redirect_uri: uri,
   });
+  // set auth cookie that expires in data.expires_in
+  res.setHeader(
+    "Set-Cookie",
+    `authy_cookie=${data.access_token}; Path=/; HttpOnly; Max-Age=${data.expires_in}`
+  );
+
   res.status(200).json(
     !data
       ? null

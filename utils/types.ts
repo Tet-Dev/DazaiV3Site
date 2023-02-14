@@ -101,7 +101,6 @@ export type CrateTemplate = {
   guildTemplate?: boolean;
 };
 
-
 export const rarityWordMap = {
   [CardRarity.COMMON]: "Common",
   [CardRarity.RARE]: "Rare",
@@ -122,4 +121,14 @@ export const rarityGradientMap = {
   [CardRarity.COMMON]: "from-gray-500 via-gray-500 to-gray-500",
   [CardRarity.EVENT_RARE]: "from-yellow-200 via-emerald-200 to-yellow-200",
   [CardRarity.SECRET_RARE]: "from-gray-700 via-gray-500 to-gray-700",
+};
+export type GuildInventory = {
+  userID: string;
+  guildID: string;
+  cards: {
+    cardID: string;
+    id: string;
+    card: CardType;
+  }[];
+  selectedCard?: string;
 };

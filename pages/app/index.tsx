@@ -1,11 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GuildDataManager } from "../../utils/classes/GuildDataManager";
 import { useAllBotGuilds } from "../../utils/hooks/useAllBotGuilds";
 import { useAllGuilds } from "../../utils/hooks/useAllGuilds";
 import { DashboardCard } from "../../components/Dashboard/DashboardCard";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { clientID } from "../../utils/constants";
 
 const DashboardIndex = () => {
   const guilds = useAllGuilds();
@@ -15,6 +17,7 @@ const DashboardIndex = () => {
     [botGuilds]
   );
   const [refreshing, setRefreshing] = useState(false);
+  const router = useRouter();
   const sortedGuilds = useMemo(
     () =>
       !!guilds &&
@@ -28,6 +31,16 @@ const DashboardIndex = () => {
         }),
     [guilds, botGuildSet]
   );
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      localStorage.setItem("redirect", globalThis?.location?.href);
+      router.push(
+        `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
+          globalThis?.location?.href
+        )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
+      );
+    }
+  }, []);
   return (
     <div
       className={`w-full h-screen bg-gray-900 flex flex-col gap-16 py-16 overflow-auto`}
@@ -76,6 +89,5 @@ const DashboardIndex = () => {
     </div>
   );
 };
-
 
 export default DashboardIndex;

@@ -66,7 +66,7 @@ export const RankCardSettings = (props: {
         )}
       </div>
       <div
-        className={`col-span-4 relative h-screen flex flex-col gap-4 p-8 items-center bg-gray-900`}
+        className={`col-span-4 relative h-screen flex flex-col gap-4 p-8 items-center bg-gray-900 overflow-auto`}
       >
         <h1 className={`text-2xl font-bold font-poppins w-full text-end`}>
           Server Card List

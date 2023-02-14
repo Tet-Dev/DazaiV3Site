@@ -45,7 +45,7 @@ export const LeaderboardEntry = (props: {
           className={`absolute top-0 left-0 w-full h-full bg-gradient-to-l from-gray-900 via-gray-900/80 to-gray-900/50 z-10`}
         ></div>
         <div
-          className={`w-full h-full bg-cover bg-center blur-md pointer-events-none opacity-100`}
+          className={`w-full h-full bg-cover bg-center blur-sm pointer-events-none opacity-100`}
           style={{
             backgroundImage: `url(${entry.card})`,
           }}
@@ -73,7 +73,9 @@ export const LeaderboardEntry = (props: {
           </span>
         </div>
         <div className={`flex flex-col gap-1`}>
-          <div className={`w-full relative h-1 md:h-0.5 bg-gray-900 rounded-full`}>
+          <div
+            className={`w-full relative h-1 md:h-0.5 bg-gray-900 rounded-full`}
+          >
             <div
               className={`absolute top-0 left-0 h-full bg-gradient-to-r ${
                 index === 0

@@ -20,6 +20,13 @@ export default async (
       refresh_token: refreshToken,
     }).toString(),
   }).then((data) => (data.ok ? data.json() : null))) as DiscordOauthBundle;
+  // set auth cookie that expires in data.expires_in
+  if (data) {
+    res.setHeader(
+      "Set-Cookie",
+      `authy_cookie=${data.access_token}; Path=/; HttpOnly; Max-Age=${data.expires_in}`
+    );
+  }
   res.status(200).json(
     !data
       ? null

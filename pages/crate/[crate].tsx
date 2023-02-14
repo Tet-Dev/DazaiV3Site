@@ -5,8 +5,19 @@ import { useEffect, useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 import { CrateCanvas } from "../../components/Crates/CrateCanvas";
 import { CrateTimer } from "../../utils/classes/CrateTimer";
-import { CardRarity, CardType, Crate, rarityGradientMap, rarityWordMap } from "../../utils/types";
+import {
+  CardRarity,
+  CardType,
+  Crate,
+  rarityGradientMap,
+  rarityWordMap,
+} from "../../utils/types";
 import Tilt from "react-parallax-tilt";
+import { fetcher } from "../../utils/discordFetcher";
+import { getGuildShardURL } from "../../utils/ShardLib";
+import Mongo from "../../utils/classes/Mongo";
+import { ObjectId } from "mongodb";
+import { useRouter } from "next/router";
 
 const rarityParticleColorMap = {
   [CardRarity.LEGENDARY]: ["##818cf8", "#db2777", "#8b5cf6"],
@@ -23,7 +34,8 @@ const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export const CratePage = (props: { crate: Crate }) => {
   const { crate } = props;
   const [stage, setStage] = useState(crate.opened ? 5 : 0);
-  console.log(Object.values(rarityGradientMap).join(" "));
+  const [opening, setOpening] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     const openListener = () => {
       setStage(1);
@@ -70,12 +82,28 @@ export const CratePage = (props: { crate: Crate }) => {
             {crate.description}
           </span>
           <button
-            className="mx-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-2xl font-wsans font-bold transition-all duration-300"
-            onClick={() => {
-              CrateTimer.getInstance().open();
+            className="mx-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-2xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={opening}
+            onClick={async () => {
+              if (opening) return;
+              setOpening(true);
+              const res = await fetcher(
+                `${await getGuildShardURL(crate.guildID)}/inventory/crates/${
+                  crate._id
+                }/open`,
+                {
+                  method: "POST",
+                }
+              );
+              if (res.ok) {
+                CrateTimer.getInstance().open();
+              }
+              setOpening(false);
+
+              // CrateTimer.getInstance().open();
             }}
           >
-            Open Crate
+            {opening ? "Opening..." : "Open Crate"}
           </button>
         </div>
       </Transition>
@@ -203,10 +231,12 @@ export const CratePage = (props: { crate: Crate }) => {
               >
                 <button
                   className={` px-6 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
-                  onClick={() => {}}
-                  disabled={stage === 5}
+                  onClick={() => {
+                    if (crate.guildID) router.push(`/app/guild/${crate.guildID}/inventory`);
+                  }}
+                  // disabled={stage === 5}
                 >
-                  {stage === 5 ? `Claimed` : `Claim`}
+                  View Inventory
                 </button>
               </Transition>
             </div>
@@ -231,6 +261,46 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     url: "https://cdn.discordapp.com/attachments/757863990129852509/1072679924692959252/migu.png",
     rarity: CardRarity.SUPER_RARE,
   };
+  const rawCrate = (await (
+    await Mongo
+  )
+    .db("Crates")
+    .collection("userCrates")
+    .findOne({
+      _id: new ObjectId(crateID),
+    })) as
+    | (Omit<Crate, "item"> & {
+        itemID: string;
+      })
+    | null;
+  if (!rawCrate) {
+    return {
+      notFound: true,
+    };
+  }
+  const item = (await (
+    await Mongo
+  )
+    .db("Guilds")
+    .collection("customCards")
+    .findOne({ _id: new ObjectId(rawCrate.itemID) })) as CardType | null;
+  const crate = {
+    ...rawCrate,
+    item: {
+      ...item,
+      _id: item?._id.toString(),
+    },
+  };
+  return {
+    props: {
+      crate: {
+        ...crate,
+        _id: crate._id.toString(),
+      },
+    },
+  };
+
+  // 63ea96e50296c1c2c951ba66
 
   // {
   //   name: "Sunset Dazai",
@@ -258,18 +328,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   //     Math.floor(Math.random() * Object.keys(cardNames).length)
   //   ]
   // ];
-  const crateItem = {
-    _id: crateID,
-    item: items,
-    userID: "295391243318591490",
-    createdAt: Date.now(),
-    name: "Dazai Crate",
-    description: "What could it be???",
-    // opened: true
-  } as Crate;
-  return {
-    props: {
-      crate: crateItem,
-    },
-  };
+  // const crateItem = {
+  //   _id: crateID,
+  //   item: items,
+  //   userID: "295391243318591490",
+  //   createdAt: Date.now(),
+  //   name: "Dazai Crate",
+  //   description: "What could it be???",
+  //   // opened: true
+  // } as Crate;
+  // return {
+  //   props: {
+  //     crate: crateItem,
+  //   },
+  // };
 };

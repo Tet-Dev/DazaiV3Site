@@ -10,7 +10,7 @@ export const GuildSidebarModule = (props: {
   onClick?: () => void;
 }) => {
   const { name, icon, route, disabled, onClick } = props;
-  const pathname = useRouter().pathname;
+  const pathname = useRouter().asPath;
   return (
     <Link href={route}>
       <div
