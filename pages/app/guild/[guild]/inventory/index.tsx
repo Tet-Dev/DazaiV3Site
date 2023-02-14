@@ -64,11 +64,11 @@ export const GuildInventoryPage = (props: {
         {!!crates.filter((x) => !x.opened).length && (
           <div className={`flex flex-col gap-4`}>
             <h2 className={`text-lg font-bold font-poppins`}>
-              Guild Crates ({crates.filter((x) => !x.opened).length})
+              Guild Crates ({crates.filter((x) => !x.opened && x.guildID === guild).length})
             </h2>
             <div className={`flex flex-row flex-wrap justify-start px-6 gap-4`}>
               {crates
-                .filter((x) => !x.opened)
+                .filter((x) => !x.opened && x.guildID === guild)
                 .map((crate, i) => (
                   <InventoryCrateRenderer
                     crate={crate}
