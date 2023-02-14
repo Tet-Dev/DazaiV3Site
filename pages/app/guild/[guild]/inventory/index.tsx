@@ -55,7 +55,7 @@ export const GuildInventoryPage = (props: {
               className={`flex w-screen flex-col gap-8 items-center justify-center mb-8 p-12 rounded-3xl border-gray-700`}
             >
               <span className={`text-gray-600 font-wsans`}>
-                You don't have any rank cards yet!
+                You don&apos;t have any rank cards yet!
               </span>
             </div>
           )}
