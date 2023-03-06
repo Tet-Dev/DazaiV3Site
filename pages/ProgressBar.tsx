@@ -8,7 +8,7 @@ export const ProgressBar = () => {
   }, [divRef]);
   return (
     <div
-      className={`bar`}
+      className={`!bg-gradient-to-r !from-pink-300 !via-purple-300 !to-indigo-400`}
       ref={divRef}
       role="bar"
       style={{
@@ -17,6 +17,7 @@ export const ProgressBar = () => {
         display: "none!important",
       }}
     ></div>
+    // null
   );
 };
 // export default ProgressBar

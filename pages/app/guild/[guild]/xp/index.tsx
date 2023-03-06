@@ -93,6 +93,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const guild = await fetch(`${shardURL}/guilds/${gid}`).then((res) =>
     res.json()
   );
+  // sleep for 20 seconds
+  
   return {
     props: {
       guildid: gid,

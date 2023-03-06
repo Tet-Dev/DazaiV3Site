@@ -62,9 +62,10 @@ const startProgress = (id: any) => {
 const stopProgress = (id: any) => {
   if (typeof window !== "undefined") {
     observers.delete(id);
-    if (observers.size === 0) {
+    console.log("observers", observers);
+    // if (observers.size === 0) {
       nprogress.done();
-    }
+    // }
   }
 };
 

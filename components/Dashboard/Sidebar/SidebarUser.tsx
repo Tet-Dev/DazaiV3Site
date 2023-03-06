@@ -79,24 +79,31 @@ export const GuildSidebarUser = (props: {
           // height={64}
           className={`rounded-full flex-shrink-0 w-12 h-12 2xl:w-6 2xl:h-6 transition-all duration-500 bg-center bg-cover relative group ${
             !user && `pointer-events-none`
-          }`}
+          } 
+          ${skeleton && `animate-pulse bg-gray-850`}
+          `}
           onClick={() => setPopout(!popout)}
           style={{
             backgroundImage: `url(${
-              user?.avatar
-                ? `https://cdn.discordapp.com/avatars/${user?.id}/${
-                    user?.avatar
-                  }${user?.avatar.startsWith("a_") ? ".gif" : ".png"}?size=256`
-                : `/images/landing/dazai.png`
+              user?.avatar &&
+              `https://cdn.discordapp.com/avatars/${user?.id}/${user?.avatar}${
+                user?.avatar.startsWith("a_") ? ".gif" : ".png"
+              }?size=256`
             })`,
           }}
         />
         <div className={`flex flex-col gap-1 flex-grow`}>
-          <div className={`text-lg font-bold text-gray-100 font-poppins 2xl:text-xs 2xl:font-medium`}>
-            {user?.username}#{user?.discriminator}
+          <div
+            className={`text-lg font-bold text-gray-100 font-poppins 2xl:text-xs 2xl:font-medium ${
+              skeleton && `blur-sm animate-pulse`
+            }`}
+          >
+            {user ? `${user?.username}#${user?.discriminator}` : `00000#0000`}
           </div>
           <div
-            className={`bg-black text-gray-300 rounded-lg px-2 py-1 text-sm 2xl:text-xs w-fit flex flex-row gap-2 items-center 2xl:hidden`}
+            className={`bg-black text-gray-300 rounded-lg px-2 py-1 text-sm 2xl:text-xs w-fit flex flex-row gap-2 items-center 2xl:hidden ${
+              skeleton && `blur-sm animate-pulse`
+            }`}
           >
             <div
               className={`rounded-md w-3 h-3`}
@@ -106,7 +113,8 @@ export const GuildSidebarUser = (props: {
                   : `#ffffff`,
               }}
             />
-            {highestUserRole?.name || ""}
+
+            {skeleton ? `LOADING` : highestUserRole?.name || ""}
           </div>
         </div>
         <ChevronRightIcon className={`w-5 h-5 text-gray-100`} />

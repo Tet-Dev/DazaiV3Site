@@ -108,7 +108,7 @@ export type CrateTemplate = {
   dropRates: {
     [key in CardRarity]: number;
   };
-  guildTemplate?: boolean;
+  guild?: string;
 };
 
 export const rarityWordMap = {

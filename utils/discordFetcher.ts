@@ -1,5 +1,5 @@
 import { DiscordAuthData } from "../pages/api/authorize";
-
+let refreshing = false;
 export const fetcher = async (
   input: RequestInfo,
   init?: RequestInit | undefined,
@@ -13,28 +13,38 @@ export const fetcher = async (
     expiresAt <= Date.now() &&
     localStorage.getItem("refreshToken")
   ) {
-    console.log(
-      "refreshing token",
-      token,
-      expiresAt,
-      localStorage.getItem("refreshToken")
-    );
-    const data = (await fetch(`/api/refresh`, {
-      method: "POST",
-      body: JSON.stringify({
-        refreshToken: localStorage.getItem("refreshToken"),
-      }),
-    }).then((res) => res.json())) as DiscordAuthData;
-    if (data) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("expiresAt", `${data.expiresAt}`);
-      localStorage.setItem("scope", data.scope);
-      token = data.token;
-      expiresAt = data.expiresAt;
+    if (refreshing) {
+      while (refreshing) {
+        await new Promise((r) => setTimeout(r, 100));
+      }
+      token = localStorage.getItem("token");
+      expiresAt = parseInt(localStorage.getItem("expiresAt") || "0")!;
     } else {
-      token = null;
-      expiresAt = 0;
+      refreshing = true;
+      console.log(
+        "refreshing token",
+        token,
+        expiresAt,
+        localStorage.getItem("refreshToken")
+      );
+      const data = (await fetch(`/api/refresh`, {
+        method: "POST",
+        body: JSON.stringify({
+          refreshToken: localStorage.getItem("refreshToken"),
+        }),
+      }).then((res) => res.json())) as DiscordAuthData;
+      if (data) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("refreshToken", data.refreshToken);
+        localStorage.setItem("expiresAt", `${data.expiresAt}`);
+        localStorage.setItem("scope", data.scope);
+        token = data.token;
+        expiresAt = data.expiresAt;
+      } else {
+        token = null;
+        expiresAt = 0;
+      }
+      refreshing = false;
     }
   }
 

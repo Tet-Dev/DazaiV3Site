@@ -1,11 +1,12 @@
 import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { InventoryCardRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCardRenderer";
 import { InventoryCardRendererNotOwned } from "../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned";
 import { InventoryCrateRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCrateRenderer";
-import { CreateRankCard } from "../../../../../components/Dashboard/Settings/RankCards/createRankCard";
-import { ViewRankCard } from "../../../../../components/Dashboard/Settings/RankCards/ViewRankCard";
+import { CreateRankCard } from "../../../../../components/Dashboard/Settings/Crates/createCrate";
+import { ViewRankCard } from "../../../../../components/Dashboard/Settings/Crates/viewCrates";
 import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
 import { getGuildShardURL } from "../../../../../utils/ShardLib";
 import {
@@ -21,11 +22,18 @@ export const GuildInventoryPage = (props: {
   inventory: GuildInventory;
   guildCards: CardType[];
   crates: Crate[];
+  forceLogin: boolean;
 }) => {
   const { guild, inventory, guildCards, crates } = props;
   const [viewingCard, setViewingCard] = useState(null as CardType | null);
   const [createCard, setCreateCard] = useState(false);
+  const router = useRouter();
   const user = useDiscordUser();
+  useEffect(() => {
+    if (props.forceLogin) {
+      router.push("/app/login");
+    }
+  }, []);
   return (
     <div
       className={`relative ${
@@ -62,15 +70,30 @@ export const GuildInventoryPage = (props: {
             </div>
           )}
         </div>
-        {!!crates.filter((x) => !x.opened &&  (x.guildID === guild || x.guildID === `@global`)).length && (
+        {!!crates.filter(
+          (x) => !x.opened && (x.guildID === guild || x.guildID === `@global`)
+        ).length && (
           <div className={`flex flex-col gap-4`}>
             <h2 className={`text-lg font-bold font-poppins`}>
               Guild Crates (
-              {crates.filter((x) => !x.opened &&  (x.guildID === guild || x.guildID === `@global`)).length})
+              {
+                crates.filter(
+                  (x) =>
+                    !x.opened &&
+                    (x.guildID === guild || x.guildID === `@global`)
+                ).length
+              }
+              )
             </h2>
-            <div className={`flex flex-row flex-wrap justify-evenly px-6 gap-4`}>
+            <div
+              className={`flex flex-row flex-wrap justify-evenly px-6 gap-4`}
+            >
               {crates
-                .filter((x) => !x.opened &&  (x.guildID === guild || x.guildID === `@global`))
+                .filter(
+                  (x) =>
+                    !x.opened &&
+                    (x.guildID === guild || x.guildID === `@global`)
+                )
                 .map((crate, i) => (
                   <InventoryCrateRenderer
                     crate={crate}
@@ -136,9 +159,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
   if (guildInventory.status === 401) {
     return {
-      redirect: {
-        destination: "/",
-        permanent: false,
+      // redirect: {
+      //   destination: "/",
+      //   permanent: false,
+      // },
+      props: {
+        forceLogin: true,
       },
     };
   }

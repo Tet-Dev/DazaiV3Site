@@ -10,10 +10,13 @@ import { CardRarity, CardType } from "../../../../../utils/types";
 export const RankCardSettings = (props: {
   guild: string;
   cards: CardType[];
+  selectedCard: CardType | null;
 }) => {
-  const { guild } = props;
+  const { guild, selectedCard } = props;
   const [cards, setCards] = useState(props.cards);
-  const [viewingCard, setViewingCard] = useState(null as CardType | null);
+  const [viewingCard, setViewingCard] = useState(
+    selectedCard ?? (null as CardType | null)
+  );
   const [createCard, setCreateCard] = useState(false);
   const user = useDiscordUser();
   return (
@@ -29,9 +32,9 @@ export const RankCardSettings = (props: {
           Server-Wide Custom Rank Cards
         </h1>
         <span className={`text-gray-400 font-wsans`}>
-          Custom rank cards are a great way to boost your server&apos;s engagement
-          and add some flair to your server&apos;s ranks! You can create up to 10
-          rank cards for free.
+          Custom rank cards are a great way to boost your server&apos;s
+          engagement and add some flair to your server&apos;s ranks! You can
+          create up to 10 rank cards for free.
         </span>
 
         {viewingCard ? (
@@ -146,6 +149,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       guild: guildID,
       cards,
+      selectedCard: context.query.card
+        ? cards.find((card) => card._id === context.query.card)
+        : null,
     },
   };
 };

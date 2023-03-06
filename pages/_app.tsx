@@ -1,7 +1,9 @@
 import Head from "next/head";
 import { AppProps } from "next/app";
 import "../styles/globals.css";
-import "../styles/nprogress.css";
+// import nprogress css
+import "nprogress/nprogress.css";
+
 import { useEffect } from "react";
 import React from "react";
 import { GuildSidebar } from "../components/Dashboard/Sidebar/Sidebar";
