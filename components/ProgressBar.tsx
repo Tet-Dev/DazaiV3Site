@@ -20,4 +20,4 @@ export const ProgressBar = () => {
     // null
   );
 };
-// export default ProgressBar
+export default ProgressBar

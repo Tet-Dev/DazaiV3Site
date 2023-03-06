@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import { InventoryCardRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCardRenderer";
 import { InventoryCardRendererNotOwned } from "../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned";
 import { InventoryCrateRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCrateRenderer";
-import { CreateRankCard } from "../../../../../components/Dashboard/Settings/Crates/createCrate";
-import { ViewRankCard } from "../../../../../components/Dashboard/Settings/Crates/viewCrates";
 import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
 import { getGuildShardURL } from "../../../../../utils/ShardLib";
 import {

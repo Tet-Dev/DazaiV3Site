@@ -10,7 +10,7 @@ import { GuildSidebar } from "../components/Dashboard/Sidebar/Sidebar";
 import { useRouter } from "next/router";
 import { NotificationsManager } from "../components/Notifications/NotificationManager";
 import { HiddenColorLoader } from "../components/HiddenColorLoader";
-import { ProgressBar } from "./ProgressBar";
+import { ProgressBar } from "../components/ProgressBar";
 import { useNProgress } from "../utils/nprogress";
 
 function MyApp({ Component, pageProps }: AppProps) {
