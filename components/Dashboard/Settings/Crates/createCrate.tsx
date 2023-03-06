@@ -475,6 +475,7 @@ export const CreateCrate = (props: { cards: CardType[]; onSave: () => void }) =>
                     setCrateItems([...crateItems, card._id as string]);
                     setSelectCardModalVisible(false);
                   }}
+                  key={`card-renderer-${card._id}`}
                 />
               ))}
           </div>

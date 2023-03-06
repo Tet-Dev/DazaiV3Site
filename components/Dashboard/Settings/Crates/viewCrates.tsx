@@ -379,6 +379,7 @@ export const ViewCrate = (props: {
                 onDelete={() => {
                   setCrateItems(crateItems.filter((i) => i !== card._id));
                 }}
+                key={`card-renderer-${card._id}`}
               />
             ))}
 
