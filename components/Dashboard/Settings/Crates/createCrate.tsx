@@ -362,6 +362,7 @@ export const CreateCrate = (props: { cards: CardType[]; onSave: () => void }) =>
                 onDelete={() => {
                   setCrateItems(crateItems.filter((i) => i !== card._id));
                 }}
+                key={`crate-item-${card._id}`}
               />
             ))}
 

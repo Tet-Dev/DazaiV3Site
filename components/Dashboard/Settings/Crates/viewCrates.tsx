@@ -493,6 +493,7 @@ export const ViewCrate = (props: {
                     setCrateItems([...crateItems, card._id as string]);
                     setSelectCardModalVisible(false);
                   }}
+                  key={`card-renderer-${card._id}`}
                 />
               ))}
           </div>
@@ -655,7 +656,7 @@ export const ViewCrate = (props: {
             .map((id) => cardMap.get(id)!)
             .sort((a, b) => rarityValue[a.rarity] - rarityValue[b.rarity])
             .map((card) => (
-              <SettingsCardRenderer card={card} />
+              <SettingsCardRenderer card={card} key={`crate-item-view-${card._id}`} />
             ))}
         </div>
       </div>
