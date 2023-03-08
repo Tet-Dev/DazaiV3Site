@@ -277,7 +277,7 @@ export const CreateRankCard = () => {
                 setUpdating(false);
                 return;
               } else {
-                router.reload();
+                router.replace(router.asPath);
               }
             }}
           >

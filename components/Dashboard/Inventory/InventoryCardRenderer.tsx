@@ -117,7 +117,7 @@ export const InventoryCardRenderer = (props: {
                 );
                 setUpdating(false);
                 if (res.status === 200) {
-                  router.reload();
+                  router.replace(router.asPath);
                 }
               }}
               disabled={updating || props.selected}

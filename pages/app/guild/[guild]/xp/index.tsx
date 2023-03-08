@@ -94,7 +94,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     res.json()
   );
   // sleep for 20 seconds
-  
   return {
     props: {
       guildid: gid,

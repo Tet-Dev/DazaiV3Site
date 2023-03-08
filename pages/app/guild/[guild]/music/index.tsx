@@ -26,27 +26,32 @@ import {
   JoinableChannelsPayload,
   MusicChannelSelect,
 } from "../../../../../components/Music/MusicSelectChannel";
+type MusicData = {
+  track?: MusicTrack;
+  status?: "playing" | "paused" | "stopped";
+  position?: number;
+  queue?: MusicTrack[];
+  error?: string;
+};
 const GuildDashboard = (props: {
-  guild: string;
-  musicData: {
-    track?: MusicTrack;
-    status?: "playing" | "paused" | "stopped";
-    position?: number;
-    queue?: MusicTrack[];
-    error?: string;
-  };
-  joinableChannels?: JoinableChannelsPayload;
+  // guild: string;
+  // musicData: {
+  //   track?: MusicTrack;
+  //   status?: "playing" | "paused" | "stopped";
+  //   position?: number;
+  //   queue?: MusicTrack[];
+  //   error?: string;
+  // };
+  // joinableChannels?: JoinableChannelsPayload;
 }) => {
-  const { musicData: md, joinableChannels } = props;
+  // const { musicData: md, joinableChannels } = props;
   const router = useRouter();
   const guildID = router.query.guild as string;
-  const [musicData, setMusicData] = useState(md);
-  const [position, setPosition] = useState(md.position!);
+  const [musicData, setMusicData] = useState(null as null | MusicData);
+  const [position, setPosition] = useState(0);
   const user = useDiscordUser();
-  const [joinableChannelPayload, setJoinableChannelPayload] =
-    useState(joinableChannels);
   useEffect(() => {
-    if (musicData.status !== "playing") return;
+    if (musicData?.status !== "playing") return;
     console.log("setting position", musicData.position);
     setPosition(musicData.position!);
     const second = setInterval(() => {
@@ -55,7 +60,7 @@ const GuildDashboard = (props: {
     return () => {
       clearInterval(second);
     };
-  }, [musicData.position, musicData.status]);
+  }, [musicData?.position, musicData?.status]);
 
   useEffect(() => {
     console.log("polling", router);
@@ -84,7 +89,7 @@ const GuildDashboard = (props: {
   // }, [musicData]);
   const guild = useDiscordGuild(guildID);
   const guildData = useGuildData(guildID);
-  if (musicData.error) {
+  if (musicData?.error || !musicData) {
     return (
       <div
         className={`flex-grow h-screen flex flex-col gap-4 justify-center items-center `}
@@ -132,39 +137,39 @@ const GuildDashboard = (props: {
     </div>
   );
 };
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { guild } = ctx.query;
-  if (!guild) {
-    return {
-      redirect: {
-        destination: "/app",
-        permanent: false,
-      },
-    };
-  }
-  // guild lookup shard
-  const shardURL = getGuildShardURL(guild as string);
-  const musicData = await fetch(`${shardURL}/guilds/${guild}/music/status`);
-  const musicDataJSON = await musicData.json();
-  if (musicData.status === 404) {
-    const joinableChannelsPayload = await fetch(
-      `${shardURL}/guilds/${guild}/music/channels`
-    );
-    const joinableChannels = await joinableChannelsPayload.json();
-    return {
-      props: {
-        guild,
-        musicData: musicDataJSON,
-        joinableChannels,
-      },
-    };
-  }
-  return {
-    props: {
-      guild,
-      musicData: musicDataJSON,
-    },
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const { guild } = ctx.query;
+//   if (!guild) {
+//     return {
+//       redirect: {
+//         destination: "/app",
+//         permanent: false,
+//       },
+//     };
+//   }
+//   // guild lookup shard
+//   const shardURL = getGuildShardURL(guild as string);
+//   const musicData = await fetch(`${shardURL}/guilds/${guild}/music/status`);
+//   const musicDataJSON = await musicData.json();
+//   if (musicData.status === 404) {
+//     const joinableChannelsPayload = await fetch(
+//       `${shardURL}/guilds/${guild}/music/channels`
+//     );
+//     const joinableChannels = await joinableChannelsPayload.json();
+//     return {
+//       props: {
+//         guild,
+//         musicData: musicDataJSON,
+//         joinableChannels,
+//       },
+//     };
+//   }
+//   return {
+//     props: {
+//       guild,
+//       musicData: musicDataJSON,
+//     },
+//   };
+// };
 
 export default GuildDashboard;
