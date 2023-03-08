@@ -3,7 +3,7 @@ import { Transition } from "@headlessui/react";
 import { GetServerSideProps } from "next/types";
 import { useEffect, useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
-import { CrateCanvas } from "../../components/Crates/CrateCanvas";
+// import { CrateCanvas } from "../../components/Crates/CrateCanvas";
 import { CrateTimer } from "../../utils/classes/CrateTimer";
 import {
   CardRarity,
@@ -39,18 +39,21 @@ export const CratePage = (props: { crate: Crate }) => {
   const router = useRouter();
   useEffect(() => {
     const openListener = () => {
-      setStage(1);
+      setStage(2);
     };
 
     const openCrate = async () => {
-      await sleep(1010);
-      setStage(2);
-    };
-    const presentCrate = async () => {
-      await sleep(1010);
+      // await sleep(1010);
+      // setStage(2);
       setStage(3);
       await sleep(1010);
       setStage(4);
+    };
+    const presentCrate = async () => {
+      // await sleep(1010);
+      // setStage(3);
+      // await sleep(1010);
+      // setStage(4);
     };
     // presentCrate()
     CrateTimer.getInstance().on("cameraShake", openListener);
@@ -118,7 +121,7 @@ export const CratePage = (props: { crate: Crate }) => {
         </div>
       </Transition>
       {/* {stage} */}
-      <Transition
+      {/* <Transition
         show={stage < 2}
         enter="transition-opacity duration-1000"
         enterFrom="opacity-0"
@@ -129,7 +132,7 @@ export const CratePage = (props: { crate: Crate }) => {
         className={"h-screen w-screen absolute top-0 left-0 z-0 "}
       >
         <CrateCanvas />
-      </Transition>
+      </Transition> */}
 
       <Transition
         show={stage >= 2}
