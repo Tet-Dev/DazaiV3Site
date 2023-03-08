@@ -55,6 +55,7 @@ export const LevelUpRewards = (props: {
                   ...rewards.slice(index + 1),
                 ]);
               }}
+              key={`reward-renderer-${x._id}`}
             />
           ))}
           {creating ? (

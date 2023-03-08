@@ -77,7 +77,9 @@ export const LevelUpRewardEntry = (props: {
           )}
         </div>
         {editing && (
-          <div className={`flex flex-row gap-6 w-full p-4 bg-gray-850 rounded-2xl`}>
+          <div
+            className={`flex flex-row gap-6 w-full p-4 bg-gray-850 rounded-2xl`}
+          >
             <div className={`flex flex-col gap-2 grow`}>
               <span className={`text-gray-300 font-bold text-sm`}>
                 Reward Frequency
@@ -189,7 +191,6 @@ export const LevelUpRewardEntry = (props: {
         >
           {reward.rewards.map((rwd, i) => (
             <LevelUpRewardActionEntry
-              key={i}
               action={rwd}
               levelUpReward={reward}
               onDelete={() => {
@@ -199,6 +200,7 @@ export const LevelUpRewardEntry = (props: {
                 });
               }}
               editing={editing}
+              key={`leveluprewardactionentry-${reward._id}-${i}`}
             />
           ))}
           {editing && (
