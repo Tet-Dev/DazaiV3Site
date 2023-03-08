@@ -7,7 +7,7 @@ function classNames(...classes: string[]) {
 export type SelectMenuItem = {
   id: string;
   name: string;
-  image?: string | ((props: ComponentProps<any>) => JSX.Element);
+  image?: string | ((props: ComponentProps<any>) => JSX.Element | null);
 };
 
 export type SelectMenuProps = {
@@ -51,7 +51,7 @@ export const SelectMenu = (props: SelectMenuProps) => {
       {({ open }) => (
         <>
           <Listbox.Label
-            className={`block text-md text-gray-800 dark:text-gray-300 ${
+            className={`block text-sm font-wsans text-gray-800 dark:text-gray-300 ${
               !props.label && "hidden"
             } w-full ${props.labelClasses}`}
           >

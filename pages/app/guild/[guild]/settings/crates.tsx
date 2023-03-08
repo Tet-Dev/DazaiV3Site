@@ -11,12 +11,11 @@ export const CrateSettings = (props: {
   guildID: string;
   crates: CrateTemplate[];
   cards: CardType[];
+  viewingCrate: CrateTemplate | null;
 }) => {
-  const { guildID } = props;
+  const { guildID, viewingCrate: vc } = props;
   const [crates, setCrates] = useState(props.crates);
-  const [viewingCrate, setViewingCrate] = useState(
-    null as CrateTemplate | null
-  );
+  const [viewingCrate, setViewingCrate] = useState(vc as CrateTemplate | null);
   const [createCrate, setCreateCrate] = useState(false);
   const user = useDiscordUser();
   return (
@@ -212,11 +211,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
   //     rarity: CardRarity.EVENT_RARE,
   //   });
+  let viewingCrate = (context.query.c as string)
+    ? cratesJSON.find((crate) => crate._id === context.query.c)
+    : null;
   return {
     props: {
       guildID,
       cards,
       crates: cratesJSON,
+      viewingCrate,
     },
   };
 };

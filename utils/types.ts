@@ -18,6 +18,7 @@ export type BotGuildData = {
     nickname: string | null;
     roles: string[];
   };
+  hasAdmin?: boolean;
 };
 
 // MUSIC
@@ -142,3 +143,48 @@ export type GuildInventory = {
   }[];
   selectedCard?: string;
 };
+
+export type LevelUpRewardType =
+  | LevelUpAtLevelRewardType
+  | LevelUpEveryNLevelsRewardType;
+export interface BaseLevelUpRewardType {
+  _id: string | ObjectId;
+  guildID: string;
+  type: "everyNLevels" | "atLevel";
+  name: string;
+  rewards: LevelUpRewardActionType[];
+}
+
+export interface LevelUpAtLevelRewardType extends BaseLevelUpRewardType {
+  type: "atLevel";
+  level: number;
+}
+
+export interface LevelUpEveryNLevelsRewardType extends BaseLevelUpRewardType {
+  type: "everyNLevels";
+  everyNLevel: number;
+  offset: number;
+}
+ export type LevelUpRewardActionType = LevelUpRewardRoleActionType | LevelUpRewardCardActionType | LevelUpRewardCrateActionType;
+
+export interface BaseLevelUpRewardActionType {
+  type: "role" | "card" | "crate";
+  action: "add" | "remove";
+}
+
+export interface LevelUpRewardRoleActionType extends BaseLevelUpRewardActionType {
+  type: "role";
+  roleID: string;
+}
+
+export interface LevelUpRewardCardActionType extends BaseLevelUpRewardActionType {
+  type: "card";
+  cardID: string;
+  count: number;
+}
+
+export interface LevelUpRewardCrateActionType extends BaseLevelUpRewardActionType {
+  type: "crate";
+  crateID: string;
+  count: number;
+}
