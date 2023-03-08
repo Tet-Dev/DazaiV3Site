@@ -42,10 +42,10 @@ export const LeaderboardEntry = (props: {
     >
       <div className={`absolute top-0 left-0 w-full h-full`}>
         <div
-          className={`absolute top-0 left-0 w-full h-full bg-gradient-to-l from-gray-900 via-gray-900/80 to-gray-900/50 z-10`}
+          className={`absolute top-0 left-0 w-full h-full bg-gradient-to-l from-gray-900/80 via-gray-900/60 to-gray-900/50 z-10`}
         ></div>
         <div
-          className={`w-full h-full bg-cover bg-center blur-sm pointer-events-none opacity-100`}
+          className={`w-full h-full bg-cover bg-center pointer-events-none opacity-90`}
           style={{
             backgroundImage: `url(${entry.card})`,
           }}
@@ -87,9 +87,10 @@ export const LeaderboardEntry = (props: {
                   : `from-white to-white`
               } rounded-full`}
               style={{
-                width: `${
-                  (entry.xp * 100) / getRequiredXPForLevel(entry.level)
-                }%`,
+                width: `${Math.min(
+                  (entry.xp * 100) / getRequiredXPForLevel(entry.level),
+                  100
+                )}%`,
               }}
             ></div>
           </div>
