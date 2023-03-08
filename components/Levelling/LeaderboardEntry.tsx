@@ -3,7 +3,7 @@ import { FaCrown } from "react-icons/fa";
 import { GuildLeaderboardEntry } from "../../utils/types";
 
 const formatLargeNumber = (num: number) => {
-  if (num < 1000) return num;
+  if (num < 1000) return ~~num;
   if (num < 1000000) return `${Math.floor(num / 100) / 10}K`;
   if (num < 1000000000) return `${Math.floor(num / 1000) / 1000}M`;
   return `${Math.floor(num / 1000000000)}B`;
