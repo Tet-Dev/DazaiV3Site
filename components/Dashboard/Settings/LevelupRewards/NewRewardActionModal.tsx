@@ -249,22 +249,27 @@ export const NewRewardActionModal = (props: {
                 delete newAction.crateID;
                 // @ts-ignore
                 delete newAction.cardID;
-                newAction.roleID = newAction.roleID || items[0].id as string;
+                newAction.roleID = newAction.roleID || (items[0].id as string);
               }
               if (newAction.type === "crate") {
                 // @ts-ignore
                 delete newAction.roleID;
                 // @ts-ignore
                 delete newAction.cardID;
-                newAction.crateID = newAction.crateID || crateData![0]?._id as string;
+                newAction.crateID =
+                  newAction.crateID || (crateData![0]?._id as string);
+                newAction.count = parseInt(`${newAction.count}`);
               }
               if (newAction.type === "card") {
                 // @ts-ignore
                 delete newAction.roleID;
                 // @ts-ignore
                 delete newAction.crateID;
-                newAction.cardID = newAction.cardID || cardData![0]?._id as string;
+                newAction.cardID =
+                  newAction.cardID || (cardData![0]?._id as string);
+                newAction.count = parseInt(`${newAction.count}`);
               }
+
               onAdd(newAction);
               onClose();
             }}
