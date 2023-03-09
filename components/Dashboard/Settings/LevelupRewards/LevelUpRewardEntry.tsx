@@ -46,7 +46,7 @@ export const LevelUpRewardEntry = (props: {
     >
       <div className={`flex flex-col gap-2 w-full`}>
         <span className={`text-gray-600 font-wsans font-medium text-sm`}>
-          Reward ID: {reward._id}
+          {`Reward ID: ${reward._id}`}
         </span>
         <div className={`flex flex-row gap-2 justify-between`}>
           {editing ? (
