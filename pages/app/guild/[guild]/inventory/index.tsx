@@ -39,8 +39,9 @@ export const GuildInventoryPage = (props: {
     }
   }, []);
   useEffect(() => {
+    let c = [];
     if (!stack) {
-      setCards(inventory.cards.map((v) => ({ ...v, amount: 1 })));
+      c = inventory.cards.map((v) => ({ ...v, amount: 1 }));
     } else {
       let addedCards = new Map<String, Card>();
       inventory.cards.forEach((v) => {
@@ -53,8 +54,11 @@ export const GuildInventoryPage = (props: {
           });
         }
       });
-      setCards(Array.from(addedCards.values()));
+      c = Array.from(addedCards.values());
     }
+    setCards(
+      c.sort((a, b) => rarityValue[b.card.rarity] - rarityValue[a.card.rarity])
+    );
   }, [stack, inventory.cards]);
   return (
     <div
@@ -69,14 +73,14 @@ export const GuildInventoryPage = (props: {
           <h1 className={`text-3xl font-bold font-poppins`}>
             Rank Card Inventory
           </h1>
-          <div className={`flex flex-row gap-1 items-center font-bold`}>
+          <div className={`flex flex-row gap-4 items-center font-bold`}>
             Stack Cards:
             <Switch
               checked={stack}
               onChange={setStack}
               className={`${
-                stack ? 'bg-blue-600' : 'bg-gray-200'
-              } relative inline-flex h-6 w-11 items-center rounded-full`}
+                stack ? 'bg-indigo-500' : 'bg-gray-200'
+              } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
             >
               <span
                 className={`${
