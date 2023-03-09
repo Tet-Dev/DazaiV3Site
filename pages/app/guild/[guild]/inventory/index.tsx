@@ -1,19 +1,23 @@
-import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { InventoryCardRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCardRenderer";
-import { InventoryCardRendererNotOwned } from "../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned";
-import { InventoryCrateRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCrateRenderer";
-import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
-import { getGuildShardURL } from "../../../../../utils/ShardLib";
+import { Switch } from '@headlessui/react';
+import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import {
+  Card,
+  InventoryCardRenderer,
+} from '../../../../../components/Dashboard/Inventory/InventoryCardRenderer';
+import { InventoryCardRendererNotOwned } from '../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned';
+import { InventoryCrateRenderer } from '../../../../../components/Dashboard/Inventory/InventoryCrateRenderer';
+import { useDiscordUser } from '../../../../../utils/hooks/useDiscordUser';
+import { getGuildShardURL } from '../../../../../utils/ShardLib';
 import {
   CardRarity,
   CardType,
   Crate,
   GuildInventory,
   rarityValue,
-} from "../../../../../utils/types";
+} from '../../../../../utils/types';
 
 export const GuildInventoryPage = (props: {
   guild: string;
@@ -25,13 +29,33 @@ export const GuildInventoryPage = (props: {
   const { guild, inventory, guildCards, crates } = props;
   const [viewingCard, setViewingCard] = useState(null as CardType | null);
   const [createCard, setCreateCard] = useState(false);
+  const [stack, setStack] = useState(true);
+  const [cards, setCards] = useState<Card[]>([]);
   const router = useRouter();
   const user = useDiscordUser();
   useEffect(() => {
     if (props.forceLogin) {
-      router.push("/app/login");
+      router.push('/app/login');
     }
   }, []);
+  useEffect(() => {
+    if (!stack) {
+      setCards(inventory.cards.map((v) => ({ ...v, amount: 1 })));
+    } else {
+      let addedCards = new Map<String, Card>();
+      inventory.cards.forEach((v) => {
+        if (addedCards.has(v.cardID)) {
+          addedCards.get(v.cardID)!.amount += 1;
+        } else {
+          addedCards.set(v.cardID, {
+            ...v,
+            amount: 1,
+          });
+        }
+      });
+      setCards(Array.from(addedCards.values()));
+    }
+  }, [stack, inventory.cards]);
   return (
     <div
       className={`relative ${
@@ -39,11 +63,29 @@ export const GuildInventoryPage = (props: {
       } relative flex flex-col items-center`}
     >
       <div
-        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[100ch] min-w-[95%] pb-8`}
+        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[150ch] min-w-[95%] pb-8`}
       >
-        <h1 className={`text-3xl font-bold font-poppins`}>
-          Rank Card Inventory
-        </h1>
+        <div className={`flex flex-col gap-4`}>
+          <h1 className={`text-3xl font-bold font-poppins`}>
+            Rank Card Inventory
+          </h1>
+          <div className={`flex flex-row gap-1 items-center font-bold`}>
+            Stack Cards:
+            <Switch
+              checked={stack}
+              onChange={setStack}
+              className={`${
+                stack ? 'bg-blue-600' : 'bg-gray-200'
+              } relative inline-flex h-6 w-11 items-center rounded-full`}
+            >
+              <span
+                className={`${
+                  stack ? 'translate-x-6' : 'translate-x-1'
+                } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+              />
+            </Switch>
+          </div>
+        </div>
         <span className={`text-gray-400 font-wsans`}>
           Your rank card inventory is where you can view all of the rank cards
           you own and use them on your server!
@@ -51,7 +93,7 @@ export const GuildInventoryPage = (props: {
         <div
           className={`flex flex-row flex-wrap justify-start w-fit max-w-full px-4`}
         >
-          {inventory.cards.map((card, i) => (
+          {cards.map((card, i) => (
             <InventoryCardRenderer
               card={card}
               selected={card.id === inventory.selectedCard}
@@ -139,7 +181,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!authy_cookie) {
     return {
       redirect: {
-        destination: "/",
+        destination: '/',
         permanent: false,
       },
     };
@@ -148,9 +190,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const guildInventory = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/inventory`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${authy_cookie}`,
       },
     }
@@ -179,9 +221,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   allCardsJSON.sort((a, b) => rarityValue[a.rarity] - rarityValue[b.rarity]);
 
   const crates = await fetch(`${getGuildShardURL(guildID)}/inventory/crates`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${authy_cookie}`,
     },
   });
