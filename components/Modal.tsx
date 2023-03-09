@@ -21,17 +21,17 @@ export const Modal = (props: {
     <>
       <div
         className={`z-50 fixed top-0 left-0 w-screen h-screen bg-gray-900 ${
-          visible
-            ? `opacity-40 dark:opacity-80`
-            : `opacity-0 pointer-events-none`
+          visible ? `opacity-80` : `opacity-0 pointer-events-none`
         }`}
         onClick={onClose}
       />
       {noAnimation ? (
         <div
           className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 ${
-            !hideBG && `dark:bg-gray-800 bg-gray-150`
-          } p-2 rounded-xl dark:text-gray-100 ${className} ${visible ? `` : `hidden`}`}
+            !hideBG && `bg-gray-800 `
+          } p-2 rounded-xl text-gray-100 ${className} ${
+            visible ? `` : `hidden`
+          }`}
         >
           {children}
         </div>
@@ -48,8 +48,8 @@ export const Modal = (props: {
         >
           <div
             className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 ${
-              !hideBG && `dark:bg-gray-800 bg-gray-150`
-            } p-2 rounded-xl dark:text-gray-100 ${className}`}
+              !hideBG && `bg-gray-800`
+            } p-2 rounded-xl text-gray-100 ${className}`}
           >
             {children}
           </div>

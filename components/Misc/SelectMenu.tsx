@@ -51,7 +51,7 @@ export const SelectMenu = (props: SelectMenuProps) => {
       {({ open }) => (
         <>
           <Listbox.Label
-            className={`block text-sm font-wsans text-gray-800 dark:text-gray-300 ${
+            className={`block text-sm font-wsans text-gray-300 ${
               !props.label && "hidden"
             } w-full ${props.labelClasses}`}
           >
@@ -59,9 +59,9 @@ export const SelectMenu = (props: SelectMenuProps) => {
           </Listbox.Label>
           <div className={`relative ${props.className}`}>
             <Listbox.Button
-              className={`${props.overrideClasses} relative w-full bg-white ${
+              className={`${props.overrideClasses} relative w-full ${
                 props.disabled && "opacity-25 transition-all"
-              } dark:bg-gray-850 border border-gray-700 rounded-xl shadow-sm pl-3 pr-10 py-3 text-left cursor-pointer focus:outline-none sm:text-sm focus:border-indigo-500 `}
+              } bg-gray-850 border border-gray-700 rounded-xl shadow-sm pl-3 pr-10 py-3 text-left cursor-pointer focus:outline-none sm:text-sm focus:border-indigo-500 `}
             >
               <span className="flex items-center">
                 {typeof selected?.image === "string" ? (
@@ -81,7 +81,7 @@ export const SelectMenu = (props: SelectMenuProps) => {
                     );
                   })()
                 )}
-                <span className="block ml-3 truncate dark:text-gray-300">
+                <span className="block ml-3 truncate text-gray-300">
                   {selected?.name}
                 </span>
               </span>
@@ -115,7 +115,7 @@ export const SelectMenu = (props: SelectMenuProps) => {
                   props.disabled && "opacity-25"
                 } ${
                   props.optionClasses
-                } dark:bg-gray-850 shadow-lg max-h-56 py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm rounded-lg`}
+                } bg-gray-850 shadow-lg max-h-56 py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm rounded-lg`}
               >
                 {props?.selectItems &&
                   props?.selectItems?.map((option) => (
@@ -125,7 +125,7 @@ export const SelectMenu = (props: SelectMenuProps) => {
                         classNames(
                           active
                             ? `text-white bg-indigo-500`
-                            : "text-gray-900 dark:text-gray-200",
+                            : "text-gray-200",
                           "cursor-default select-none relative py-2 pl-3 pr-9 transition-all text-sm"
                         )
                       }
