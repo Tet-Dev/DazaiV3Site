@@ -1,23 +1,26 @@
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { fetcher } from "../../../utils/discordFetcher";
-import { getGuildShardURL } from "../../../utils/ShardLib";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { fetcher } from '../../../utils/discordFetcher';
+import { getGuildShardURL } from '../../../utils/ShardLib';
 import {
   CardType,
   rarityGradientMap,
   rarityWordMap,
-} from "../../../utils/types";
-import { Modal } from "../../Modal";
+} from '../../../utils/types';
+import { Modal } from '../../Modal';
+
+export interface Card {
+  cardID: string;
+  id: string;
+  card: CardType;
+  amount: number;
+}
 
 export const InventoryCardRenderer = (props: {
-  card: {
-    cardID: string;
-    id: string;
-    card: CardType;
-  };
+  card: Card;
   selected?: boolean;
 }) => {
-  const { card, cardID, id } = props.card;
+  const { card, cardID, id, amount } = props.card;
   const [modalOpen, setmodalOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
   const router = useRouter();
@@ -45,9 +48,17 @@ export const InventoryCardRenderer = (props: {
           onClick={() => setmodalOpen(true)}
           key={`card-inventory-${card._id}`}
         >
+          {!!(amount - 1) && (
+            <div
+              className={`absolute z-10 bottom-2 right-2 p-2 bg-gray-900/70 backdrop-blur-sm w-12 h-8 flex flex-row items-center justify-center rounded-xl text-sm font-medium font-wsans`}
+            >
+              x{amount}
+            </div>
+          )}
+
           <img
             src={card.url}
-            alt=""
+            alt=''
             className={`w-[17.75rem] h-[6.64rem] object-cover z-10 transition-all pointer-events-none brightness-75 group-hover:brightness-100 ease-in duration-200 rounded-2xl`}
           />
         </div>
@@ -73,16 +84,18 @@ export const InventoryCardRenderer = (props: {
               {rarityWordMap[card.rarity]}
             </span>
           </div>
-          <h1 className={`text-4xl font-poppins font-extrabold`}>
-            {card.name}
-          </h1>
+          <div className={`flex items-center gap-4 w-full justify-between`}>
+            <h1 className={`text-4xl font-poppins font-extrabold`}>
+              {card.name}
+            </h1>
+          </div>
           <div className={`flex flex-col justify-center items-center`}>
             <div
               className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0 z-10`}
             >
               <img
                 src={card.url}
-                alt=""
+                alt=''
                 className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none`}
               />
 
@@ -98,7 +111,25 @@ export const InventoryCardRenderer = (props: {
           >
             {card.description}
           </span>
-          <div className={`flex flex-row gap-4 justify-end w-full`}>
+          <div
+            className={`flex flex-row gap-4 ${
+              !!(amount - 1) ? `justify-between` : `justify-end`
+            } w-full`}
+          >
+            {!!(amount - 1) && (
+              <div
+                className={`bg-gray-900 px-4 p-1.5 rounded-2xl flex flex-row font-wsans font-bold text-lg items-center gap-2 text-gray-400`}
+              >
+                Owned:{' '}
+                <div
+                  className={`font-extrabold bg-gradient-to-r ${
+                    rarityGradientMap[card.rarity]
+                  } animate-gradient-medium leading-loose bg-clip-text text-transparent`}
+                >
+                  {`x${amount}`}
+                </div>
+              </div>
+            )}
             <button
               className={`rounded-2xl px-4 py-2 border border-gray-50/10 w-fit bg-gray-50/5 flex flex-row gap-2 items-center hover:bg-indigo-500 hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
               onClick={async () => {
@@ -109,7 +140,7 @@ export const InventoryCardRenderer = (props: {
                     router.query.guild as string
                   )}/guilds/${router.query.guild}/inventory/selectCard`,
                   {
-                    method: "POST",
+                    method: 'POST',
                     body: JSON.stringify({
                       cardID: id,
                     }),
