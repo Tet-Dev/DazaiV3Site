@@ -142,6 +142,7 @@ export type GuildInventory = {
     card: CardType;
   }[];
   selectedCard?: string;
+  money?: number;
 };
 
 export type LevelUpRewardType =
