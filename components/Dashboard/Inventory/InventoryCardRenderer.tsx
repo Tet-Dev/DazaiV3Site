@@ -30,8 +30,8 @@ export const InventoryCardRenderer = (props: {
     // calculate appropriate scale
     const cardHeight = 576;
     const screen = window.innerHeight;
-    // card should take up 60% of the screen
-    const scale = (screen * 0.6) / cardHeight;
+    // card should take up 70% of the screen
+    const scale = (screen * 0.7) / cardHeight;
     setScale(scale);
   }, []);
 
@@ -157,7 +157,7 @@ export const InventoryCardRenderer = (props: {
                 </div>
                 <div className={`flex flex-col justify-center items-center`}>
                   <div
-                    className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0 z-10`}
+                    className={`card rounded-3xl shadow-lg w-fit p-1 relative overflow-hidden shrink-0 z-10`}
                   >
                     <img
                       src={card.url}
