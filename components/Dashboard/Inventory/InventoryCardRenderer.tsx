@@ -63,98 +63,120 @@ export const InventoryCardRenderer = (props: {
           />
         </div>
       </div>
-      <Modal visible={modalOpen} onClose={() => setmodalOpen(false)}>
-        <div
-          className={`flex flex-col p-6 gap-6 rounded-3xl border-gray-100/10 bg-gray-800 max-w-prose ${
-            updating && `opacity-50 pointer-events-none`
-          } transition-all`}
-        >
+      <Modal visible={modalOpen} onClose={() => setmodalOpen(false)} hideBG>
+        <div className={`relative h-[576px] aspect-[400/576] scale-150`}>
           <div
-            className={`flex flex-row justify-between items-center -mt-2 -mb-4`}
-          >
-            <span className={`text-gray-500 font-wsans`}>
-              Card ID: {card._id as string}
-            </span>
-
-            <span
-              className={`text-2xl font-wsans font-bold uppercase bg-gradient-to-r ${
-                rarityGradientMap[card.rarity]
-              } animate-gradient-medium leading-loose bg-clip-text text-transparent `}
-            >
-              {rarityWordMap[card.rarity]}
-            </span>
-          </div>
-          <div className={`flex items-center gap-4 w-full justify-between`}>
-            <h1 className={`text-4xl font-poppins font-extrabold`}>
-              {card.name}
-            </h1>
-          </div>
-          <div className={`flex flex-col justify-center items-center`}>
-            <div
-              className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0 z-10`}
-            >
-              <img
-                src={card.url}
-                alt=''
-                className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none`}
-              />
-
-              <div
-                className={`bg-gradient-to-r ${
-                  rarityGradientMap[card.rarity]
-                } animate-gradient absolute top-0 left-0 w-full h-full -z-10`}
-              />
-            </div>
-          </div>
-          <span
-            className={`text-gray-400 font-wsans text-xl p-4 border border-gray-50/10 rounded-2xl`}
-          >
-            {card.description}
-          </span>
+            className={`absolute w-full h-full rounded-3xl bg-gradient-to-br z-20 ${
+              rarityGradientMap[card.rarity]
+            } leading-loose opacity-5`}
+          />
           <div
-            className={`flex flex-row gap-4 ${
-              !!(amount - 1) ? `justify-between` : `justify-end`
-            } w-full`}
+            className={`absolute w-full h-full rounded-3xl bg-gradient-to-r z-0 ${
+              rarityGradientMap[card.rarity]
+            } animate-gradient-medium leading-loose blur-lg opacity-50`}
+          />
+          <div
+            className={`absolute w-full h-full rounded-3xl bg-gradient-to-br z-10 from-gray-750 to-gray-900  leading-loose`}
+          />
+          <div
+            className={`absolute w-full h-full rounded-3xl bg-gradient-to-br z-10 opacity-5 overflow-hidden`}
           >
-            {!!(amount - 1) && (
+            <img
+              src={card.url}
+              alt=''
+              className={`w-auto h-full object-cover z-10 rounded-3xl pointer-events-none blur-sm`}
+            />
+          </div>
+          <div
+            className={`flex absolute flex-col p-8 justify-between gap-6 h-full w-full rounded-3xl border-gray-100/10 ${
+              updating && `opacity-50 pointer-events-none`
+            } transition-all z-30`}
+          >
+            <div className={`flex flex-col gap-4 flex-grow`}>
               <div
-                className={`bg-gray-900 px-4 p-1.5 rounded-2xl flex flex-row font-wsans font-bold text-lg items-center gap-2 text-gray-400`}
+                className={`flex flex-row justify-between items-center -mt-2 mb-2`}
               >
-                Owned:{' '}
-                <div
-                  className={`font-extrabold bg-gradient-to-r ${
+                <span
+                  className={`text-xl font-wsans font-extrabold uppercase bg-gradient-to-r ${
                     rarityGradientMap[card.rarity]
-                  } animate-gradient-medium leading-loose bg-clip-text text-transparent`}
+                  } animate-gradient-medium leading-loose bg-clip-text text-transparent `}
                 >
-                  {`x${amount}`}
+                  {rarityWordMap[card.rarity]}
+                </span>
+                {!!(amount - 1) && (
+                  <div
+                    className={`bg-black px-6 p-1 rounded-full flex flex-row font-wsans font-bold text-sm items-center gap-2 text-white`}
+                  >
+                    Owned:{' '}
+                    <div
+                      className={`font-extrabold bg-gradient-to-r ${
+                        rarityGradientMap[card.rarity]
+                      } animate-gradient-medium leading-loose bg-clip-text text-transparent`}
+                    >
+                      {`x${amount}`}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className={`flex items-center gap-4 w-full justify-between`}>
+                <h1 className={`text-2xl font-poppins font-extrabold`}>
+                  {card.name}
+                </h1>
+              </div>
+              <div className={`flex flex-col justify-center items-center`}>
+                <div
+                  className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0 z-10`}
+                >
+                  <img
+                    src={card.url}
+                    alt=''
+                    className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none`}
+                  />
+                  <div
+                    className={`bg-gradient-to-r ${
+                      rarityGradientMap[card.rarity]
+                    } animate-gradient absolute top-0 left-0 w-full h-full -z-10`}
+                  />
                 </div>
               </div>
-            )}
-            <button
-              className={`rounded-2xl px-4 py-2 border border-gray-50/10 w-fit bg-gray-50/5 flex flex-row gap-2 items-center hover:bg-indigo-500 hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
-              onClick={async () => {
-                if (updating) return;
-                setUpdating(true);
-                const res = await fetcher(
-                  `${await getGuildShardURL(
-                    router.query.guild as string
-                  )}/guilds/${router.query.guild}/inventory/selectCard`,
-                  {
-                    method: 'POST',
-                    body: JSON.stringify({
-                      cardID: id,
-                    }),
-                  }
-                );
-                setUpdating(false);
-                if (res.status === 200) {
-                  router.replace(router.asPath);
-                }
-              }}
-              disabled={updating || props.selected}
+              <span
+                className={`text-gray-400 font-wsans text-xs p-4 bg-gray-900/50 flex-grow rounded-2xl`}
+              >
+                {card.description}
+              </span>
+            </div>
+            <div
+              className={`flex flex-row gap-4 justify-between w-full items-center`}
             >
-              {props.selected ? `Card Selected` : `Select Card`}
-            </button>
+              <span className={`text-gray-500 font-wsans text-xs`}>
+                Card ID: {card._id as string}
+              </span>
+              <button
+                className={`rounded-full px-6 py-1.5 w-fit text-sm bg-gray-100 text-gray-850 font-bold flex flex-row gap-2 items-center hover:bg-indigo-500 hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
+                onClick={async () => {
+                  if (updating) return;
+                  setUpdating(true);
+                  const res = await fetcher(
+                    `${await getGuildShardURL(
+                      router.query.guild as string
+                    )}/guilds/${router.query.guild}/inventory/selectCard`,
+                    {
+                      method: 'POST',
+                      body: JSON.stringify({
+                        cardID: id,
+                      }),
+                    }
+                  );
+                  setUpdating(false);
+                  if (res.status === 200) {
+                    router.replace(router.asPath);
+                  }
+                }}
+                disabled={updating || props.selected}
+              >
+                {props.selected ? `SELECTED` : `SELECT`}
+              </button>
+            </div>
           </div>
         </div>
       </Modal>
