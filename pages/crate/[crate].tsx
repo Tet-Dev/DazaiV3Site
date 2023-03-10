@@ -10,6 +10,7 @@ import {
   CardType,
   Crate,
   rarityGradientMap,
+  rarityParticleColorMap,
   rarityWordMap,
 } from "../../utils/types";
 import Tilt from "react-parallax-tilt";
@@ -20,16 +21,7 @@ import { ObjectId } from "mongodb";
 import { useRouter } from "next/router";
 import { clientID } from "../../utils/constants";
 
-const rarityParticleColorMap = {
-  [CardRarity.LEGENDARY]: ["##818cf8", "#db2777", "#8b5cf6"],
-  [CardRarity.MYTHIC]: ["#f87171", "#be123c", "#9d174d"],
-  [CardRarity.EPIC]: ["#f472b6", "#e148ec", "#9748ec"],
-  [CardRarity.SUPER_RARE]: ["#2495ff", "#87ffff", "#7040ff"],
-  [CardRarity.RARE]: ["#34d399", "#00b303", "#00b591"],
-  [CardRarity.COMMON]: ["#a0aec0", "#bdcade", "#4a5568"],
-  [CardRarity.EVENT_RARE]: ["#f6e05e", "#80ffce", "#a3ffa9"],
-  [CardRarity.SECRET_RARE]: ["#a0aec0", "#cfe2ff", "#fce3ff"],
-};
+
 
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export const CratePage = (props: { crate: Crate }) => {
