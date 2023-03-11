@@ -129,6 +129,14 @@ export const GuildInventoryPage = (props: {
               }
               )
             </h2>
+            <button
+              className={`bg-indigo-500 group-hover:bg-indigo-400 text-gray-50 font-wsans font-bold text-sm px-4 py-2 rounded-xl transition-all`}
+              onClick={() => {
+                router.push(`/crate/all/${guild}`);
+              }}
+            >
+              Open All
+            </button>
             <div
               className={`flex flex-row flex-wrap justify-evenly px-6 gap-4`}
             >
