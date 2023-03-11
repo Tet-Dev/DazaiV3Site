@@ -181,33 +181,59 @@ export const InventoryCardRenderer = (props: {
                 className={`flex flex-row gap-4 justify-between w-full items-center`}
               >
                 <span className={`text-gray-500 font-wsans text-xs`}>
-                  Card ID: {card._id as string}
+                  Card ID: {id as string}
                 </span>
-                <button
-                  className={`rounded-full px-6 py-1.5 w-fit text-sm bg-gray-100 text-gray-850 font-bold flex flex-row gap-2 items-center hover:bg-indigo-500 hover:text-white hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
-                  onClick={async () => {
-                    if (updating) return;
-                    setUpdating(true);
-                    const res = await fetcher(
-                      `${await getGuildShardURL(
-                        router.query.guild as string
-                      )}/guilds/${router.query.guild}/inventory/selectCard`,
-                      {
-                        method: "POST",
-                        body: JSON.stringify({
-                          cardID: id,
-                        }),
+                <div className={`flex flex-col gap-2 items-center`}>
+                  <button
+                    className={`rounded-full px-6 py-1.5 w-fit text-sm bg-gray-100 text-gray-850 font-bold flex flex-row gap-2 items-center hover:bg-indigo-500 hover:text-white hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
+                    onClick={async () => {
+                      if (updating) return;
+                      setUpdating(true);
+                      const res = await fetcher(
+                        `${await getGuildShardURL(
+                          router.query.guild as string
+                        )}/guilds/${router.query.guild}/inventory/selectCard`,
+                        {
+                          method: "POST",
+                          body: JSON.stringify({
+                            cardID: id,
+                          }),
+                        }
+                      );
+                      setUpdating(false);
+                      if (res.status === 200) {
+                        router.replace(router.asPath);
                       }
-                    );
-                    setUpdating(false);
-                    if (res.status === 200) {
-                      router.replace(router.asPath);
-                    }
-                  }}
-                  disabled={updating || props.selected}
-                >
-                  {props.selected ? `SELECTED` : `SELECT`}
-                </button>
+                    }}
+                    disabled={updating || props.selected}
+                  >
+                    {props.selected ? `SELECTED` : `SELECT`}
+                  </button>
+                  {card.sellPrice && (
+                    <button
+                      className={`rounded-full px-3 py-1.5 text-xs bg-rose-500 text-gray-100 font-bold flex flex-row gap-2 items-center hover:bg-rose-300 hover:text-white hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
+                      onClick={async () => {
+                        if (updating) return;
+                        setUpdating(true);
+                        const res = await fetcher(
+                          `${await getGuildShardURL(
+                            router.query.guild as string
+                          )}/guilds/${router.query.guild}/inventory/sell/${id}`,
+                          {
+                            method: "POST",
+                          }
+                        );
+                        setUpdating(false);
+                        if (res.status === 200) {
+                          router.replace(router.asPath);
+                        }
+                      }}
+                      disabled={updating || props.selected}
+                    >
+                      Sell for {card.sellPrice}円
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -75,7 +75,9 @@ export const GuildInventoryPage = (props: {
               Rank Card Inventory
             </h1>
             <div className={`p-2 bg-gray-900 rounded-2xl px-4`}>
-              <span className={`font-bold font-wsans`}>{inventory.money ?? 0} 円</span>
+              <span className={`font-bold font-wsans`}>
+                {inventory.money ?? 0} 円
+              </span>
             </div>
           </div>
           <div className={`flex flex-row gap-4 items-center font-bold`}>
