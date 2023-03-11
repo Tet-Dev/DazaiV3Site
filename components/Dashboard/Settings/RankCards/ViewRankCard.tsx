@@ -21,6 +21,9 @@ export const ViewRankCard = (props: {
   const [editMode, setEditMode] = useState(false);
   const [cardName, setCardName] = useState(card.name);
   const [cardDescription, setCardDescription] = useState(card.description);
+  const [cardPrice, setCardPrice] = useState(
+    card.sellPrice ?? (0 as number | string)
+  );
   const [rarity, setRarity] = useState(card.rarity);
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState("");
@@ -76,6 +79,33 @@ export const ViewRankCard = (props: {
             {cardName.length}/40
           </span>
         </div>
+        <div className={`flex flex-col gap-2 relative w-32`}>
+          <span className={`text-gray-300 font-wsans font-medium`}>
+            Sell Price
+          </span>
+          <div className={`w-full h-full relative`}>
+            <input
+              type="text"
+              value={cardPrice}
+              onChange={(e) => setCardPrice(e.target.value)}
+              className={`text-sm w-full h-full pr-8 bg-gray-850 px-4 p-2 rounded-2xl font-medium font-poppins focus:outline-none focus:ring-2 ring-0 ring-indigo-500 transition-all`}
+              onBlur={() => {
+                if (typeof cardPrice === "string") {
+                  if (cardPrice.length === 0) {
+                    setCardPrice(0);
+                  } else {
+                    setCardPrice(parseInt(cardPrice) || 0);
+                  }
+                }
+              }}
+            />
+            <span
+              className={`absolute top-1/2 -translate-y-1/2 right-1 text-gray-400 p-2 rounded-2xl text-xs`}
+            >
+              円
+            </span>
+          </div>
+        </div>
         <div
           className={`flex flex-col gap-2 items-start font-wsans font-medium z-20 w-64`}
         >
@@ -87,7 +117,8 @@ export const ViewRankCard = (props: {
             }))}
             selectedItemId={rarity}
             onSelect={(x) => setRarity(x.id as CardRarity)}
-            className={`w-full`}
+            className={`w-full h-full`}
+            overrideClasses={`h-full`}
           />
         </div>
       </div>
@@ -131,6 +162,10 @@ export const ViewRankCard = (props: {
             const guildShardURL = await getGuildShardURL(
               router.query.guild as string
             );
+            let int = parseInt(`${cardPrice}`);
+            if (isNaN(int)) {
+              int = 0;
+            }
             const res = await fetcher(
               `${guildShardURL}/guilds/${router.query.guild}/settings/cards/${card._id}`,
               {
@@ -142,6 +177,7 @@ export const ViewRankCard = (props: {
                   name: cardName,
                   description: cardDescription,
                   rarity: rarity,
+                  sellPrice: int,
                 }),
               }
             );
@@ -181,14 +217,20 @@ export const ViewRankCard = (props: {
         <span className={`text-gray-500 font-wsans`}>
           Card ID: {card._id as string}
         </span>
-
-        <span
-          className={`text-2xl font-wsans font-bold uppercase bg-gradient-to-r ${
-            rarityGradientMap[card.rarity]
-          } animate-gradient-medium leading-loose bg-clip-text text-transparent `}
-        >
-          {rarityWordMap[card.rarity]}
-        </span>
+        <div className={`flex flex-col items-center`}>
+          <span
+            className={`text-2xl font-wsans font-bold uppercase bg-gradient-to-r ${
+              rarityGradientMap[card.rarity]
+            } animate-gradient-medium leading-loose bg-clip-text text-transparent `}
+          >
+            {rarityWordMap[card.rarity]}
+          </span>
+          {!card.sellPrice && (
+            <span className={`text-red-500 font-wsans font-medium`}>
+              Not for Sale
+            </span>
+          )}
+        </div>
       </div>
       <h1 className={`text-4xl font-poppins font-extrabold`}>{card.name}</h1>
       <div className={`flex flex-col justify-center items-center`}>
@@ -213,7 +255,16 @@ export const ViewRankCard = (props: {
       >
         {card.description}
       </span>
-      <div className={`flex flex-row gap-4 justify-end w-full`}>
+      <div
+        className={`flex flex-row gap-4 ${
+          card.sellPrice ? "justify-between" : "justify-end"
+        } w-full items-center`}
+      >
+        {card.sellPrice && (
+          <span className={`text-gray-100/50 font-wsans text-sm`}>
+            Sells for <b className={`text-base text-gray-300`}>{card.sellPrice} 円</b>
+          </span>
+        )}
         <button
           className={`rounded-2xl px-4 py-2 border border-gray-50/10 w-fit bg-gray-50/5 flex flex-row gap-2 items-center hover:bg-indigo-500 hover:border-transparent transition-all`}
           onClick={() => setEditMode(true)}

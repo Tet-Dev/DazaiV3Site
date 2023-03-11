@@ -111,7 +111,7 @@ export const SelectMenu = (props: SelectMenuProps) => {
               // enterTo="transform translate-y-0 opacity-100"
             >
               <Listbox.Options
-                className={`absolute z-10 mt-1 w-full bg-white ${
+                className={`absolute z-10 mt-1 w-full ${
                   props.disabled && "opacity-25"
                 } ${
                   props.optionClasses
