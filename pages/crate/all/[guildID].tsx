@@ -73,7 +73,7 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
             All Crates
           </h1>
           <span className='text-2xl text-center font-wsans font-medium'>
-            {Array.from(crateTypes.entries()).map(([v, i]) => (
+            {Array.from(crateTypes.entries()).map(([v, i], _) => (
               <div>
                 {v}: x{i}
               </div>
