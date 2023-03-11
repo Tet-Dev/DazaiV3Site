@@ -211,7 +211,7 @@ export const InventoryCardRenderer = (props: {
                   </button>
                   {card.sellPrice && (
                     <button
-                      className={`rounded-full px-3 py-1.5 text-xs bg-rose-500 text-gray-100 font-bold flex flex-row gap-2 items-center hover:bg-rose-300 hover:text-white hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
+                      className={`rounded-full px-3 py-1.5 text-[0.5rem] bg-rose-500 text-gray-100 font-bold flex flex-row gap-2 items-center hover:bg-rose-300 hover:text-white hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
                       onClick={async () => {
                         if (updating) return;
                         setUpdating(true);

@@ -52,7 +52,9 @@ export const RankCardSettings = (props: {
               );
               setCards(await res.json());
               setViewingCard(null);
+              
             }}
+            key={`view-card-${viewingCard._id}`}
           />
         ) : createCard ? (
           <CreateRankCard />
