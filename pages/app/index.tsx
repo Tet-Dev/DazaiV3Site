@@ -43,7 +43,7 @@ const DashboardIndex = () => {
   }, []);
   return (
     <div
-      className={`w-full h-screen bg-gray-900 flex flex-col gap-16 py-16 overflow-auto`}
+      className={`w-full h-screen bg-gray-900 flex flex-col gap-16 py-16 px-8 overflow-auto`}
     >
       <button
         className={`px-6 py-3 bg-black hover:bg-purple-800 disabled:opacity-50 disabled:backdrop-blur-2xl bottom-4 left-4 w-fit absolute z-10 rounded-2xl text-gray-50/80 cursor-pointer transition-all`}

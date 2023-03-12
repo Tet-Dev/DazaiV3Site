@@ -30,10 +30,23 @@ export const InventoryCardRenderer = (props: {
   useEffect(() => {
     // calculate appropriate scale
     const cardHeight = 576;
-    const screen = window.innerHeight;
-    // card should take up 70% of the screen
-    const scale = (screen * 0.7) / cardHeight;
-    setScale(scale);
+    const cardWidth = 400;
+    // on window resize, recalculate scale
+    const handleResize = () => {
+      const sW = window.innerWidth;
+      const sH = window.innerHeight;
+      // card should take up 75% of the screen height, but not more than 80% of the width
+      const scale = Math.min((sH * 0.75) / cardHeight, (sW * 0.8) / cardWidth);
+
+      // const scale = (sH * 0.4) / cardHeight;
+      setScale(scale);
+    };
+    // add event listener
+    window.addEventListener("resize", handleResize);
+    // call handler right away so state gets updated with initial window size
+    handleResize();
+    // remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -72,7 +85,12 @@ export const InventoryCardRenderer = (props: {
           />
         </div>
       </div>
-      <Modal visible={modalOpen} onClose={() => setmodalOpen(false)} hideBG className={`ease-[cubic-bezier(0.175,0.885,0.32,1.275)] duration-300`}>
+      <Modal
+        visible={modalOpen}
+        onClose={() => setmodalOpen(false)}
+        hideBG
+        className={`ease-[cubic-bezier(0.175,0.885,0.32,1.275)] duration-300`}
+      >
         <Tilt
           glareEnable={true}
           glareMaxOpacity={0.2}

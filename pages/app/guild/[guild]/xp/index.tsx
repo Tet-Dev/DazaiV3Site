@@ -61,7 +61,7 @@ const GuildXP = (props: {
       >
         <div
           className={`grid grid-cols-12 flex-grow h-full xl:grid-cols-8 xl:mx-2 ${
-            user ? `2xl:ml-2 ml-[10%] gap-8 2xl:gap-0 ` : `2xl:ml-[5%] gap-8`
+            user ? `2xl:ml-2 ml-[10%] gap-8 2xl:gap-0 lg:px-12 md:px-8 sm:px-2` : `2xl:ml-[5%] gap-8`
           } relative`}
         >
           <GuildLeaderboard

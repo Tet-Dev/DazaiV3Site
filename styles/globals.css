@@ -33,3 +33,12 @@ a {
 .ctain {
   @apply 2xl:w-[90%] 2xl:max-w-6xl mx-auto;
 }
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
+}

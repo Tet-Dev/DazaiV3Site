@@ -53,31 +53,31 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
           </div>
         </div>
       </div>
-      <Modal visible={modalOpen} onClose={() => setmodalOpen(false)}>
+      <Modal visible={modalOpen} onClose={() => setmodalOpen(false)} className={`w-full`}>
         <div
           className={`flex flex-col p-6 gap-6 rounded-3xl border-gray-100/10 bg-gray-800 max-w-prose ${
             updating && `opacity-50 pointer-events-none`
           } transition-all w-screen`}
-        >
+        >``
           <div
             className={`flex flex-row justify-between items-center -mt-2 -mb-4`}
           >
             {card.rarity !== `secret_rare` && (
-              <span className={`text-gray-500 font-wsans `}>
+              <span className={`text-gray-500 font-wsans lg:text-xs`}>
                 Card ID: {card._id as string}
               </span>
             )}
             <span
               className={`text-2xl font-wsans font-bold uppercase bg-gradient-to-r ${
                 rarityGradientMap[card.rarity]
-              } animate-gradient-medium leading-loose bg-clip-text text-transparent `}
+              } animate-gradient-medium leading-loose bg-clip-text text-transparent lg:text-lg`}
             >
               {rarityWordMap[card.rarity]}
             </span>
           </div>
           <div className={`flex flex-row gap-4 justify-between w-full`}>
             <h1
-              className={`text-4xl font-poppins font-extrabold ${
+              className={`text-4xl font-poppins font-extrabold lg:text-2xl ${
                 card.rarity === `secret_rare` && `blur-md pointer-events-none`
               }`}
             >
@@ -88,7 +88,7 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
               }
             </h1>
             <span
-              className={`text-gray-500 font-wsans font-black text-xl uppercase text-end`}
+              className={`text-gray-500 font-wsans font-black text-xl uppercase text-end lg:text-base`}
             >
               Unowned
             </span>
@@ -124,7 +124,7 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
             </div>
           </div>
           <span
-            className={`text-gray-400 font-wsans text-xl p-4 border border-gray-50/10 rounded-2xl`}
+            className={`text-gray-400 font-wsans text-xl p-4 border border-gray-50/10 rounded-2xl lg:text-sm lg:p-3`}
           >
             {card.rarity === "secret_rare" ? `???` : card.description}
           </span>
