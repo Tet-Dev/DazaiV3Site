@@ -1,34 +1,34 @@
-'use client';
-import { Transition } from '@headlessui/react';
-import { GetServerSideProps } from 'next/types';
-import { useEffect, useState } from 'react';
-import ConfettiExplosion from 'react-confetti-explosion';
+"use client";
+import { Transition } from "@headlessui/react";
+import { GetServerSideProps } from "next/types";
+import { useEffect, useState } from "react";
+import ConfettiExplosion from "react-confetti-explosion";
 // import { CrateCanvas } from "../../components/Crates/CrateCanvas";
-import { CrateTimer } from '../../../utils/classes/CrateTimer';
+import { CrateTimer } from "../../../utils/classes/CrateTimer";
 import {
   CardRarity,
   CardType,
   Crate,
   rarityGradientMap,
   rarityWordMap,
-} from '../../../utils/types';
-import Tilt from 'react-parallax-tilt';
-import { fetcher } from '../../../utils/discordFetcher';
-import { getGuildShardURL } from '../../../utils/ShardLib';
-import Mongo from '../../../utils/classes/Mongo';
-import { ObjectId } from 'mongodb';
-import { useRouter } from 'next/router';
-import { clientID } from '../../../utils/constants';
+} from "../../../utils/types";
+import Tilt from "react-parallax-tilt";
+import { fetcher } from "../../../utils/discordFetcher";
+import { getGuildShardURL } from "../../../utils/ShardLib";
+import Mongo from "../../../utils/classes/Mongo";
+import { ObjectId } from "mongodb";
+import { useRouter } from "next/router";
+import { clientID } from "../../../utils/constants";
 
 const rarityParticleColorMap = {
-  [CardRarity.LEGENDARY]: ['##818cf8', '#db2777', '#8b5cf6'],
-  [CardRarity.MYTHIC]: ['#f87171', '#be123c', '#9d174d'],
-  [CardRarity.EPIC]: ['#f472b6', '#e148ec', '#9748ec'],
-  [CardRarity.SUPER_RARE]: ['#2495ff', '#87ffff', '#7040ff'],
-  [CardRarity.RARE]: ['#34d399', '#00b303', '#00b591'],
-  [CardRarity.COMMON]: ['#a0aec0', '#bdcade', '#4a5568'],
-  [CardRarity.EVENT_RARE]: ['#f6e05e', '#80ffce', '#a3ffa9'],
-  [CardRarity.SECRET_RARE]: ['#a0aec0', '#cfe2ff', '#fce3ff'],
+  [CardRarity.LEGENDARY]: ["##818cf8", "#db2777", "#8b5cf6"],
+  [CardRarity.MYTHIC]: ["#f87171", "#be123c", "#9d174d"],
+  [CardRarity.EPIC]: ["#f472b6", "#e148ec", "#9748ec"],
+  [CardRarity.SUPER_RARE]: ["#2495ff", "#87ffff", "#7040ff"],
+  [CardRarity.RARE]: ["#34d399", "#00b303", "#00b591"],
+  [CardRarity.COMMON]: ["#a0aec0", "#bdcade", "#4a5568"],
+  [CardRarity.EVENT_RARE]: ["#f6e05e", "#80ffce", "#a3ffa9"],
+  [CardRarity.SECRET_RARE]: ["#a0aec0", "#cfe2ff", "#fce3ff"],
 };
 
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
@@ -57,22 +57,35 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
     setCrateTypes(ct);
   }, [crates]);
 
+  useEffect(() => {
+    if (stage === 2) {
+      const timer = setTimeout(() => {
+        setStage(3);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (stage === 3) {
+      const timer = setTimeout(() => {
+        setStage(4);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [stage]);
   return (
     <>
       <Transition
         show={stage === 0}
-        enter='transition-opacity duration-1000'
-        enterFrom='opacity-0'
-        enterTo='opacity-100'
-        leave='transition-opacity duration-1000'
-        leaveFrom='opacity-100'
-        leaveTo='opacity-0'
+        enter="transition-opacity duration-1000"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-1000"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
       >
-        <div className='h-screen w-screen absolute top-0 left-0 z-10 pt-[10%] flex flex-col gap-4'>
-          <h1 className='text-5xl text-center font-poppins font-bold'>
-            All Crates
+        <div className="h-screen w-screen absolute top-0 left-0 z-10 pt-[10%] flex flex-col gap-4">
+          <h1 className="text-5xl lg:text-3xl text-center font-poppins font-bold">
+            Open All Crates
           </h1>
-          <span className='text-2xl text-center font-wsans font-medium'>
+          <span className="text-2xl lg:text-lg text-center font-wsans font-medium">
             {Array.from(crateTypes.entries()).map(([v, i], j) => (
               <div key={j}>
                 {v}: x{i}
@@ -80,7 +93,7 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
             ))}
           </span>
           <button
-            className='mx-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-2xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed'
+            className="mx-auto px-8 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-lg font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={opening || unopenedCrates.length == 0}
             onClick={async () => {
               if (opening) return;
@@ -91,13 +104,13 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
                     crate._id
                   }/open`,
                   {
-                    method: 'POST',
+                    method: "POST",
                   }
                 );
                 if (!res.ok) {
                   if (res.status === 401) {
                     localStorage.setItem(
-                      'redirect',
+                      "redirect",
                       globalThis?.location?.href
                     );
                     return router.push(
@@ -115,31 +128,156 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
               // CrateTimer.getInstance().open();
             }}
           >
-            {opening ? 'Opening...' : 'Open Crates'}
+            {opening ? "Opening..." : "Open All"}
           </button>
         </div>
       </Transition>
 
       {unopenedCrates.length > 0 && (
+        // <Transition
+        //   show={stage >= 2}
+        //   enter='transition-opacity duration-1000'
+        //   enterFrom='opacity-0'
+        //   enterTo='opacity-100'
+        //   leave='transition-opacity duration-1000'
+        //   leaveFrom='opacity-100'
+        //   leaveTo='opacity-0'
+        // >
+        //   <div className={`w-screen h-screen absolute top-0 left-0 z-0`}>
+        //     <div className='w-full h-full relative'>
+        //       <div className='w-full h-full absolute top-0 left-0 bg-gradient-to-t from-gray-850 via-gray-850 to-gray-850/50 z-10 ' />
+        //       <img
+        //         src={unopenedCrates[crateIndex].item.url}
+        //         className={`absolute left-1/2 -translate-x-1/2 w-[200%] brightness-75 transition-all duration-1000 blur-xl`}
+        //       />
+        //     </div>
+        //   </div>
+        //   <div className='h-screen w-[80vw] absolute top-0 left-1/2 -translate-x-1/2 z-10 flex flex-row gap-24 items-center justify-evenly'>
+        //     <Tilt
+        //       glareEnable={true}
+        //       glareMaxOpacity={0.5}
+        //       glareColor={
+        //         rarityParticleColorMap[
+        //           unopenedCrates[crateIndex].item.rarity
+        //         ][0]
+        //       }
+        //       glarePosition='bottom'
+        //       glareBorderRadius='10px'
+        //       tiltMaxAngleX={20}
+        //       tiltMaxAngleY={10}
+        //       scale={1.1}
+        //       className={`rounded-3xl overflow-hidden scale-100 opacity-100 ease-bounce transition-all duration-1000 delay-300`}
+        //     >
+        //       <div
+        //         className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0`}
+        //       >
+        //         <img
+        //           src={unopenedCrates[crateIndex].item.url}
+        //           alt=''
+        //           className={`w-[40rem] h-auto object-cover z-10 rounded-3xl brightness-75 transition-all duration-1000 ease-in pointer-events-none`}
+        //         />
+
+        //         <ConfettiExplosion
+        //           className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+        //           duration={5000}
+        //           force={0.8}
+        //           width={2000}
+        //           particleCount={200}
+        //           colors={
+        //             rarityParticleColorMap[
+        //               unopenedCrates[crateIndex].item.rarity
+        //             ]
+        //           }
+        //         />
+        //         <div
+        //           className={`bg-gradient-to-r ${
+        //             rarityGradientMap[unopenedCrates[crateIndex].item.rarity]
+        //           } animate-gradient absolute top-0 left-0 w-full h-full -z-10`}
+        //         />
+        //       </div>
+        //     </Tilt>
+        //     <div
+        //       className={`w-full max-w-prose flex flex-col gap-4 items-center`}
+        //     >
+        //       <div className={`flex flex-col gap-4 items-start w-fit`}>
+        //         <span
+        //           className={`text-lg font-bold font-wsans text-gray-50/40 uppercase delay-500 duration-1000 transition-all opacity-100 ease-bounce`}
+        //         >
+        //           Card Background
+        //         </span>
+        //         <h1
+        //           className={`text-5xl text-center font-poppins font-extrabold delay-[750ms] duration-[2000ms] transition-all opacity-100 ease-out`}
+        //         >
+        //           {unopenedCrates[crateIndex].item.name}
+        //         </h1>
+        //         <span
+        //           className={`text-2xl font-wsans font-bold uppercase bg-gradient-to-r ${
+        //             rarityGradientMap[unopenedCrates[crateIndex].item.rarity]
+        //           } animate-gradient-medium leading-loose bg-clip-text text-transparent delay-[750ms] duration-[2000ms] transition-all opacity-100 ease-out`}
+        //         >
+        //           {rarityWordMap[unopenedCrates[crateIndex].item.rarity]}
+        //         </span>
+
+        //         <span
+        //           className={`text-2xl font-wsans font-medium delay-[2000ms] duration-1000 transition-all opacity-100`}
+        //         >
+        //           {unopenedCrates[crateIndex].item.description}
+        //         </span>
+        //         <button
+        //           onClick={increaseCrateIndex}
+        //           disabled={stage >= 3}
+        //           className='mx-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-2xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed'
+        //         >
+        //           Next
+        //         </button>
+        //         <Transition
+        //           show={stage >= 3}
+        //           enter='delay-[2000ms] duration-1000'
+        //           enterFrom='opacity-0 scale-50'
+        //           enterTo='opacity-100 scale-100'
+        //           leave='duration-1000 opacity-0 scale-50'
+        //         >
+        //           <button
+        //             className={` px-6 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
+        //             onClick={() => {
+        //               if (guildID && guildID !== `@global`)
+        //                 router.push(`/app/guild/${guildID}/inventory`);
+        //               else router.push(`/app`);
+        //             }}
+        //             // disabled={stage === 5}
+        //           >
+        //             {guildID && guildID !== `@global`
+        //               ? `Back to Inventory`
+        //               : `Back to Home`}
+        //           </button>
+        //         </Transition>
+        //       </div>
+        //     </div>
+        //   </div>
+        // </Transition>
         <Transition
           show={stage >= 2}
-          enter='transition-opacity duration-1000'
-          enterFrom='opacity-0'
-          enterTo='opacity-100'
-          leave='transition-opacity duration-1000'
-          leaveFrom='opacity-100'
-          leaveTo='opacity-0'
+          enter="transition-opacity duration-1000"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-1000"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
           <div className={`w-screen h-screen absolute top-0 left-0 z-0`}>
-            <div className='w-full h-full relative'>
-              <div className='w-full h-full absolute top-0 left-0 bg-gradient-to-t from-gray-850 via-gray-850 to-gray-850/50 z-10 ' />
+            <div className="w-full h-full relative ">
+              <div className="w-full h-full absolute top-0 left-0 bg-gradient-to-t from-gray-850 via-gray-850 to-gray-850/50 z-10 " />
               <img
                 src={unopenedCrates[crateIndex].item.url}
-                className={`absolute left-1/2 -translate-x-1/2 w-[200%] brightness-75 transition-all duration-1000 blur-xl`}
+                className={`absolute left-1/2 -translate-x-1/2 w-[200%] ${
+                  stage >= 4
+                    ? `brightness-75`
+                    : `brightness-0 opacity-0 -translate-y-3/4 ease-out`
+                } transition-all duration-1000 blur-xl`}
               />
             </div>
           </div>
-          <div className='h-screen w-[80vw] absolute top-0 left-1/2 -translate-x-1/2 z-10 flex flex-row gap-24 items-center justify-evenly'>
+          <div className="h-screen w-[80vw] absolute top-0 left-1/2 -translate-x-1/2 z-10 flex flex-row lg:flex-col lg:gap-12 lg:justify-start lg:pt-12 gap-24 items-center justify-evenly">
             <Tilt
               glareEnable={true}
               glareMaxOpacity={0.5}
@@ -148,34 +286,40 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
                   unopenedCrates[crateIndex].item.rarity
                 ][0]
               }
-              glarePosition='bottom'
-              glareBorderRadius='10px'
+              glarePosition="bottom"
+              glareBorderRadius="10px"
               tiltMaxAngleX={20}
               tiltMaxAngleY={10}
               scale={1.1}
-              className={`rounded-3xl overflow-hidden scale-100 opacity-100 ease-bounce transition-all duration-1000 delay-300`}
+              className={`rounded-3xl overflow-hidden ${
+                stage >= 3 ? `scale-100 opacity-100` : `scale-[0.25] opacity-0`
+              } ease-bounce transition-all duration-1000 delay-300`}
             >
               <div
-                className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0`}
+                className={`card rounded-3xl shadow-lg w-fit p-1.5 lg:p-1 sm:p-0.5 relative overflow-hidden shrink-0`}
               >
                 <img
                   src={unopenedCrates[crateIndex].item.url}
-                  alt=''
-                  className={`w-[40rem] h-auto object-cover z-10 rounded-3xl brightness-75 transition-all duration-1000 ease-in pointer-events-none`}
+                  alt=""
+                  className={`w-[40rem] h-auto aspect-[1024/340] object-cover z-10 rounded-3xl ${
+                    stage >= 4 ? `brightness-75` : `brightness-0 opacity-50`
+                  } transition-all duration-1000 ease-in pointer-events-none`}
                 />
 
-                <ConfettiExplosion
-                  className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
-                  duration={5000}
-                  force={0.8}
-                  width={2000}
-                  particleCount={200}
-                  colors={
-                    rarityParticleColorMap[
-                      unopenedCrates[crateIndex].item.rarity
-                    ]
-                  }
-                />
+                {stage === 4 && (
+                  <ConfettiExplosion
+                    className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+                    duration={5000}
+                    force={0.8}
+                    width={2000}
+                    particleCount={200}
+                    colors={
+                      rarityParticleColorMap[
+                        unopenedCrates[crateIndex].item.rarity
+                      ]
+                    }
+                  />
+                )}
                 <div
                   className={`bg-gradient-to-r ${
                     rarityGradientMap[unopenedCrates[crateIndex].item.rarity]
@@ -186,54 +330,72 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
             <div
               className={`w-full max-w-prose flex flex-col gap-4 items-center`}
             >
-              <div className={`flex flex-col gap-4 items-start w-fit`}>
+              <div
+                className={`flex flex-col gap-4 items-start md:items-center w-fit lg:w-full`}
+              >
                 <span
-                  className={`text-lg font-bold font-wsans text-gray-50/40 uppercase delay-500 duration-1000 transition-all opacity-100 ease-bounce`}
+                  className={`text-lg lg:text-sm font-bold font-wsans text-gray-50/40 uppercase delay-500 duration-1000 transition-all ${
+                    stage >= 3 ? `opacity-100` : `opacity-0 scale-50`
+                  } ease-bounce md:w-full`}
                 >
                   Card Background
                 </span>
                 <h1
-                  className={`text-5xl text-center font-poppins font-extrabold delay-[750ms] duration-[2000ms] transition-all opacity-100 ease-out`}
+                  className={`text-5xl lg:text-2xl text-center font-poppins font-extrabold delay-[750ms] duration-[2000ms] transition-all ${
+                    stage >= 3 ? `opacity-100` : `opacity-0 -translate-y-10`
+                  } ease-out md:w-full`}
                 >
                   {unopenedCrates[crateIndex].item.name}
                 </h1>
                 <span
-                  className={`text-2xl font-wsans font-bold uppercase bg-gradient-to-r ${
+                  className={`text-2xl lg:text-base md:text-sm font-wsans font-bold uppercase bg-gradient-to-r ${
                     rarityGradientMap[unopenedCrates[crateIndex].item.rarity]
-                  } animate-gradient-medium leading-loose bg-clip-text text-transparent delay-[750ms] duration-[2000ms] transition-all opacity-100 ease-out`}
+                  } animate-gradient-medium leading-loose bg-clip-text text-transparent delay-[750ms] duration-[2000ms] transition-all ${
+                    stage >= 3
+                      ? `opacity-100`
+                      : `opacity-0 scale-75 -translate-y-20`
+                  } ease-out md:w-full`}
                 >
                   {rarityWordMap[unopenedCrates[crateIndex].item.rarity]}
                 </span>
 
                 <span
-                  className={`text-2xl font-wsans font-medium delay-[2000ms] duration-1000 transition-all opacity-100`}
+                  className={`text-2xl lg:text-sm md:text-xs font-wsans font-medium delay-[2000ms] duration-1000 transition-all ${
+                    stage >= 3 ? `opacity-100` : `opacity-0`
+                  } md:w-full`}
                 >
                   {unopenedCrates[crateIndex].item.description}
                 </span>
                 <button
                   onClick={increaseCrateIndex}
                   disabled={stage >= 3}
-                  className='mx-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-2xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed'
+                  className="mx-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-2xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Next
                 </button>
                 <Transition
                   show={stage >= 3}
-                  enter='delay-[2000ms] duration-1000'
-                  enterFrom='opacity-0 scale-50'
-                  enterTo='opacity-100 scale-100'
-                  leave='duration-1000 opacity-0 scale-50'
+                  enter="delay-[2000ms] duration-1000"
+                  enterFrom="opacity-0 scale-50"
+                  enterTo="opacity-100 scale-100"
+                  leave="duration-1000 opacity-0 scale-50"
                 >
                   <button
-                    className={` px-6 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
+                    className={` px-6 py-2 md:px-4 md:py-1 md:mt-8 md:text-base bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
                     onClick={() => {
-                      if (guildID && guildID !== `@global`)
-                        router.push(`/app/guild/${guildID}/inventory`);
+                      if (
+                        unopenedCrates[crateIndex].guildID &&
+                        unopenedCrates[crateIndex].guildID !== `@global`
+                      )
+                        router.push(
+                          `/app/guild/${unopenedCrates[crateIndex].guildID}/inventory`
+                        );
                       else router.push(`/app`);
                     }}
                     // disabled={stage === 5}
                   >
-                    {guildID && guildID !== `@global`
+                    {unopenedCrates[crateIndex].guildID &&
+                    unopenedCrates[crateIndex].guildID !== `@global`
                       ? `Back to Inventory`
                       : `Back to Home`}
                   </button>
@@ -256,16 +418,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!authy_cookie) {
     return {
       redirect: {
-        destination: '/',
+        destination: "/",
         permanent: false,
       },
     };
   }
 
   const crates = await fetch(`${getGuildShardURL(guildID)}/inventory/crates`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${authy_cookie}`,
     },
   });

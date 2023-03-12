@@ -54,7 +54,7 @@ export const InventoryCardRenderer = (props: {
       <div
         className={` flex-col gap-1 p-2 ${
           props.selected && `bg-indigo-700/40`
-        } rounded-3xl hover:bg-transparent transition-all hidden md:flex`}
+        } rounded-3xl hover:bg-transparent transition-all md:flex`}
       >
         {/* <span className={`text-gray-50/40 w-fit font-wsans font-medium`}>
           {props.selected ? `Selected` : <>&nbsp;</>}
@@ -92,7 +92,7 @@ export const InventoryCardRenderer = (props: {
         className={`ease-[cubic-bezier(0.175,0.885,0.32,1.275)] duration-300 origin-bottom`}
       >
         <div
-          className={`relative h-[576px] w-[400px]`}
+          className={`relative h-[576px] w-[400px] hidden md:flex`}
           style={{
             transform: `scale(${scale})`,
           }}
