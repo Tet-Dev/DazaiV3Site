@@ -4,6 +4,7 @@ import { fetcher } from "../../../utils/discordFetcher";
 import { getGuildShardURL } from "../../../utils/ShardLib";
 import {
   CardType,
+  nonAnimatedRarityGradientMap,
   rarityGradientMap,
   rarityParticleColorMap,
   rarityWordMap,
@@ -48,9 +49,7 @@ export const InventoryCardRenderer = (props: {
         <div
           className={`card rounded-2xl shadow-lg relative shrink-0 z-10 h-fit group hover:scale-105 ease-in duration-200 cursor-pointer opacity-80 hover:opacity-100 bg-gradient-to-r ${
             rarityGradientMap[card.rarity]
-          } animate-gradient p-1 overflow-hidden shrink-0 ${
-            !props.selected && `opacity-75`
-          }`}
+          } p-1 overflow-hidden shrink-0 ${!props.selected && `opacity-75`}`}
           //   onClick={() => {
           //     setViewingCard(card);
           //     setCreateCard(false);
@@ -73,17 +72,17 @@ export const InventoryCardRenderer = (props: {
           />
         </div>
       </div>
-      <Modal visible={modalOpen} onClose={() => setmodalOpen(false)} hideBG>
+      <Modal visible={modalOpen} onClose={() => setmodalOpen(false)} hideBG className={`ease-[cubic-bezier(0.175,0.885,0.32,1.275)] duration-300`}>
         <Tilt
           glareEnable={true}
-          glareMaxOpacity={0.3}
+          glareMaxOpacity={0.2}
           glareColor={rarityParticleColorMap[card.rarity][0]}
           glarePosition="bottom"
-          glareBorderRadius="10px"
-          tiltMaxAngleX={10}
-          tiltMaxAngleY={10}
-          scale={1.1}
-          className={`flex flex-row gap-0 items-center justify-center rounded-xl`}
+          glareBorderRadius="1px"
+          tiltMaxAngleX={5}
+          tiltMaxAngleY={5}
+          scale={1.2}
+          className={`flex flex-row gap-0 items-center justify-center rounded-2xl`}
           style={{
             height: `${576 * scale}px`,
             width: `${400 * scale}px`,
@@ -128,8 +127,8 @@ export const InventoryCardRenderer = (props: {
                 >
                   <span
                     className={`text-xl font-wsans font-extrabold uppercase bg-gradient-to-r ${
-                      rarityGradientMap[card.rarity]
-                    } animate-gradient-medium leading-loose bg-clip-text text-transparent `}
+                      nonAnimatedRarityGradientMap[card.rarity]
+                    } leading-loose bg-clip-text text-transparent `}
                   >
                     {rarityWordMap[card.rarity]}
                   </span>
@@ -140,8 +139,8 @@ export const InventoryCardRenderer = (props: {
                       Owned:{" "}
                       <div
                         className={`font-extrabold bg-gradient-to-r ${
-                          rarityGradientMap[card.rarity]
-                        } animate-gradient-medium leading-loose bg-clip-text text-transparent`}
+                          nonAnimatedRarityGradientMap[card.rarity]
+                        } leading-loose bg-clip-text text-transparent`}
                       >
                         {`x${amount}`}
                       </div>
@@ -162,12 +161,12 @@ export const InventoryCardRenderer = (props: {
                     <img
                       src={card.url}
                       alt=""
-                      className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none`}
+                      className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none bg-gray-850`}
                     />
                     <div
                       className={`bg-gradient-to-r ${
-                        rarityGradientMap[card.rarity]
-                      } animate-gradient absolute top-0 left-0 w-full h-full -z-10`}
+                        nonAnimatedRarityGradientMap[card.rarity]
+                      } absolute top-0 left-0 w-full h-full -z-10`}
                     />
                   </div>
                 </div>
