@@ -107,7 +107,7 @@ export const InventoryCardRenderer = (props: {
           }}
         >
           <div
-            className={`relative h-[576px] aspect-[400/576]`}
+            className={`relative h-[576px] w-[400px]`}
             style={{
               transform: `scale(${scale})`,
             }}

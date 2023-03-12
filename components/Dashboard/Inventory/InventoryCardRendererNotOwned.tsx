@@ -49,16 +49,25 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
           <div
             className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20`}
           >
-            <span className={`font-bold text-2xl uppercase font-wsans`}> Locked  </span>
+            <span className={`font-bold text-2xl uppercase font-wsans`}>
+              {" "}
+              Locked{" "}
+            </span>
           </div>
         </div>
       </div>
-      <Modal visible={modalOpen} onClose={() => setmodalOpen(false)} className={`w-full`}>
+      <Modal
+        visible={modalOpen}
+        onClose={() => setmodalOpen(false)}
+        className={`w-full lg:w-[90vw]`}
+        hideBG
+      >
         <div
-          className={`flex flex-col p-6 gap-6 rounded-3xl border-gray-100/10 bg-gray-800 max-w-prose ${
+          className={`flex flex-col p-6 gap-6 rounded-3xl border-gray-100/10 bg-gray-800 max-w-prose lg:max-w-[90vw] ${
             updating && `opacity-50 pointer-events-none`
           } transition-all w-screen`}
-        >``
+        >
+          ``
           <div
             className={`flex flex-row justify-between items-center -mt-2 -mb-4`}
           >
