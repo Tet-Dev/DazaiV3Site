@@ -9,6 +9,7 @@ import {
 } from '../../../../../components/Dashboard/Inventory/InventoryCardRenderer';
 import { InventoryCardRendererNotOwned } from '../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned';
 import { InventoryCrateRenderer } from '../../../../../components/Dashboard/Inventory/InventoryCrateRenderer';
+import { fetcher } from '../../../../../utils/discordFetcher';
 import { useDiscordUser } from '../../../../../utils/hooks/useDiscordUser';
 import { getGuildShardURL } from '../../../../../utils/ShardLib';
 import {
@@ -18,6 +19,7 @@ import {
   GuildInventory,
   GuildShop,
   rarityValue,
+  ShopItem,
 } from '../../../../../utils/types';
 
 export const GuildInventoryPage = (props: {
@@ -29,11 +31,26 @@ export const GuildInventoryPage = (props: {
   const { guild, inventory, shop } = props;
   const router = useRouter();
   const user = useDiscordUser();
+  console.log(shop);
   useEffect(() => {
     if (props.forceLogin) {
       router.push('/app/login');
     }
   }, []);
+
+  const buyBundle = async (v: ShopItem) => {
+    if ((inventory.money ?? 0) < v.price) return;
+    const res = await fetcher(
+      `${await getGuildShardURL(router.query.guild as string)}/guilds/${
+        router.query.guild
+      }/shop/items/${v._id as string}/buy`,
+      {
+        method: 'POST',
+      }
+    ).then((x) => x.json());
+    router.replace(router.asPath);
+  };
+
   return (
     <div
       className={`relative ${
@@ -53,13 +70,28 @@ export const GuildInventoryPage = (props: {
             </div>
           </div>
         </div>
-      </div>
-      <div className={`w-full flex flex-wrap`}>
-        {shop.shopItems.map((v, i) => (
-          <div>
-            {v.name}: {v.price} 円
-          </div>
-        ))}
+        <div className={`w-full flex flex-wrap`}>
+          {shop.shopItems.map((v, i) => (
+            <div
+              className={`bg-gray-900 p-10 rounded-3xl flex w-[400px] flex-col gap-2`}
+            >
+              <h1 className={`font-wsans font-bold text-white text-xl`}>
+                {v.name}
+              </h1>
+              <div className={`w-full bg-gray-500 rounded-3xl p-4`}>
+                {v.description}
+              </div>
+              <button
+                disabled={(inventory.money ?? 0) < v.price}
+                onClick={async () => {
+                  await buyBundle(v);
+                }}
+              >
+                Buy ({v.price} 円)
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
