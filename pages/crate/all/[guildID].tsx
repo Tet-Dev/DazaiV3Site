@@ -42,8 +42,11 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
   const router = useRouter();
 
   const increaseCrateIndex = () => {
-    if (crateIndex >= unopenedCrates.length - 1) setStage(3);
-    else setCrateIndex((v) => v + 1);
+    setStage(-1);
+    setTimeout(() => {
+      setCrateIndex((v) => v + 1);
+      setStage(2);
+    }, 250);
   };
 
   useEffect(() => {
@@ -98,29 +101,29 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
             onClick={async () => {
               if (opening) return;
               setOpening(true);
-              for (let crate of unopenedCrates) {
-                const res = await fetcher(
-                  `${await getGuildShardURL(crate.guildID)}/inventory/crates/${
-                    crate._id
-                  }/open`,
-                  {
-                    method: "POST",
-                  }
-                );
-                if (!res.ok) {
-                  if (res.status === 401) {
-                    localStorage.setItem(
-                      "redirect",
-                      globalThis?.location?.href
-                    );
-                    return router.push(
-                      `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
-                        window?.location?.origin
-                      )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
-                    );
-                  }
-                }
-              }
+              // for (let crate of unopenedCrates) {
+              //   const res = await fetcher(
+              //     `${await getGuildShardURL(crate.guildID)}/inventory/crates/${
+              //       crate._id
+              //     }/open`,
+              //     {
+              //       method: "POST",
+              //     }
+              //   );
+              //   if (!res.ok) {
+              //     if (res.status === 401) {
+              //       localStorage.setItem(
+              //         "redirect",
+              //         globalThis?.location?.href
+              //       );
+              //       return router.push(
+              //         `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
+              //           window?.location?.origin
+              //         )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
+              //       );
+              //     }
+              //   }
+              // }
               setOpening(false);
 
               setStage(2);
@@ -257,10 +260,14 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
         // </Transition>
         <Transition
           show={stage >= 2}
-          enter="transition-opacity duration-1000"
+          enter={`transition-opacity ${
+            stage === -1 ? `duration-[0ms] delay-[0ms]` : `duration-1000`
+          }`}
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="transition-opacity duration-1000"
+          leave={`transition-opacity ${
+            stage === -1 ? `duration-[0ms] delay-[0ms]` : `duration-1000`
+          }`}
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
@@ -273,7 +280,9 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
                   stage >= 4
                     ? `brightness-75`
                     : `brightness-0 opacity-0 -translate-y-3/4 ease-out`
-                } transition-all duration-1000 blur-xl`}
+                } transition-all ${
+                  stage === -1 ? `duration-[0ms] delay-[0ms]` : `duration-1000`
+                } blur-xl`}
               />
             </div>
           </div>
@@ -366,13 +375,7 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
                 >
                   {unopenedCrates[crateIndex].item.description}
                 </span>
-                <button
-                  onClick={increaseCrateIndex}
-                  disabled={stage >= 3}
-                  className="mx-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-2xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
+
                 <Transition
                   show={stage >= 3}
                   enter="delay-[2000ms] duration-1000"
@@ -380,25 +383,35 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
                   enterTo="opacity-100 scale-100"
                   leave="duration-1000 opacity-0 scale-50"
                 >
-                  <button
-                    className={` px-6 py-2 md:px-4 md:py-1 md:mt-8 md:text-base bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
-                    onClick={() => {
-                      if (
-                        unopenedCrates[crateIndex].guildID &&
-                        unopenedCrates[crateIndex].guildID !== `@global`
-                      )
-                        router.push(
-                          `/app/guild/${unopenedCrates[crateIndex].guildID}/inventory`
-                        );
-                      else router.push(`/app`);
-                    }}
-                    // disabled={stage === 5}
-                  >
-                    {unopenedCrates[crateIndex].guildID &&
-                    unopenedCrates[crateIndex].guildID !== `@global`
-                      ? `Back to Inventory`
-                      : `Back to Home`}
-                  </button>
+                  {unopenedCrates[crateIndex + 1] !== undefined ? (
+                    <button
+                      onClick={increaseCrateIndex}
+                      disabled={unopenedCrates[crateIndex + 1] === undefined}
+                      className="mx-auto px-6 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  ) : (
+                    <button
+                      className={` px-6 py-2 md:px-4 md:py-1 md:mt-8 md:text-base bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
+                      onClick={() => {
+                        if (
+                          unopenedCrates[crateIndex].guildID &&
+                          unopenedCrates[crateIndex].guildID !== `@global`
+                        )
+                          router.push(
+                            `/app/guild/${unopenedCrates[crateIndex].guildID}/inventory`
+                          );
+                        else router.push(`/app`);
+                      }}
+                      // disabled={stage === 5}
+                    >
+                      {unopenedCrates[crateIndex].guildID &&
+                      unopenedCrates[crateIndex].guildID !== `@global`
+                        ? `Back to Inventory`
+                        : `Back to Home`}
+                    </button>
+                  )}
                 </Transition>
               </div>
             </div>
