@@ -55,6 +55,7 @@ export const ShopSettings = (props: {
               setBundles((await res.json()).shopItems);
               setViewingBundle(null);
             }}
+            key={`view-bundle-${viewingBundle._id}`}
           />
         ) : createBundle ? (
           <CreateBundle
