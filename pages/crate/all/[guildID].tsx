@@ -101,29 +101,29 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
             onClick={async () => {
               if (opening) return;
               setOpening(true);
-              // for (let crate of unopenedCrates) {
-              //   const res = await fetcher(
-              //     `${await getGuildShardURL(crate.guildID)}/inventory/crates/${
-              //       crate._id
-              //     }/open`,
-              //     {
-              //       method: "POST",
-              //     }
-              //   );
-              //   if (!res.ok) {
-              //     if (res.status === 401) {
-              //       localStorage.setItem(
-              //         "redirect",
-              //         globalThis?.location?.href
-              //       );
-              //       return router.push(
-              //         `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
-              //           window?.location?.origin
-              //         )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
-              //       );
-              //     }
-              //   }
-              // }
+              for (let crate of unopenedCrates) {
+                const res = await fetcher(
+                  `${await getGuildShardURL(crate.guildID)}/inventory/crates/${
+                    crate._id
+                  }/open`,
+                  {
+                    method: "POST",
+                  }
+                );
+                if (!res.ok) {
+                  if (res.status === 401) {
+                    localStorage.setItem(
+                      "redirect",
+                      globalThis?.location?.href
+                    );
+                    return router.push(
+                      `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
+                        window?.location?.origin
+                      )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
+                    );
+                  }
+                }
+              }
               setOpening(false);
 
               setStage(2);
