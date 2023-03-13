@@ -1,17 +1,17 @@
-import { Switch } from '@headlessui/react';
-import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { Switch } from "@headlessui/react";
+import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import {
   Card,
   InventoryCardRenderer,
-} from '../../../../../components/Dashboard/Inventory/InventoryCardRenderer';
-import { InventoryCardRendererNotOwned } from '../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned';
-import { InventoryCrateRenderer } from '../../../../../components/Dashboard/Inventory/InventoryCrateRenderer';
-import { fetcher } from '../../../../../utils/discordFetcher';
-import { useDiscordUser } from '../../../../../utils/hooks/useDiscordUser';
-import { getGuildShardURL } from '../../../../../utils/ShardLib';
+} from "../../../../../components/Dashboard/Inventory/InventoryCardRenderer";
+import { InventoryCardRendererNotOwned } from "../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned";
+import { InventoryCrateRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCrateRenderer";
+import { fetcher } from "../../../../../utils/discordFetcher";
+import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
+import { getGuildShardURL } from "../../../../../utils/ShardLib";
 import {
   CardRarity,
   CardType,
@@ -20,7 +20,7 @@ import {
   GuildShop,
   rarityValue,
   ShopItem,
-} from '../../../../../utils/types';
+} from "../../../../../utils/types";
 
 export const GuildInventoryPage = (props: {
   guild: string;
@@ -34,7 +34,7 @@ export const GuildInventoryPage = (props: {
   console.log(shop);
   useEffect(() => {
     if (props.forceLogin) {
-      router.push('/app/login');
+      router.push("/app/login");
     }
   }, []);
 
@@ -45,7 +45,7 @@ export const GuildInventoryPage = (props: {
         router.query.guild
       }/shop/items/${v._id as string}/buy`,
       {
-        method: 'POST',
+        method: "POST",
       }
     ).then((x) => x.json());
     router.replace(router.asPath);
@@ -105,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!authy_cookie) {
     return {
       redirect: {
-        destination: '/',
+        destination: "/",
         permanent: false,
       },
     };
@@ -114,9 +114,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const guildInventory = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/inventory`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${authy_cookie}`,
       },
     }
@@ -139,9 +139,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const shop = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/shop`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${authy_cookie}`,
       },
     }
