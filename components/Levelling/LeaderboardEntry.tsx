@@ -30,7 +30,7 @@ export const LeaderboardEntry = (props: {
   const { entry, index } = props;
   return (
     <div
-      className={`flex flex-row gap-4 p-4 bg-gray-800 rounded-3xl items-center relative overflow-hidden z-0 md:p-2 md:ring-2 ${
+      className={`flex flex-row gap-4 lg:gap-2 sm:gap-1 p-4 bg-gray-800 rounded-3xl items-center relative overflow-hidden z-0 md:p-2 md:ring-2 ${
         index === 0
           ? `ring-4 ring-yellow-500`
           : index === 1
@@ -55,7 +55,7 @@ export const LeaderboardEntry = (props: {
       <div
         className={`${
           index <= 2 ? `text-3xl p-0` : `text-base`
-        } font-mono bg-black  w-10 h-10 md:w-6 md:h-6 md:p-0.5 flex flex-row items-center justify-center rounded-full z-10`}
+        } font-mono bg-black  w-10 h-10 md:w-6 md:h-6 md:p-0.5 flex flex-row items-center justify-center rounded-full z-10 shrink-0`}
       >
         {getIconForPlace(index) ?? (
           <span className={`font-bold`}>{index + 1}</span>
@@ -63,7 +63,7 @@ export const LeaderboardEntry = (props: {
       </div>
       <img
         src={entry.user.avatarURL}
-        className={`w-16 h-16 rounded-3xl z-10 md:w-10 md:h-10`}
+        className={`w-16 h-16 rounded-3xl z-10 md:w-10 md:h-10 sm:h-8 sm:w-8`}
       />
       <div className={`flex flex-col gap-3 md:gap-1 flex-grow z-10`}>
         <div className={`text-xl font-poppins font-medium md:text-base`}>

@@ -40,7 +40,7 @@ export const GuildSidebarUser = (props: {
   return (
     <div className={`w-full relative`}>
       <div
-        className={`absolute right-0 translate-x-[calc(100%+1rem)] -translate-y-1/2 top-1/2 w-max bg-black p-4 text-white rounded-lg ${
+        className={`absolute right-0 translate-x-[calc(100%+1rem)] -translate-y-1/2 md:-translate-x-1/2 md:left-1/2 md:origin-bottom md:top-0 md:-translate-y-[calc(100%+1rem)] top-1/2 w-max bg-black p-4 text-white rounded-lg ${
           popout ? `scale-100` : `scale-0`
         } origin-left duration-200 transition-all flex flex-col gap-2 z-50`}
       >
@@ -56,7 +56,7 @@ export const GuildSidebarUser = (props: {
         <div
           className={`flex flex-row gap-2 bg-red-900/40 p-2 text-red-400 hover:bg-red-900/60 transition-colors cursor-pointer rounded-lg`}
         >
-          <ArrowRightOnRectangleIcon className={`w-5 h-5`} />
+          <ArrowRightOnRectangleIcon className={`w-5 h-5 `} />
           <div
             className={`text-sm font-wsans`}
             onClick={() => {
@@ -117,7 +117,7 @@ export const GuildSidebarUser = (props: {
             {skeleton ? `LOADING` : highestUserRole?.name || ""}
           </div>
         </div>
-        <ChevronRightIcon className={`w-5 h-5 text-gray-100`} />
+        <ChevronRightIcon className={`w-5 h-5 text-gray-100 md:-rotate-90 transition-all`} />
       </div>
     </div>
   );

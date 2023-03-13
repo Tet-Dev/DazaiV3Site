@@ -157,6 +157,16 @@ export const rarityGradientMap = {
   [CardRarity.EVENT_RARE]: 'from-yellow-200 via-emerald-200 to-yellow-200',
   [CardRarity.SECRET_RARE]: 'from-gray-700 via-gray-500 to-gray-700',
 };
+export const nonAnimatedRarityGradientMap = {
+  [CardRarity.LEGENDARY]: "from-indigo-500 to-pink-400",
+  [CardRarity.MYTHIC]: "from-orange-400 to-rose-400",
+  [CardRarity.EPIC]: "from-rose-500 to-fuchsia-500",
+  [CardRarity.SUPER_RARE]: "from-blue-500 to-violet-500",
+  [CardRarity.RARE]: "from-green-500 to-teal-500",
+  [CardRarity.COMMON]: "from-gray-500 to-gray-500",
+  [CardRarity.EVENT_RARE]: "from-yellow-200 to-emerald-200",
+  [CardRarity.SECRET_RARE]: "from-gray-700 to-gray-500",
+};
 
 export const rarityParticleColorMap = {
   [CardRarity.LEGENDARY]: ['##818cf8', '#db2777', '#8b5cf6'],

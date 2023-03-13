@@ -21,8 +21,6 @@ import { ObjectId } from "mongodb";
 import { useRouter } from "next/router";
 import { clientID } from "../../utils/constants";
 
-
-
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export const CratePage = (props: { crate: Crate }) => {
   const { crate } = props;
@@ -70,11 +68,11 @@ export const CratePage = (props: { crate: Crate }) => {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="h-screen w-screen absolute top-0 left-0 z-10 pt-[10%] flex flex-col gap-4">
-          <h1 className="text-5xl text-center font-poppins font-bold">
+        <div className="h-screen w-screen absolute top-0 left-0 z-10 pt-[10%] flex flex-col gap-4 px-8">
+          <h1 className="text-5xl lg:text-3xl text-center font-poppins font-bold">
             {crate.name}
           </h1>
-          <span className="text-2xl text-center font-wsans font-medium">
+          <span className="text-2xl lg:text-lg text-center font-wsans font-medium">
             {crate.description}
           </span>
           <button
@@ -148,7 +146,7 @@ export const CratePage = (props: { crate: Crate }) => {
             />
           </div>
         </div>
-        <div className="h-screen w-[80vw] absolute top-0 left-1/2 -translate-x-1/2 z-10 flex flex-row gap-24 items-center justify-evenly">
+        <div className="h-screen w-[80vw] absolute top-0 left-1/2 -translate-x-1/2 z-10 flex flex-row lg:flex-col lg:gap-12 lg:justify-start lg:pt-12 gap-24 items-center justify-evenly">
           <Tilt
             glareEnable={true}
             glareMaxOpacity={0.5}
@@ -163,12 +161,12 @@ export const CratePage = (props: { crate: Crate }) => {
             } ease-bounce transition-all duration-1000 delay-300`}
           >
             <div
-              className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0`}
+              className={`card rounded-3xl shadow-lg w-fit p-1.5 lg:p-1 sm:p-0.5 relative overflow-hidden shrink-0`}
             >
               <img
                 src={crate.item.url}
                 alt=""
-                className={`w-[40rem] h-auto object-cover z-10 rounded-3xl ${
+                className={`w-[40rem] h-auto aspect-[1024/340] object-cover z-10 rounded-3xl ${
                   stage >= 4 ? `brightness-75` : `brightness-0 opacity-50`
                 } transition-all duration-1000 ease-in pointer-events-none`}
               />
@@ -193,37 +191,37 @@ export const CratePage = (props: { crate: Crate }) => {
           <div
             className={`w-full max-w-prose flex flex-col gap-4 items-center`}
           >
-            <div className={`flex flex-col gap-4 items-start w-fit`}>
+            <div className={`flex flex-col gap-4 items-start md:items-center w-fit lg:w-full`}>
               <span
-                className={`text-lg font-bold font-wsans text-gray-50/40 uppercase delay-500 duration-1000 transition-all ${
+                className={`text-lg lg:text-sm font-bold font-wsans text-gray-50/40 uppercase delay-500 duration-1000 transition-all ${
                   stage >= 3 ? `opacity-100` : `opacity-0 scale-50`
-                } ease-bounce`}
+                } ease-bounce md:w-full`}
               >
                 Card Background
               </span>
               <h1
-                className={`text-5xl text-center font-poppins font-extrabold delay-[750ms] duration-[2000ms] transition-all ${
+                className={`text-5xl lg:text-2xl text-center font-poppins font-extrabold delay-[750ms] duration-[2000ms] transition-all ${
                   stage >= 3 ? `opacity-100` : `opacity-0 -translate-y-10`
-                } ease-out`}
+                } ease-out md:w-full`}
               >
                 {crate.item.name}
               </h1>
               <span
-                className={`text-2xl font-wsans font-bold uppercase bg-gradient-to-r ${
+                className={`text-2xl lg:text-base md:text-sm font-wsans font-bold uppercase bg-gradient-to-r ${
                   rarityGradientMap[crate.item.rarity]
                 } animate-gradient-medium leading-loose bg-clip-text text-transparent delay-[750ms] duration-[2000ms] transition-all ${
                   stage >= 3
                     ? `opacity-100`
                     : `opacity-0 scale-75 -translate-y-20`
-                } ease-out`}
+                } ease-out md:w-full`}
               >
                 {rarityWordMap[crate.item.rarity]}
               </span>
 
               <span
-                className={`text-2xl font-wsans font-medium delay-[2000ms] duration-1000 transition-all ${
+                className={`text-2xl lg:text-sm md:text-xs font-wsans font-medium delay-[2000ms] duration-1000 transition-all ${
                   stage >= 3 ? `opacity-100` : `opacity-0`
-                }`}
+                } md:w-full`}
               >
                 {crate.item.description}
               </span>
@@ -235,7 +233,7 @@ export const CratePage = (props: { crate: Crate }) => {
                 leave="duration-1000 opacity-0 scale-50"
               >
                 <button
-                  className={` px-6 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
+                  className={` px-6 py-2 md:px-4 md:py-1 md:mt-8 md:text-base bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
                   onClick={() => {
                     if (crate.guildID && crate.guildID !== `@global`)
                       router.push(`/app/guild/${crate.guildID}/inventory`);

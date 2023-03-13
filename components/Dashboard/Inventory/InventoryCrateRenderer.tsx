@@ -10,7 +10,7 @@ export const InventoryCrateRenderer = (props: {
   const router = useRouter();
   return (
     <div
-      className={`flex flex-col gap-4 p-6 bg-gray-800 rounded-3xl relative overflow-hidden w-96 h-64 border border-gray-100/10 group cursor-pointer`}
+      className={`flex flex-col gap-4 p-6 bg-gray-800 rounded-3xl relative overflow-hidden w-96 h-64 lg:w-full border border-gray-100/10 group cursor-pointer`}
       onClick={() => {
         router.push(`/crate/${crate._id}`)
       }}

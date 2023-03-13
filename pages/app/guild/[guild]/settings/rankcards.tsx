@@ -53,6 +53,7 @@ export const RankCardSettings = (props: {
               setCards(await res.json());
               setViewingCard(null);
             }}
+            key={`view-card-${viewingCard._id}`}
           />
         ) : createCard ? (
           <CreateRankCard />
@@ -77,7 +78,7 @@ export const RankCardSettings = (props: {
         <span
           className={`text-gray-200 font-wsans font-medium text-end w-full`}
         >
-          {cards.length} / 25 card slots used
+          {cards.length} / 250 card slots used
         </span>
         {cards.map((card) => (
           <div

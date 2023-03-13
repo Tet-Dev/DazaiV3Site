@@ -14,7 +14,7 @@ export const GuildSidebarModule = (props: {
   return (
     <Link href={route}>
       <div
-        className={`flex flex-row gap-4 ${
+        className={`flex flex-row gap-4 lg:gap-2 ${
           route.toLowerCase() === pathname?.toLowerCase()
             ? `text-indigo-400 hover:text-indigo-200`
             : `hover:text-indigo-300 text-gray-100`
@@ -34,7 +34,7 @@ export const GuildSidebarModule = (props: {
         }}
       >
         <div className={``}>{icon}</div>
-        <div className={`font-wsans font-medium`}>{name}</div>
+        <div className={`font-wsans font-medium lg:text-sm`}>{name}</div>
       </div>
     </Link>
   );
