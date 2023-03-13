@@ -5,6 +5,7 @@ import { GuildSidebarModule } from './SidebarModule';
 import {
   ArchiveBoxIcon,
   Bars3Icon,
+  CurrencyDollarIcon,
   GiftIcon,
   HomeIcon,
   MusicalNoteIcon,
