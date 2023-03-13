@@ -75,7 +75,7 @@ export const GuildInventoryPage = (props: {
       <div
         className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[150ch] lg:max-w-[100vw] w-auto pb-8 items-center`}
       >
-        <div className={`flex flex-col gap-4 flex-grow`}>
+        <div className={`flex flex-col gap-4 w-full`}>
           <div
             className={`flex flex-row lg:flex-col gap-16 lg:gap-6 items-center`}
           >
@@ -131,7 +131,7 @@ export const GuildInventoryPage = (props: {
             </Switch>
           </div>
         </div>
-        <span className={`text-gray-400 font-wsans lg:px-8 flex-grow`}>
+        <span className={`text-gray-400 font-wsans lg:px-8 `}>
           Your rank card inventory is where you can view all of the rank cards
           you own and use them on your server!
         </span>
@@ -200,7 +200,7 @@ export const GuildInventoryPage = (props: {
           </div>
         )}
         <div className={`flex flex-col gap-4`}>
-          <h2 className={`text-lg font-bold font-poppins`}>
+          <h2 className={`text-lg font-bold font-poppins w-full`}>
             Collected Guild Cards (
             {
               new Set(
