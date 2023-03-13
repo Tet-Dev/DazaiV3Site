@@ -123,7 +123,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     }
   );
-  const shopJSON = await shop.json();
+  const shopJSON = (await shop.json()) as GuildShop;
+  shopJSON.shopItems.sort((a, b) => a.price - b.price);
 
   return {
     props: {
