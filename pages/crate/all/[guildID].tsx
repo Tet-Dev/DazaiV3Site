@@ -415,7 +415,7 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
                 </Transition>
               </div>
             </div>
-          </div>
+        </div>
         </Transition>
       )}
     </>
