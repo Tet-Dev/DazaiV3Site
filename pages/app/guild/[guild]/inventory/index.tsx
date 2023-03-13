@@ -57,7 +57,13 @@ export const GuildInventoryPage = (props: {
       c = Array.from(addedCards.values());
     }
     setCards(
-      c.sort((a, b) => rarityValue[b.card.rarity] - rarityValue[a.card.rarity])
+      c.sort((a, b) => {
+        // sort by rarity and then by name
+        if (a.card.rarity === b.card.rarity) {
+          return a.card.name.localeCompare(b.card.name);
+        }
+        return rarityValue[b.card.rarity] - rarityValue[a.card.rarity];
+      })
     );
   }, [stack, inventory.cards]);
   return (
