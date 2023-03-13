@@ -92,10 +92,10 @@ const GuildDashboard = (props: {
   if (musicData?.error || !musicData) {
     return (
       <div
-        className={`flex-grow h-screen flex flex-col gap-4 justify-center items-center `}
+        className={`flex-grow h-screen flex flex-col gap-4 justify-center items-center px-8`}
       >
-        <div className={`flex flex-col gap-4 w-min`}>
-          <span className={`text-2xl font-poppins font-bold whitespace-nowrap`}>
+        <div className={`flex flex-col gap-4 w-min lg:w-full max-w-full`}>
+          <span className={`text-2xl font-poppins font-bold whitespace-nowrap lg:whitespace-normal`}>
             Dazai is not connected to a voice channel!
           </span>
           <p className={`text-base font-wsans w-full flex flex-col gap-2`}>

@@ -1,23 +1,23 @@
-import { Switch } from "@headlessui/react";
-import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Switch } from '@headlessui/react';
+import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import {
   Card,
   InventoryCardRenderer,
-} from "../../../../../components/Dashboard/Inventory/InventoryCardRenderer";
-import { InventoryCardRendererNotOwned } from "../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned";
-import { InventoryCrateRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCrateRenderer";
-import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
-import { getGuildShardURL } from "../../../../../utils/ShardLib";
+} from '../../../../../components/Dashboard/Inventory/InventoryCardRenderer';
+import { InventoryCardRendererNotOwned } from '../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned';
+import { InventoryCrateRenderer } from '../../../../../components/Dashboard/Inventory/InventoryCrateRenderer';
+import { useDiscordUser } from '../../../../../utils/hooks/useDiscordUser';
+import { getGuildShardURL } from '../../../../../utils/ShardLib';
 import {
   CardRarity,
   CardType,
   Crate,
   GuildInventory,
   rarityValue,
-} from "../../../../../utils/types";
+} from '../../../../../utils/types';
 
 export const GuildInventoryPage = (props: {
   guild: string;
@@ -35,7 +35,7 @@ export const GuildInventoryPage = (props: {
   const user = useDiscordUser();
   useEffect(() => {
     if (props.forceLogin) {
-      router.push("/app/login");
+      router.push('/app/login');
     }
   }, []);
   useEffect(() => {
@@ -57,52 +57,86 @@ export const GuildInventoryPage = (props: {
       c = Array.from(addedCards.values());
     }
     setCards(
-      c.sort((a, b) => rarityValue[b.card.rarity] - rarityValue[a.card.rarity])
+      c.sort((a, b) => {
+        // sort by rarity and then by name
+        if (a.card.rarity === b.card.rarity) {
+          return a.card.name.localeCompare(b.card.name);
+        }
+        return rarityValue[b.card.rarity] - rarityValue[a.card.rarity];
+      })
     );
   }, [stack, inventory.cards]);
   return (
     <div
       className={`relative ${
-        user ? `2xl:ml-2 gap-8 2xl:gap-0 ml-[5%]` : `ml-[5%] gap-8`
-      } relative flex flex-col items-center`}
+        user ? ` gap-8 2xl:gap-0 px-8` : `ml-[5%] gap-8`
+      } relative flex flex-col items-center justify-center flex-grow`}
     >
       <div
-        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[150ch] w-fit pb-8`}
+        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[150ch] lg:max-w-[100vw] w-auto pb-8 items-center`}
       >
-        <div className={`flex flex-col gap-4`}>
-          <div className={`flex flex-row gap-16 items-center`}>
-            <h1 className={`text-3xl font-bold font-poppins`}>
+        <div className={`flex flex-col gap-4 w-full`}>
+          <div
+            className={`flex flex-row lg:flex-col gap-16 lg:gap-6 items-center`}
+          >
+            <h1 className={`text-3xl font-bold font-poppins lg:text-xl`}>
               Rank Card Inventory
-            </h1>
-            <div className={`p-2 bg-gray-900 rounded-2xl px-4`}>
-              <span className={`font-bold font-wsans`}>
-                {inventory.money ?? 0} 円
-              </span>
+            </h1>{" "}
+            <div className={`flex flex-row gap-4`}>
+              <div className={`p-2 bg-gray-900 rounded-2xl px-4`}>
+                <span className={`font-wsans text-sm lg:inline hidden`}>
+                  Wallet:{" "}
+                </span>
+
+                <span className={`font-bold font-wsans`}>
+                  {inventory.money ?? 0} 円
+                </span>
+              </div>
+              <div
+                className={` flex-row gap-4 items-center font-bold lg:flex hidden`}
+              >
+                Stack Cards:
+                <Switch
+                  checked={stack}
+                  onChange={setStack}
+                  className={`${
+                    stack ? "bg-indigo-500" : "bg-gray-200"
+                  } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
+                >
+                  <span
+                    className={`${
+                      stack ? "translate-x-6" : "translate-x-1"
+                    } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+                  />
+                </Switch>
+              </div>
             </div>
           </div>
-          <div className={`flex flex-row gap-4 items-center font-bold`}>
+          <div
+            className={`flex flex-row gap-4 items-center font-bold lg:bg-blend-hard-light lg:hidden`}
+          >
             Stack Cards:
             <Switch
               checked={stack}
               onChange={setStack}
               className={`${
-                stack ? "bg-indigo-500" : "bg-gray-200"
+                stack ? 'bg-indigo-500' : 'bg-gray-200'
               } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
             >
               <span
                 className={`${
-                  stack ? "translate-x-6" : "translate-x-1"
+                  stack ? 'translate-x-6' : 'translate-x-1'
                 } inline-block h-4 w-4 transform rounded-full bg-white transition`}
               />
             </Switch>
           </div>
         </div>
-        <span className={`text-gray-400 font-wsans`}>
+        <span className={`text-gray-400 font-wsans lg:px-8 `}>
           Your rank card inventory is where you can view all of the rank cards
           you own and use them on your server!
         </span>
         <div
-          className={`flex flex-row flex-wrap justify-start w-fit max-w-full px-4`}
+          className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 lg:justify-center px-4 w-fit`}
         >
           {cards.map((card, i) => (
             <InventoryCardRenderer
@@ -125,25 +159,27 @@ export const GuildInventoryPage = (props: {
           (x) => !x.opened && (x.guildID === guild || x.guildID === `@global`)
         ).length && (
           <div className={`flex flex-col gap-4`}>
-            <h2 className={`text-lg font-bold font-poppins`}>
-              Guild Crates (
-              {
-                crates.filter(
-                  (x) =>
-                    !x.opened &&
-                    (x.guildID === guild || x.guildID === `@global`)
-                ).length
-              }
-              )
-            </h2>
-            <button
-              className={`bg-indigo-500 group-hover:bg-indigo-400 text-gray-50 font-wsans font-bold text-sm px-4 py-2 rounded-xl transition-all`}
-              onClick={() => {
-                router.push(`/crate/all/${guild}`);
-              }}
-            >
-              Open All
-            </button>
+            <div className={`flex flex-row gap-2 items-center justify-center`}>
+              <h2 className={`text-lg font-bold font-poppins`}>
+                Guild Crates (
+                {
+                  crates.filter(
+                    (x) =>
+                      !x.opened &&
+                      (x.guildID === guild || x.guildID === `@global`)
+                  ).length
+                }
+                )
+              </h2>
+              <button
+                className={`bg-indigo-500 group-hover:bg-indigo-400 text-gray-50 font-wsans font-bold text-sm px-4 py-2 rounded-xl transition-all w-fit`}
+                onClick={() => {
+                  router.push(`/crate/all/${guild}`);
+                }}
+              >
+                Open All
+              </button>
+            </div>
             <div
               className={`flex flex-row flex-wrap justify-evenly px-6 gap-4`}
             >
@@ -164,7 +200,7 @@ export const GuildInventoryPage = (props: {
           </div>
         )}
         <div className={`flex flex-col gap-4`}>
-          <h2 className={`text-lg font-bold font-poppins`}>
+          <h2 className={`text-lg font-bold font-poppins w-full`}>
             Collected Guild Cards (
             {
               new Set(
@@ -173,7 +209,9 @@ export const GuildInventoryPage = (props: {
             }
             /{guildCards.length})
           </h2>
-          <div className={`flex flex-row flex-wrap justify-start px-6 gap-4`}>
+          <div
+            className={`flex flex-row flex-wrap justify-start lg:justify-center px-6 gap-4`}
+          >
             {guildCards.map((card, i) => {
               if (inventory.cards.find((c) => c.cardID === card._id)) {
                 return null;
@@ -200,7 +238,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!authy_cookie) {
     return {
       redirect: {
-        destination: "/",
+        destination: '/',
         permanent: false,
       },
     };
@@ -209,9 +247,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const guildInventory = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/inventory`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${authy_cookie}`,
       },
     }
@@ -240,9 +278,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   allCardsJSON.sort((a, b) => rarityValue[a.rarity] - rarityValue[b.rarity]);
 
   const crates = await fetch(`${getGuildShardURL(guildID)}/inventory/crates`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${authy_cookie}`,
     },
   });
