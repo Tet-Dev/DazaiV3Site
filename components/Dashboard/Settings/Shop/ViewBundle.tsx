@@ -1,38 +1,47 @@
 import {
   ExclamationTriangleIcon,
   PencilIcon,
+  PlusCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { fetcher } from '../../../../utils/discordFetcher';
 import { getGuildShardURL } from '../../../../utils/ShardLib';
 import {
+  BundleItem,
   CardRarity,
   CardType,
   rarityGradientMap,
   rarityWordMap,
+  ShopItem,
 } from '../../../../utils/types';
 import SelectMenu from '../../../Misc/SelectMenu';
-export const ViewRankCard = (props: {
-  card: CardType;
+import { BundleItemEntry } from './BundleItemEntry';
+import { NewBundleRewardModal } from './NewBundleRewardModal';
+
+export const ViewBundle = (props: {
+  bundle: ShopItem;
+  guild: string;
   onSave: () => Promise<void>;
 }) => {
-  const { card, onSave } = props;
+  const { bundle, onSave } = props;
   const [editMode, setEditMode] = useState(false);
-  const [cardName, setCardName] = useState(card.name);
-  const [cardDescription, setCardDescription] = useState(card.description);
-  const [cardPrice, setCardPrice] = useState(
-    card.sellPrice ?? (0 as number | string)
+  const [bundleName, setBundleName] = useState(bundle.name);
+  const [rewards, setRewards] = useState<BundleItem[]>(bundle.items);
+  const [newReward, setNewReward] = useState(false);
+  const [bundleDescription, setBundleDescription] = useState(
+    bundle.description
   );
-  const [rarity, setRarity] = useState(card.rarity);
+  const [bundlePrice, setBundlePrice] = useState(
+    bundle.price as number | string
+  );
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
   useEffect(() => {
-    setCardName(card.name);
-    setCardDescription(card.description);
-    setRarity(card.rarity);
-  }, [card, editMode]);
+    setBundleName(bundle.name);
+    setBundleDescription(bundle.description);
+  }, [bundle, editMode]);
 
   return editMode ? (
     <div
@@ -42,15 +51,15 @@ export const ViewRankCard = (props: {
     >
       <div className={`flex flex-row justify-between items-start z-20`}>
         <span className={`text-gray-700 font-wsans`}>
-          Card ID: {card._id as string}
+          Bundle ID: {bundle._id as string}
         </span>
 
         {/* <span
           className={`text-2xl font-wsans font-bold uppercase bg-gradient-to-r ${
-            rarityGradientMap[card.rarity]
+            rarityGradientMap[bundle.rarity]
           } animate-gradient-medium leading-loose bg-clip-text text-transparent `}
         >
-          {rarityWordMap[card.rarity]}
+          {rarityWordMap[bundle.rarity]}
         </span> */}
       </div>
       {error && (
@@ -69,32 +78,30 @@ export const ViewRankCard = (props: {
           </span>
           <input
             type='text'
-            value={cardName}
-            onChange={(e) => setCardName(e.target.value.substring(0, 40))}
+            value={bundleName}
+            onChange={(e) => setBundleName(e.target.value.substring(0, 40))}
             className={`text-3xl bg-gray-850 px-4 p-2 rounded-2xl font-medium font-poppins focus:outline-none focus:ring-2 ring-0 ring-indigo-500 transition-all`}
           />
           <span
             className={`absolute bottom-0 right-0 text-gray-400 bg-gray-850/90 p-2 rounded-2xl text-xs`}
           >
-            {cardName.length}/40
+            {bundleName.length}/40
           </span>
         </div>
         <div className={`flex flex-col gap-2 relative w-32`}>
-          <span className={`text-gray-300 font-wsans font-medium`}>
-            Sell Price
-          </span>
+          <span className={`text-gray-300 font-wsans font-medium`}>Price</span>
           <div className={`w-full h-full relative`}>
             <input
               type='text'
-              value={cardPrice}
-              onChange={(e) => setCardPrice(e.target.value)}
+              value={bundlePrice}
+              onChange={(e) => setBundlePrice(e.target.value)}
               className={`text-sm w-full h-full pr-8 bg-gray-850 px-4 p-2 rounded-2xl font-medium font-poppins focus:outline-none focus:ring-2 ring-0 ring-indigo-500 transition-all`}
               onBlur={() => {
-                if (typeof cardPrice === 'string') {
-                  if (cardPrice.length === 0) {
-                    setCardPrice(0);
+                if (typeof bundlePrice === 'string') {
+                  if (bundlePrice.length === 0) {
+                    setBundlePrice(0);
                   } else {
-                    setCardPrice(parseInt(cardPrice) || 0);
+                    setBundlePrice(parseInt(bundlePrice) || 0);
                   }
                 }
               }}
@@ -106,51 +113,52 @@ export const ViewRankCard = (props: {
             </span>
           </div>
         </div>
-        <div
-          className={`flex flex-col gap-2 items-start font-wsans font-medium z-20 w-64`}
-        >
-          <SelectMenu
-            label='Rarity'
-            selectItems={Object.values(CardRarity).map((x) => ({
-              id: x,
-              name: rarityWordMap[x],
-            }))}
-            selectedItemId={rarity}
-            onSelect={(x) => setRarity(x.id as CardRarity)}
-            className={`w-full h-full`}
-            overrideClasses={`h-full`}
+      </div>
+      <div className={`flex flex-col gap-4 p-4 w-full bg-gray-850 rounded-2xl`}>
+        {rewards.map((rwd, i) => (
+          <BundleItemEntry
+            reward={rwd}
+            guildID={props.guild}
+            onDelete={() => {
+              setRewards(rewards.filter((_, index) => index !== i));
+            }}
+            editing
+            key={`editbundlerewardentry-${i}`}
           />
+        ))}
+        <div
+          className={`flex flex-row gap-3 p-2 w-full bg-gray-800/50 hover:bg-gray-750 transition-all cursor-pointer items-center px-4 rounded-xl text-gray-50/50 py-3`}
+          onClick={() => {
+            setNewReward(true);
+          }}
+        >
+          <PlusCircleIcon className={`h-6 w-6`} />
+          <span className={`font-wsans`}>Add Action</span>
         </div>
       </div>
-
-      <div className={`flex flex-col justify-center items-center`}>
-        <div
-          className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0 z-10`}
-        >
-          <img
-            src={card.url}
-            alt=''
-            className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none`}
-          />
-
-          <div
-            className={`bg-gradient-to-r ${rarityGradientMap[rarity]} animate-gradient absolute top-0 left-0 w-full h-full -z-10`}
-          />
-        </div>
-      </div>
+      <NewBundleRewardModal
+        open={newReward}
+        onClose={() => setNewReward(false)}
+        guildID={props.guild}
+        onAdd={(action) => {
+          setRewards([...rewards, action]);
+        }}
+      />
       <div className={`flex flex-col gap-2 relative`}>
         <span className={`text-gray-300 font-wsans font-medium`}>
-          Card Description
+          Bundle Description
         </span>
         <textarea
           className='text-gray-300 bg-gray-850 p-4 rounded-2xl font-medium font-wsans focus:outline-none resize-none h-40 focus:ring-2 ring-0 ring-indigo-500 transition-all'
-          value={cardDescription}
-          onChange={(e) => setCardDescription(e.target.value.substring(0, 200))}
+          value={bundleDescription}
+          onChange={(e) =>
+            setBundleDescription(e.target.value.substring(0, 200))
+          }
         />
         <span
           className={`absolute bottom-0 right-0 text-gray-400 bg-gray-850/90 p-2 rounded-2xl text-xs`}
         >
-          {cardDescription.length}/200
+          {bundleDescription.length}/200
         </span>
       </div>
 
@@ -158,43 +166,28 @@ export const ViewRankCard = (props: {
         <button
           className={`rounded-2xl px-4 py-2 border border-gray-50/10 w-fit bg-gray-50/5 flex flex-row gap-2 items-center hover:bg-indigo-500 hover:border-transparent transition-all`}
           onClick={async () => {
+            if (updating) return;
             setUpdating(true);
-            const guildShardURL = await getGuildShardURL(
-              router.query.guild as string
-            );
-            let int = parseInt(`${cardPrice}`);
-            if (isNaN(int)) {
-              int = 0;
-            }
             const res = await fetcher(
-              `${guildShardURL}/guilds/${router.query.guild}/settings/cards/${card._id}`,
+              `${await getGuildShardURL(router.query.guild as string)}/guilds/${
+                router.query.guild
+              }/shop/items/${bundle._id as string}`,
               {
                 method: 'PATCH',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
                 body: JSON.stringify({
-                  name: cardName,
-                  description: cardDescription,
-                  rarity: rarity,
-                  sellPrice: int,
+                  name: bundleName,
+                  description: bundleDescription,
+                  price: bundlePrice,
+                  items: rewards,
                 }),
               }
-            );
-            if (res.ok) {
-              //   setCard({
-              //     ...card,
-              //     name: cardName,
-              //     description: cardDescription,
-              //     rarity: rarity,
-              //   });
-              await onSave();
-              setEditMode(false);
+            ).then((x) => x.json());
+            if (res.error) {
+              setError(res.error);
               setUpdating(false);
+              return;
             } else {
-              const data = await res.text();
-              setError(data);
-              setUpdating(false);
+              router.replace(router.asPath);
             }
           }}
         >
@@ -215,55 +208,24 @@ export const ViewRankCard = (props: {
     >
       <div className={`flex flex-row justify-between items-center -mt-2 -mb-4`}>
         <span className={`text-gray-500 font-wsans`}>
-          Card ID: {card._id as string}
+          Bundle ID: {bundle._id as string}
         </span>
-        <div className={`flex flex-col items-center`}>
-          <span
-            className={`text-2xl font-wsans font-bold uppercase bg-gradient-to-r ${
-              rarityGradientMap[card.rarity]
-            } animate-gradient-medium leading-loose bg-clip-text text-transparent `}
-          >
-            {rarityWordMap[card.rarity]}
-          </span>
-          {!card.sellPrice && (
-            <span className={`text-red-500 font-wsans font-medium`}>
-              Not for Sale
-            </span>
-          )}
-        </div>
       </div>
-      <h1 className={`text-4xl font-poppins font-extrabold`}>{card.name}</h1>
-      <div className={`flex flex-col justify-center items-center`}>
-        <div
-          className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0 z-10`}
-        >
-          <img
-            src={card.url}
-            alt=''
-            className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none`}
-          />
-
-          <div
-            className={`bg-gradient-to-r ${
-              rarityGradientMap[card.rarity]
-            } animate-gradient absolute top-0 left-0 w-full h-full -z-10`}
-          />
-        </div>
-      </div>
+      <h1 className={`text-4xl font-poppins font-extrabold`}>{bundle.name}</h1>
       <span
         className={`text-gray-400 font-wsans text-xl p-4 border border-gray-50/10 rounded-2xl`}
       >
-        {card.description}
+        {bundle.description}
       </span>
       <div
         className={`flex flex-row gap-4 ${
-          card.sellPrice ? 'justify-between' : 'justify-end'
+          bundle.price ? 'justify-between' : 'justify-end'
         } w-full items-center`}
       >
-        {card.sellPrice && (
+        {bundle.price && (
           <span className={`text-gray-100/50 font-wsans text-sm`}>
             Sells for{' '}
-            <b className={`text-base text-gray-300`}>{card.sellPrice} 円</b>
+            <b className={`text-base text-gray-300`}>{bundle.price} 円</b>
           </span>
         )}
         <button

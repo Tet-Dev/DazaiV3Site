@@ -1,7 +1,7 @@
-import { GuildIconRenderer } from "../../GuildIconRenderer";
-import { useDiscordGuild } from "../../../utils/hooks/useDiscordGuildData";
-import { useGuildData } from "../../../utils/hooks/useGuildData";
-import { GuildSidebarModule } from "./SidebarModule";
+import { GuildIconRenderer } from '../../GuildIconRenderer';
+import { useDiscordGuild } from '../../../utils/hooks/useDiscordGuildData';
+import { useGuildData } from '../../../utils/hooks/useGuildData';
+import { GuildSidebarModule } from './SidebarModule';
 import {
   ArchiveBoxIcon,
   Bars3Icon,
@@ -107,6 +107,12 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
               route={`/app/guild/${guildID}/inventory`}
               // disabled={"Coming soon!"}
             />
+            <GuildSidebarModule
+              name='Shop'
+              icon={<CurrencyDollarIcon className={`w-6 h-6`} />}
+              route={`/app/guild/${guildID}/shop`}
+              // disabled={"Coming soon!"}
+            />
           </div>
           {guildData?.hasAdmin && (
             <div className={`flex flex-col gap-6`}>
@@ -131,6 +137,12 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
                   name="Server Crates"
                   icon={<ArchiveBoxIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
                   route={`/app/guild/${guildID}/settings/crates`}
+                  // disabled={"Coming soon!"}
+                />
+                <GuildSidebarModule
+                  name='Server Shop Bundles'
+                  icon={<CurrencyDollarIcon className={`w-6 h-6`} />}
+                  route={`/app/guild/${guildID}/settings/shop`}
                   // disabled={"Coming soon!"}
                 />
                 <GuildSidebarModule
