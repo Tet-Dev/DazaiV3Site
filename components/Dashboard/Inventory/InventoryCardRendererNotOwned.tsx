@@ -65,7 +65,7 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
         <div
           className={`flex flex-col p-6 gap-6 rounded-3xl border-gray-100/10 bg-gray-800 max-w-prose lg:max-w-[90vw] ${
             updating && `opacity-50 pointer-events-none`
-          } transition-all w-screen`}
+          } transition-all lg:w-screen`}
         >
           ``
           <div

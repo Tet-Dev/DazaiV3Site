@@ -1,23 +1,23 @@
-import { Switch } from '@headlessui/react';
-import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { Switch } from "@headlessui/react";
+import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import {
   Card,
   InventoryCardRenderer,
-} from '../../../../../components/Dashboard/Inventory/InventoryCardRenderer';
-import { InventoryCardRendererNotOwned } from '../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned';
-import { InventoryCrateRenderer } from '../../../../../components/Dashboard/Inventory/InventoryCrateRenderer';
-import { useDiscordUser } from '../../../../../utils/hooks/useDiscordUser';
-import { getGuildShardURL } from '../../../../../utils/ShardLib';
+} from "../../../../../components/Dashboard/Inventory/InventoryCardRenderer";
+import { InventoryCardRendererNotOwned } from "../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned";
+import { InventoryCrateRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCrateRenderer";
+import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
+import { getGuildShardURL } from "../../../../../utils/ShardLib";
 import {
   CardRarity,
   CardType,
   Crate,
   GuildInventory,
   rarityValue,
-} from '../../../../../utils/types';
+} from "../../../../../utils/types";
 
 export const GuildInventoryPage = (props: {
   guild: string;
@@ -35,7 +35,7 @@ export const GuildInventoryPage = (props: {
   const user = useDiscordUser();
   useEffect(() => {
     if (props.forceLogin) {
-      router.push('/app/login');
+      router.push("/app/login");
     }
   }, []);
   useEffect(() => {
@@ -120,12 +120,12 @@ export const GuildInventoryPage = (props: {
               checked={stack}
               onChange={setStack}
               className={`${
-                stack ? 'bg-indigo-500' : 'bg-gray-200'
+                stack ? "bg-indigo-500" : "bg-gray-200"
               } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
             >
               <span
                 className={`${
-                  stack ? 'translate-x-6' : 'translate-x-1'
+                  stack ? "translate-x-6" : "translate-x-1"
                 } inline-block h-4 w-4 transform rounded-full bg-white transition`}
               />
             </Switch>
@@ -136,7 +136,7 @@ export const GuildInventoryPage = (props: {
           you own and use them on your server!
         </span>
         <div
-          className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 lg:justify-center px-4 w-fit`}
+          className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 inf:grid-cols-6 lg:justify-center px-4 w-fit`}
         >
           {cards.map((card, i) => (
             <InventoryCardRenderer
@@ -238,7 +238,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!authy_cookie) {
     return {
       redirect: {
-        destination: '/',
+        destination: "/",
         permanent: false,
       },
     };
@@ -247,9 +247,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const guildInventory = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/inventory`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${authy_cookie}`,
       },
     }
@@ -278,9 +278,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   allCardsJSON.sort((a, b) => rarityValue[a.rarity] - rarityValue[b.rarity]);
 
   const crates = await fetch(`${getGuildShardURL(guildID)}/inventory/crates`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${authy_cookie}`,
     },
   });
