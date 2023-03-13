@@ -30,10 +30,10 @@ export const ShopOfferRenderer = (props: {
       <h1 className={`font-poppins font-bold text-white text-xl`}>
         {shopItem.name}
       </h1>
-      <div className={`font-wsans text-gray-400 grow`}>{shopItem.description}</div>
+      <div className={`font-wsans text-gray-400`}>{shopItem.description}</div>
       <div className={`font-wsans text-gray-500`}>Contains:</div>
       <div
-        className={`flex flex-row gap-4 p-4 bg-gray-850 rounded-2xl flex-wrap`}
+        className={`flex flex-row gap-4 p-4 bg-gray-850 rounded-2xl flex-wrap grow`}
       >
         {shopItem.items.map((item) => (
           <ShopOfferItemRenderer
