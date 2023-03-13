@@ -1,13 +1,13 @@
-import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { GetServerSideProps } from 'next';
-import { useState } from 'react';
-import { CreateRankCard } from '../../../../../components/Dashboard/Settings/RankCards/createRankCard';
-import { ViewRankCard } from '../../../../../components/Dashboard/Settings/RankCards/ViewRankCard';
-import { CreateBundle } from '../../../../../components/Dashboard/Settings/Shop/CreateBundle';
-import { ViewBundle } from '../../../../../components/Dashboard/Settings/Shop/ViewBundle';
-import { useDiscordUser } from '../../../../../utils/hooks/useDiscordUser';
-import { getGuildShardURL } from '../../../../../utils/ShardLib';
-import { CardRarity, CardType, ShopItem } from '../../../../../utils/types';
+import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { GetServerSideProps } from "next";
+import { useState } from "react";
+import { CreateRankCard } from "../../../../../components/Dashboard/Settings/RankCards/createRankCard";
+import { ViewRankCard } from "../../../../../components/Dashboard/Settings/RankCards/ViewRankCard";
+import { CreateBundle } from "../../../../../components/Dashboard/Settings/Shop/CreateBundle";
+import { ViewBundle } from "../../../../../components/Dashboard/Settings/Shop/ViewBundle";
+import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
+import { getGuildShardURL } from "../../../../../utils/ShardLib";
+import { CardRarity, CardType, ShopItem } from "../../../../../utils/types";
 
 export const ShopSettings = (props: {
   guild: string;
@@ -46,9 +46,9 @@ export const ShopSettings = (props: {
               const res = await fetch(
                 `${getGuildShardURL(guild)}/guilds/${guild}/shop`,
                 {
-                  method: 'GET',
+                  method: "GET",
                   headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                   },
                 }
               );
@@ -57,7 +57,22 @@ export const ShopSettings = (props: {
             }}
           />
         ) : createBundle ? (
-          <CreateBundle guild={guild} />
+          <CreateBundle
+            guild={guild}
+            onClose={async () => {
+              const res = await fetch(
+                `${getGuildShardURL(guild)}/guilds/${guild}/shop`,
+                {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+              setBundles((await res.json()).shopItems);
+              setCreateBundle(false);
+            }}
+          />
         ) : (
           <div
             className={`flex flex-grow flex-col gap-8 items-center justify-center border-2 mb-8 p-12 rounded-3xl border-dashed border-gray-700`}
@@ -119,9 +134,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const guildBundles = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/shop`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
   );

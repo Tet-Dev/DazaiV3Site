@@ -2,34 +2,35 @@ import {
   ExclamationTriangleIcon,
   PlusCircleIcon,
   PlusIcon,
-} from '@heroicons/react/24/outline';
-import { cropResizeGif } from 'gif-cropper-resizer-browser';
-import { GifCodec, GifFrame, GifUtil } from 'gifwrap';
-import Jimp from 'jimp';
-import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Cropper, { Area } from 'react-easy-crop';
-import { fetcher } from '../../../../utils/discordFetcher';
-import { getGuildShardURL } from '../../../../utils/ShardLib';
+} from "@heroicons/react/24/outline";
+import { cropResizeGif } from "gif-cropper-resizer-browser";
+import { GifCodec, GifFrame, GifUtil } from "gifwrap";
+import Jimp from "jimp";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Cropper, { Area } from "react-easy-crop";
+import { fetcher } from "../../../../utils/discordFetcher";
+import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
   CardRarity,
   rarityGradientMap,
   rarityWordMap,
   ShopItem,
   BundleItem,
-} from '../../../../utils/types';
-import SelectMenu from '../../../Misc/SelectMenu';
-import { Modal } from '../../../Modal';
-import { NewRewardActionModal } from '../LevelupRewards/NewRewardActionModal';
-import { BundleItemEntry } from './BundleItemEntry';
-import { NewBundleRewardModal } from './NewBundleRewardModal';
+} from "../../../../utils/types";
+import SelectMenu from "../../../Misc/SelectMenu";
+import { Modal } from "../../../Modal";
+import { NewRewardActionModal } from "../LevelupRewards/NewRewardActionModal";
+import { BundleItemEntry } from "./BundleItemEntry";
+import { NewBundleRewardModal } from "./NewBundleRewardModal";
 
-export const CreateBundle = (props: { guild: string }) => {
+export const CreateBundle = (props: { guild: string; onClose: () => void }) => {
+  const { guild, onClose } = props;
   const [editMode, setEditMode] = useState(false);
-  const [cardName, setCardName] = useState('');
-  const [cardDescription, setCardDescription] = useState('');
+  const [cardName, setCardName] = useState("");
+  const [cardDescription, setCardDescription] = useState("");
   const [updating, setUpdating] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [price, setPrice] = useState<number | string>(0);
   const [newReward, setNewReward] = useState(false);
   const [rewards, setRewards] = useState<BundleItem[]>([]);
@@ -75,7 +76,7 @@ export const CreateBundle = (props: { guild: string }) => {
               Bundle Name
             </span>
             <input
-              type='text'
+              type="text"
               value={cardName}
               onChange={(e) => setCardName(e.target.value.substring(0, 40))}
               className={`text-3xl bg-gray-850 px-4 p-2 rounded-2xl font-medium font-poppins focus:outline-none focus:ring-2 ring-0 ring-indigo-500 transition-all`}
@@ -92,12 +93,12 @@ export const CreateBundle = (props: { guild: string }) => {
             </span>
             <div className={`w-full h-full relative`}>
               <input
-                type='text'
+                type="text"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 className={`text-sm w-full h-full pr-8 bg-gray-850 px-4 p-2 rounded-2xl font-medium font-poppins focus:outline-none focus:ring-2 ring-0 ring-indigo-500 transition-all`}
                 onBlur={() => {
-                  if (typeof price === 'string') {
+                  if (typeof price === "string") {
                     if (price.length === 0) {
                       setPrice(0);
                     } else {
@@ -151,7 +152,7 @@ export const CreateBundle = (props: { guild: string }) => {
             Bundle Description
           </span>
           <textarea
-            className='text-gray-300 bg-gray-850 p-4 rounded-2xl font-medium font-wsans focus:outline-none resize-none h-40 focus:ring-2 ring-0 ring-indigo-500 transition-all'
+            className="text-gray-300 bg-gray-850 p-4 rounded-2xl font-medium font-wsans focus:outline-none resize-none h-40 focus:ring-2 ring-0 ring-indigo-500 transition-all"
             value={cardDescription}
             onChange={(e) =>
               setCardDescription(e.target.value.substring(0, 200))
@@ -175,7 +176,7 @@ export const CreateBundle = (props: { guild: string }) => {
                   router.query.guild as string
                 )}/guilds/${router.query.guild}/shop/items`,
                 {
-                  method: 'POST',
+                  method: "POST",
                   body: JSON.stringify({
                     name: cardName,
                     description: cardDescription,
@@ -190,6 +191,8 @@ export const CreateBundle = (props: { guild: string }) => {
                 return;
               } else {
                 router.replace(router.asPath);
+                setUpdating(false);
+                onClose();
               }
             }}
           >

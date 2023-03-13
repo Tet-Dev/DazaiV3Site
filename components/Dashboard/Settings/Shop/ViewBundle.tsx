@@ -185,6 +185,7 @@ export const ViewBundle = (props: {
             if (res.error) {
               setError(res.error);
               setUpdating(false);
+              onSave()
               return;
             } else {
               router.replace(router.asPath);
