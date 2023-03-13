@@ -2,11 +2,11 @@ import {
   ExclamationTriangleIcon,
   PencilIcon,
   PlusCircleIcon,
-} from '@heroicons/react/24/outline';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { fetcher } from '../../../../utils/discordFetcher';
-import { getGuildShardURL } from '../../../../utils/ShardLib';
+} from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { fetcher } from "../../../../utils/discordFetcher";
+import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
   BundleItem,
   CardRarity,
@@ -14,10 +14,10 @@ import {
   rarityGradientMap,
   rarityWordMap,
   ShopItem,
-} from '../../../../utils/types';
-import SelectMenu from '../../../Misc/SelectMenu';
-import { BundleItemEntry } from './BundleItemEntry';
-import { NewBundleRewardModal } from './NewBundleRewardModal';
+} from "../../../../utils/types";
+import SelectMenu from "../../../Misc/SelectMenu";
+import { BundleItemEntry } from "./BundleItemEntry";
+import { NewBundleRewardModal } from "./NewBundleRewardModal";
 
 export const ViewBundle = (props: {
   bundle: ShopItem;
@@ -36,7 +36,7 @@ export const ViewBundle = (props: {
     bundle.price as number | string
   );
   const [updating, setUpdating] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
   useEffect(() => {
     setBundleName(bundle.name);
@@ -77,7 +77,7 @@ export const ViewBundle = (props: {
             Card Name
           </span>
           <input
-            type='text'
+            type="text"
             value={bundleName}
             onChange={(e) => setBundleName(e.target.value.substring(0, 40))}
             className={`text-3xl bg-gray-850 px-4 p-2 rounded-2xl font-medium font-poppins focus:outline-none focus:ring-2 ring-0 ring-indigo-500 transition-all`}
@@ -92,12 +92,12 @@ export const ViewBundle = (props: {
           <span className={`text-gray-300 font-wsans font-medium`}>Price</span>
           <div className={`w-full h-full relative`}>
             <input
-              type='text'
+              type="text"
               value={bundlePrice}
               onChange={(e) => setBundlePrice(e.target.value)}
               className={`text-sm w-full h-full pr-8 bg-gray-850 px-4 p-2 rounded-2xl font-medium font-poppins focus:outline-none focus:ring-2 ring-0 ring-indigo-500 transition-all`}
               onBlur={() => {
-                if (typeof bundlePrice === 'string') {
+                if (typeof bundlePrice === "string") {
                   if (bundlePrice.length === 0) {
                     setBundlePrice(0);
                   } else {
@@ -149,7 +149,7 @@ export const ViewBundle = (props: {
           Bundle Description
         </span>
         <textarea
-          className='text-gray-300 bg-gray-850 p-4 rounded-2xl font-medium font-wsans focus:outline-none resize-none h-40 focus:ring-2 ring-0 ring-indigo-500 transition-all'
+          className="text-gray-300 bg-gray-850 p-4 rounded-2xl font-medium font-wsans focus:outline-none resize-none h-40 focus:ring-2 ring-0 ring-indigo-500 transition-all"
           value={bundleDescription}
           onChange={(e) =>
             setBundleDescription(e.target.value.substring(0, 200))
@@ -173,7 +173,7 @@ export const ViewBundle = (props: {
                 router.query.guild
               }/shop/items/${bundle._id as string}`,
               {
-                method: 'PATCH',
+                method: "PATCH",
                 body: JSON.stringify({
                   name: bundleName,
                   description: bundleDescription,
@@ -185,10 +185,11 @@ export const ViewBundle = (props: {
             if (res.error) {
               setError(res.error);
               setUpdating(false);
-              onSave()
+
               return;
             } else {
               router.replace(router.asPath);
+              onSave();
             }
           }}
         >
@@ -220,12 +221,12 @@ export const ViewBundle = (props: {
       </span>
       <div
         className={`flex flex-row gap-4 ${
-          bundle.price ? 'justify-between' : 'justify-end'
+          bundle.price ? "justify-between" : "justify-end"
         } w-full items-center`}
       >
         {bundle.price && (
           <span className={`text-gray-100/50 font-wsans text-sm`}>
-            Sells for{' '}
+            Sells for{" "}
             <b className={`text-base text-gray-300`}>{bundle.price} 円</b>
           </span>
         )}
@@ -233,7 +234,7 @@ export const ViewBundle = (props: {
           className={`rounded-2xl px-4 py-2 border border-gray-50/10 w-fit bg-gray-50/5 flex flex-row gap-2 items-center hover:bg-indigo-500 hover:border-transparent transition-all`}
           onClick={() => setEditMode(true)}
         >
-          <PencilIcon className='w-5 h-5' /> Edit Card
+          <PencilIcon className="w-5 h-5" /> Edit Card
         </button>
       </div>
     </div>
