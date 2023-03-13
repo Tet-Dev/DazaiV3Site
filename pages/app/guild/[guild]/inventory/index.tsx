@@ -136,7 +136,7 @@ export const GuildInventoryPage = (props: {
           you own and use them on your server!
         </span>
         <div
-          className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 inf:grid-cols-6 lg:justify-center px-4 w-fit`}
+          className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 inf:grid-cols-5 lg:justify-center px-4 w-fit`}
         >
           {cards.map((card, i) => (
             <InventoryCardRenderer

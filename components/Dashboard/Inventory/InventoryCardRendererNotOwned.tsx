@@ -59,7 +59,7 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
       <Modal
         visible={modalOpen}
         onClose={() => setmodalOpen(false)}
-        className={`w-full lg:w-[90vw]`}
+        className={`lg:w-[90vw]`}
         hideBG
       >
         <div
@@ -67,7 +67,6 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
             updating && `opacity-50 pointer-events-none`
           } transition-all lg:w-screen`}
         >
-          ``
           <div
             className={`flex flex-row justify-between items-center -mt-2 -mb-4`}
           >
