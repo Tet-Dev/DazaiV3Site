@@ -1,11 +1,11 @@
-import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { GetServerSideProps } from "next";
-import { useState } from "react";
-import { CreateRankCard } from "../../../../../components/Dashboard/Settings/RankCards/createRankCard";
-import { ViewRankCard } from "../../../../../components/Dashboard/Settings/RankCards/ViewRankCard";
-import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
-import { getGuildShardURL } from "../../../../../utils/ShardLib";
-import { CardRarity, CardType } from "../../../../../utils/types";
+import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { GetServerSideProps } from 'next';
+import { useState } from 'react';
+import { CreateRankCard } from '../../../../../components/Dashboard/Settings/RankCards/createRankCard';
+import { ViewRankCard } from '../../../../../components/Dashboard/Settings/RankCards/ViewRankCard';
+import { useDiscordUser } from '../../../../../utils/hooks/useDiscordUser';
+import { getGuildShardURL } from '../../../../../utils/ShardLib';
+import { CardRarity, CardType } from '../../../../../utils/types';
 
 export const RankCardSettings = (props: {
   guild: string;
@@ -44,9 +44,9 @@ export const RankCardSettings = (props: {
               const res = await fetch(
                 `${getGuildShardURL(guild)}/guilds/${guild}/settings/cards`,
                 {
-                  method: "GET",
+                  method: 'GET',
                   headers: {
-                    "Content-Type": "application/json",
+                    'Content-Type': 'application/json',
                   },
                 }
               );
@@ -77,7 +77,7 @@ export const RankCardSettings = (props: {
         <span
           className={`text-gray-200 font-wsans font-medium text-end w-full`}
         >
-          {cards.length} / 25 card slots used
+          {cards.length} / 250 card slots used
         </span>
         {cards.map((card) => (
           <div
@@ -92,7 +92,7 @@ export const RankCardSettings = (props: {
           >
             <img
               src={card.url}
-              alt=""
+              alt=''
               className={`w-[17.75rem] h-[6.64rem] object-cover z-10 transition-all pointer-events-none brightness-75 group-hover:brightness-100 ease-in duration-200`}
             />
           </div>
@@ -124,9 +124,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const guildCards = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
