@@ -22,7 +22,7 @@ const toBase64 = (file: File) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   }) as Promise<string | ArrayBuffer | null>;
-export const CreateRankCard = () => {
+export const CreateRankCard = (props: { onUpdate: () => void }) => {
   const [editMode, setEditMode] = useState(false);
   const [cardName, setCardName] = useState("");
   const [cardDescription, setCardDescription] = useState("");
@@ -277,7 +277,8 @@ export const CreateRankCard = () => {
                 setUpdating(false);
                 return;
               } else {
-                router.replace(router.asPath);
+                props.onUpdate()
+                setUpdating(false);
               }
             }}
           >

@@ -32,16 +32,19 @@ export const ShopOfferRenderer = (props: {
       </h1>
       <div className={`font-wsans text-gray-400`}>{shopItem.description}</div>
       <div className={`font-wsans text-gray-500`}>Contains:</div>
-      <div
-        className={`flex flex-row gap-4 p-4 bg-gray-850 rounded-2xl flex-wrap grow`}
-      >
-        {shopItem.items.map((item) => (
-          <ShopOfferItemRenderer
-            item={item}
-            key={`shop-offer-${shopItem._id}-item-${item.itemID}`}
-            guildID={shopItem.guildID}
-          />
-        ))}
+      <div className={`p-4 pb-0 bg-gray-850 rounded-2xl grow overflow-auto`}>
+        <div
+          className={`flex flex-row gap-2 pb-4 flex-wrap justify-start items-start`}
+        >
+          {shopItem.items.map((item) => (
+            <ShopOfferItemRenderer
+              item={item}
+              key={`shop-offer-${shopItem._id}-item-${item.itemID}`}
+              guildID={shopItem.guildID}
+            />
+          ))}
+          
+        </div>
       </div>
       <div className={`justify-end flex flex-row w-full pt-4 items-end`}>
         <button

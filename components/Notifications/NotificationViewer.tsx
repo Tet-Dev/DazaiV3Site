@@ -55,7 +55,7 @@ export const NotificationViewer = (props: {
       leaveTo="opacity-0 translate-x-full"
     >
       <div
-        className={`flex flex-col gap-2 w-[48ch] rounded-xl cursor-pointer z-50 shadow-md overflow-hidden bg-gray-850 hover:brightness-110 border-gray-100/10 border text-gray-100`}
+        className={`flex flex-col gap-2 w-[48ch] max-w-[80vw] rounded-xl cursor-pointer z-50 shadow-md overflow-hidden bg-gray-850 hover:brightness-110 border-gray-100/10 border text-gray-100`}
         onClick={() => {
           setIsVisible(0);
           notification.onClick && notification.onClick();

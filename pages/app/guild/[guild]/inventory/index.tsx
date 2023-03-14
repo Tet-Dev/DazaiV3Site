@@ -210,7 +210,7 @@ export const GuildInventoryPage = (props: {
             /{guildCards.length})
           </h2>
           <div
-            className={`flex flex-row flex-wrap justify-start lg:justify-center px-6 gap-4`}
+            className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 inf:grid-cols-5 lg:justify-center px-4 w-fit gap-4`}
           >
             {guildCards.map((card, i) => {
               if (inventory.cards.find((c) => c.cardID === card._id)) {

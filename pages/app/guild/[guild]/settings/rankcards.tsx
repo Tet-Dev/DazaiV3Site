@@ -1,11 +1,11 @@
-import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { GetServerSideProps } from 'next';
-import { useState } from 'react';
-import { CreateRankCard } from '../../../../../components/Dashboard/Settings/RankCards/createRankCard';
-import { ViewRankCard } from '../../../../../components/Dashboard/Settings/RankCards/ViewRankCard';
-import { useDiscordUser } from '../../../../../utils/hooks/useDiscordUser';
-import { getGuildShardURL } from '../../../../../utils/ShardLib';
-import { CardRarity, CardType } from '../../../../../utils/types';
+import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { GetServerSideProps } from "next";
+import { useState } from "react";
+import { CreateRankCard } from "../../../../../components/Dashboard/Settings/RankCards/createRankCard";
+import { ViewRankCard } from "../../../../../components/Dashboard/Settings/RankCards/ViewRankCard";
+import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
+import { getGuildShardURL } from "../../../../../utils/ShardLib";
+import { CardRarity, CardType } from "../../../../../utils/types";
 
 export const RankCardSettings = (props: {
   guild: string;
@@ -44,9 +44,9 @@ export const RankCardSettings = (props: {
               const res = await fetch(
                 `${getGuildShardURL(guild)}/guilds/${guild}/settings/cards`,
                 {
-                  method: 'GET',
+                  method: "GET",
                   headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                   },
                 }
               );
@@ -56,7 +56,22 @@ export const RankCardSettings = (props: {
             key={`view-card-${viewingCard._id}`}
           />
         ) : createCard ? (
-          <CreateRankCard />
+          <CreateRankCard
+            onUpdate={async () => {
+              const res = await fetch(
+                `${getGuildShardURL(guild)}/guilds/${guild}/settings/cards`,
+                {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              );
+              setCards(await res.json());
+              setViewingCard(null);
+              setCreateCard(false);
+            }}
+          />
         ) : (
           <div
             className={`flex flex-grow flex-col gap-8 items-center justify-center border-2 mb-8 p-12 rounded-3xl border-dashed border-gray-700`}
@@ -93,7 +108,7 @@ export const RankCardSettings = (props: {
           >
             <img
               src={card.url}
-              alt=''
+              alt=""
               className={`w-[17.75rem] h-[6.64rem] object-cover z-10 transition-all pointer-events-none brightness-75 group-hover:brightness-100 ease-in duration-200`}
             />
           </div>
@@ -125,9 +140,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const guildCards = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
   );

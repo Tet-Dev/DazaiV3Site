@@ -14,7 +14,7 @@ export const ShopOfferItemRenderer = (props: {
 }) => {
   const { item, guildID } = props;
   return (
-    <div className={` pointer-events-none`}>
+    <div className={` pointer-events-none w-fit h-fit`}>
       {item.type === "role" ? (
         <LevelUpRewardActionRole
           action={{
