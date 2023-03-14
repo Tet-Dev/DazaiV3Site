@@ -95,7 +95,9 @@ const GuildDashboard = (props: {
         className={`flex-grow h-screen flex flex-col gap-4 justify-center items-center px-8`}
       >
         <div className={`flex flex-col gap-4 w-min lg:w-full max-w-full`}>
-          <span className={`text-2xl font-poppins font-bold whitespace-nowrap lg:whitespace-normal`}>
+          <span
+            className={`text-2xl font-poppins font-bold whitespace-nowrap lg:whitespace-normal`}
+          >
             Dazai is not connected to a voice channel!
           </span>
           <p className={`text-base font-wsans w-full flex flex-col gap-2`}>
@@ -121,11 +123,19 @@ const GuildDashboard = (props: {
     );
   }
   return (
-    <div className={`flex-grow h-screen flex flex-row justify-center`}>
+    <div className={`flex-grow h-screen flex flex-row justify-center relative`}>
+      <div className={`w-full h-full lg:flex hidden relative overflow-hidden`}>
+        <GuildMusicQueue queue={musicData.queue!} />
+        <GuildMusicNowPlaying
+          musicData={musicData}
+          position={position}
+          guildID={guildID}
+        />
+      </div>
       <div
         className={`grid grid-cols-12 flex-grow h-full  ${
           user ? `2xl:ml-2 ml-[10%] gap-8 2xl:gap-0` : `ml-[5%] gap-8`
-        } relative`}
+        } relative lg:hidden`}
       >
         <GuildMusicQueue queue={musicData.queue!} />
         <GuildMusicNowPlaying

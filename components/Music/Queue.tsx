@@ -22,12 +22,12 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
     setLocation(window.location.origin);
   }, []);
   return (
-    <div className={`col-span-8 relative h-full`}>
+    <div className={`col-span-8 lg:w-full relative h-full`}>
       <div
-        className={` flex flex-col h-full overflow-auto pb-40 gap-2 absolute w-full`}
+        className={` flex flex-col h-full overflow-auto pb-40 gap-2 absolute w-full lg:px-8`}
       >
         <div
-          className={`flex flex-row gap-4 sticky top-0 z-40 bg-gray-850/80 pt-8 pb-4 items-center backdrop-blur-xl`}
+          className={`flex flex-row gap-4 sticky top-0 z-20 bg-gray-850/80 pt-12 pb-4 items-center backdrop-blur-xl`}
         >
           <span
             className={`text-base font-bold font-poppins text-gray-100/20  `}
@@ -71,7 +71,7 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
         <div className={`flex flex-col gap-4`}>
           {queue?.map((track, i) => (
             <div
-              className={`relative w-full h-32 bg-gray-800 rounded-3xl p-4 overflow-hidden flex flex-row gap-4`}
+              className={`relative w-full h-32 lg:h-fit bg-gray-800 rounded-3xl p-4 overflow-hidden flex flex-col gap-4`}
               key={`guild-queue-${track.url}-${i}`}
             >
               <div
@@ -87,77 +87,137 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
                   />
                 </div>
               </div>
-
-              <div
-                className={`w-24 h-24 relative overflow-hidden z-10 rounded-2xl shrink-0`}
-              >
-                <MusicThumbnailRenderer
-                  className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-0 bg-cover min-w-[185%] h-auto pointer-events-none`}
-                  src={track.thumbnail!}
-                />
-              </div>
-              <div className={`flex flex-col justify-evenly grow relative`}>
-                <span className={`text-lg font-bold leading-snug font-poppins`}>
-                  {track.title}
-                </span>
-                <span className={`text-base leading-loose font-poppins`}>
-                  {track.author}
-                </span>
+              <div className={`flex flex-row gap-4 w-full`}>
                 <div
-                  className={`absolute flex flex-row gap-6 bottom-0 right-0 items-center`}
+                  className={`w-24 h-24 lg:w-16 lg:h-16 relative overflow-hidden z-10 rounded-2xl shrink-0`}
                 >
-                  <div
-                    className={`flex flex-row gap-2  bg-gray-900 pr-4 p-1 rounded-2xl items-center opacity-80`}
-                  >
-                    <img
-                      className={`w-8 h-8 rounded-2xl`}
-                      src={track.requestedBy?.avatar}
-                    />
-                    <span className={`text-sm font-wsans`}>
-                      {track.requestedBy?.username}#
-                      {track.requestedBy?.discriminator}
-                    </span>
-                  </div>
-                  <span
-                    className={`text-sm font-mono bg-gray-900/50 p-1.5 w-20 text-center rounded-2xl items-center opacity-80 h-fit`}
-                  >
-                    {msToFormat(track.duration!)}
-                  </span>
-                  {user && (
-                    <span
-                      className={`text-sm font-wsans bg-red-900/50 hover:bg-red-500 p-1.5 w-20 text-center rounded-2xl items-center opacity-80 h-fit cursor-pointer z-30`}
-                      onClick={() => {
-                        fetcher(
-                          `${getGuildShardURL(
-                            guildID
-                          )}/guilds/${guildID}/music/status`,
-                          {
-                            method: "POST",
-                            headers: {
-                              "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                              removeSong: track.url,
-                              removeSongIndex: i,
-                            }),
-                          }
-                        ).then((res) => {
-                          if (res.ok) {
-                            console.log("success");
-                            NotificationsClass.getInstance().addNotif({
-                              title: `Removed Song`,
-                              message: `Removed ${track.title} from the queue`,
-                              type: "success",
-                              duration: 2000,
-                            });
-                          }
-                        });
-                      }}
-                    >
-                      Remove
-                    </span>
-                  )}
+                  <MusicThumbnailRenderer
+                    className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-0 bg-cover min-w-[185%] h-auto pointer-events-none`}
+                    src={track.thumbnail!}
+                  />
                 </div>
+                <div className={`flex flex-col justify-evenly grow relative`}>
+                  <span
+                    className={`text-lg lg:text-base font-bold leading-snug font-poppins`}
+                  >
+                    {track.title}
+                  </span>
+                  <span
+                    className={`text-base lg:text-sm leading-loose font-poppins`}
+                  >
+                    {track.author}
+                  </span>
+                  <div
+                    className={`absolute flex flex-row gap-6 bottom-0 right-0 items-center lg:hidden`}
+                  >
+                    <div
+                      className={`flex flex-row gap-2  bg-gray-900 pr-4 p-1 rounded-2xl items-center opacity-80`}
+                    >
+                      <img
+                        className={`w-8 h-8 rounded-2xl`}
+                        src={track.requestedBy?.avatar}
+                      />
+                      <span className={`text-sm font-wsans`}>
+                        {track.requestedBy?.username}#
+                        {track.requestedBy?.discriminator}
+                      </span>
+                    </div>
+                    <span
+                      className={`text-sm font-mono bg-gray-900/50 p-1.5 w-20 text-center rounded-2xl items-center opacity-80 h-fit`}
+                    >
+                      {msToFormat(track.duration!)}
+                    </span>
+                    {user && (
+                      <span
+                        className={`text-sm font-wsans bg-red-900/50 hover:bg-red-500 p-1.5 w-20 text-center rounded-2xl items-center opacity-80 h-fit cursor-pointer z-30`}
+                        onClick={() => {
+                          fetcher(
+                            `${getGuildShardURL(
+                              guildID
+                            )}/guilds/${guildID}/music/status`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                removeSong: track.url,
+                                removeSongIndex: i,
+                              }),
+                            }
+                          ).then((res) => {
+                            if (res.ok) {
+                              console.log("success");
+                              NotificationsClass.getInstance().addNotif({
+                                title: `Removed Song`,
+                                message: `Removed ${track.title} from the queue`,
+                                type: "success",
+                                duration: 2000,
+                              });
+                            }
+                          });
+                        }}
+                      >
+                        Remove
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div
+                className={`flex-row gap-6 bottom-0 right-0 items-center lg:flex hidden`}
+              >
+                <div
+                  className={`flex flex-row gap-2  bg-gray-900 pr-4 p-1 rounded-2xl items-center opacity-80`}
+                >
+                  <img
+                    className={`w-8 h-8 rounded-2xl`}
+                    src={track.requestedBy?.avatar}
+                  />
+                  <span className={`text-sm font-wsans`}>
+                    {track.requestedBy?.username}#
+                    {track.requestedBy?.discriminator}
+                  </span>
+                </div>
+                <span
+                  className={`text-sm font-mono bg-gray-900/50 p-1.5 w-20 text-center rounded-2xl items-center opacity-80 h-fit`}
+                >
+                  {msToFormat(track.duration!)}
+                </span>
+                {user && (
+                  <span
+                    className={`text-sm font-wsans bg-red-900/50 hover:bg-red-500 p-1.5 w-20 text-center rounded-2xl items-center opacity-80 h-fit cursor-pointer z-30`}
+                    onClick={() => {
+                      fetcher(
+                        `${getGuildShardURL(
+                          guildID
+                        )}/guilds/${guildID}/music/status`,
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            removeSong: track.url,
+                            removeSongIndex: i,
+                          }),
+                        }
+                      ).then((res) => {
+                        if (res.ok) {
+                          console.log("success");
+                          NotificationsClass.getInstance().addNotif({
+                            title: `Removed Song`,
+                            message: `Removed ${track.title} from the queue`,
+                            type: "success",
+                            duration: 2000,
+                          });
+                        }
+                      });
+                    }}
+                  >
+                    Remove
+                  </span>
+                )}
               </div>
             </div>
           ))}
@@ -166,9 +226,9 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
       <div
         className={`absolute ${
           queue?.length
-            ? `bottom-6 bg-gray-750/60 border border-gray-100/20`
+            ? `bottom-6 lg:bottom-24 bg-gray-750/60 border border-gray-100/20`
             : `bottom-1/2 translate-y-1/2 bg-gray-800/60 border border-gray-100/10`
-        } right-0 w-full  hover:bg-gray-600/80 transition-all cursor-pointer z-30 rounded-2xl backdrop-blur-xl flex flex-row gap-4 p-4 overflow-hidden items-center`}
+        } right-0 w-full  hover:bg-gray-600/80 transition-all cursor-pointer z-30 rounded-2xl backdrop-blur-xl flex flex-row gap-4 p-4 overflow-hidden items-center lg:scale-90`}
         onClick={() => {
           if (!user) {
             localStorage.setItem("redirect", globalThis?.location?.href);

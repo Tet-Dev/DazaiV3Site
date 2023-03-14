@@ -34,7 +34,7 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
     return null;
   }
   return (
-    <div className="w-fit shrink-0 max-w-full z-30">
+    <div className="w-fit shrink-0 max-w-full z-40">
       <div
         className={`absolute w-screen h-screen bg-black/80 z-40 hidden ${
           open ? "lg:block" : " pointer-events-none"

@@ -53,7 +53,7 @@ export const MusicModal = (props: {
       hideBG
     >
       <div
-        className={`max-w-prose w-screen flex flex-col gap-4 p-4 bg-gray-850 rounded-3xl`}
+        className={`max-w-prose w-[90vw] flex flex-col gap-4 p-4 bg-gray-850 rounded-3xl`}
       >
         <div className={`p-4`}>
           <form
