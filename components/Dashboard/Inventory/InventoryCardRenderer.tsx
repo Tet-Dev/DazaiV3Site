@@ -391,7 +391,7 @@ export const InventoryCardRenderer = (props: {
                           router.replace(router.asPath);
                         }
                       }}
-                      disabled={updating || props.selected}
+                      disabled={updating}
                     >
                       Sell for {card.sellPrice}円
                     </button>
