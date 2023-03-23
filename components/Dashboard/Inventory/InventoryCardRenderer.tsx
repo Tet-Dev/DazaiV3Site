@@ -1,16 +1,16 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { fetcher } from '../../../utils/discordFetcher';
-import { getGuildShardURL } from '../../../utils/ShardLib';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { fetcher } from "../../../utils/discordFetcher";
+import { getGuildShardURL } from "../../../utils/ShardLib";
 import {
   CardType,
   nonAnimatedRarityGradientMap,
   rarityGradientMap,
   rarityParticleColorMap,
   rarityWordMap,
-} from '../../../utils/types';
-import { Modal } from '../../Modal';
-import Tilt from 'react-parallax-tilt';
+} from "../../../utils/types";
+import { Modal } from "../../Modal";
+import Tilt from "react-parallax-tilt";
 export interface Card {
   cardID: string;
   id: string;
@@ -21,6 +21,7 @@ export interface Card {
 export const InventoryCardRenderer = (props: {
   card: Card;
   selected?: boolean;
+  updateInventory: () => void;
 }) => {
   const { card, cardID, id, amount } = props.card;
   const [modalOpen, setmodalOpen] = useState(false);
@@ -42,11 +43,11 @@ export const InventoryCardRenderer = (props: {
       setScale(scale);
     };
     // add event listener
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     // call handler right away so state gets updated with initial window size
     handleResize();
     // remove event listener on cleanup
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -80,7 +81,7 @@ export const InventoryCardRenderer = (props: {
 
           <img
             src={card.url}
-            alt=''
+            alt=""
             className={`w-[17.75rem] h-[6.64rem] object-cover z-10 transition-all pointer-events-none brightness-75 group-hover:brightness-100 ease-in duration-200 rounded-2xl`}
           />
         </div>
@@ -115,7 +116,7 @@ export const InventoryCardRenderer = (props: {
           >
             <img
               src={card.url}
-              alt=''
+              alt=""
               className={`w-auto h-full object-cover z-10 rounded-3xl pointer-events-none blur-sm`}
             />
           </div>
@@ -139,7 +140,7 @@ export const InventoryCardRenderer = (props: {
                   <div
                     className={`bg-black px-6 p-1 rounded-full flex flex-row font-wsans font-bold text-sm items-center gap-2 text-white`}
                   >
-                    Owned:{' '}
+                    Owned:{" "}
                     <div
                       className={`font-extrabold bg-gradient-to-r ${
                         nonAnimatedRarityGradientMap[card.rarity]
@@ -161,7 +162,7 @@ export const InventoryCardRenderer = (props: {
                 >
                   <img
                     src={card.url}
-                    alt=''
+                    alt=""
                     className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none bg-gray-850`}
                   />
                   <div
@@ -194,7 +195,7 @@ export const InventoryCardRenderer = (props: {
                         router.query.guild as string
                       )}/guilds/${router.query.guild}/inventory/selectCard`,
                       {
-                        method: 'POST',
+                        method: "POST",
                         body: JSON.stringify({
                           cardID: id,
                         }),
@@ -202,14 +203,15 @@ export const InventoryCardRenderer = (props: {
                     );
                     setUpdating(false);
                     if (res.status === 200) {
-                      router.replace(router.asPath);
+                      props.updateInventory();
+                      setmodalOpen(false);
                     }
                   }}
                   disabled={updating || props.selected}
                 >
                   {props.selected ? `SELECTED` : `SELECT`}
                 </button>
-                {!!card.sellPrice&& (
+                {!!card.sellPrice && (
                   <button
                     className={`rounded-full px-3 py-1.5 text-[0.5rem] bg-rose-500 text-gray-100 font-bold flex flex-row gap-2 items-center hover:bg-rose-300 hover:text-white hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
                     onClick={async () => {
@@ -220,12 +222,13 @@ export const InventoryCardRenderer = (props: {
                           router.query.guild as string
                         )}/guilds/${router.query.guild}/inventory/sell/${id}`,
                         {
-                          method: 'POST',
+                          method: "POST",
                         }
                       );
                       setUpdating(false);
                       if (res.status === 200) {
-                        router.replace(router.asPath);
+                        props.updateInventory();
+                        setmodalOpen(false);
                       }
                     }}
                     disabled={updating || props.selected}
@@ -241,8 +244,8 @@ export const InventoryCardRenderer = (props: {
           glareEnable={true}
           glareMaxOpacity={0.2}
           glareColor={rarityParticleColorMap[card.rarity][0]}
-          glarePosition='bottom'
-          glareBorderRadius='1px'
+          glarePosition="bottom"
+          glareBorderRadius="1px"
           tiltMaxAngleX={5}
           tiltMaxAngleY={5}
           scale={1.2}
@@ -276,7 +279,7 @@ export const InventoryCardRenderer = (props: {
             >
               <img
                 src={card.url}
-                alt=''
+                alt=""
                 className={`w-auto h-full object-cover z-10 rounded-3xl pointer-events-none blur-sm`}
               />
             </div>
@@ -300,7 +303,7 @@ export const InventoryCardRenderer = (props: {
                     <div
                       className={`bg-black px-6 p-1 rounded-full flex flex-row font-wsans font-bold text-sm items-center gap-2 text-white`}
                     >
-                      Owned:{' '}
+                      Owned:{" "}
                       <div
                         className={`font-extrabold bg-gradient-to-r ${
                           nonAnimatedRarityGradientMap[card.rarity]
@@ -324,7 +327,7 @@ export const InventoryCardRenderer = (props: {
                   >
                     <img
                       src={card.url}
-                      alt=''
+                      alt=""
                       className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none bg-gray-850`}
                     />
                     <div
@@ -357,7 +360,7 @@ export const InventoryCardRenderer = (props: {
                           router.query.guild as string
                         )}/guilds/${router.query.guild}/inventory/selectCard`,
                         {
-                          method: 'POST',
+                          method: "POST",
                           body: JSON.stringify({
                             cardID: id,
                           }),
@@ -365,7 +368,8 @@ export const InventoryCardRenderer = (props: {
                       );
                       setUpdating(false);
                       if (res.status === 200) {
-                        router.replace(router.asPath);
+                        props.updateInventory();
+                        setmodalOpen(false);
                       }
                     }}
                     disabled={updating || props.selected}
@@ -383,12 +387,13 @@ export const InventoryCardRenderer = (props: {
                             router.query.guild as string
                           )}/guilds/${router.query.guild}/inventory/sell/${id}`,
                           {
-                            method: 'POST',
+                            method: "POST",
                           }
                         );
                         setUpdating(false);
                         if (res.status === 200) {
-                          router.replace(router.asPath);
+                          props.updateInventory();
+                          setmodalOpen(false);
                         }
                       }}
                       disabled={updating}

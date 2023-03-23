@@ -3,11 +3,13 @@ export const calcShardID = (guildID: string, shardCount: number) =>
 
 export const ShardMap = {
   0:
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:888'
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:888"
       : `https://v2api.dazai.app:2053`,
 };
-export const getGuildShardURL = (guildID: string) =>
-  ShardMap[
+export const getGuildShardURL = (guildID?: string) => {
+  if (!guildID) return Promise.resolve(ShardMap[0]);
+  return ShardMap[
     calcShardID(guildID, Object.keys(ShardMap).length) as keyof typeof ShardMap
   ];
+};

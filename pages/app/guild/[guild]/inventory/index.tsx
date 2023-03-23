@@ -9,7 +9,9 @@ import {
 } from "../../../../../components/Dashboard/Inventory/InventoryCardRenderer";
 import { InventoryCardRendererNotOwned } from "../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned";
 import { InventoryCrateRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCrateRenderer";
+import { DummyInventoryCardRenderer } from "../../../../../components/Dashboard/Inventory/InventoryDummyCardRenderer";
 import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
+import { useAPIProp } from "../../../../../utils/hooks/useProp";
 import { getGuildShardURL } from "../../../../../utils/ShardLib";
 import {
   CardRarity,
@@ -21,12 +23,19 @@ import {
 
 export const GuildInventoryPage = (props: {
   guild: string;
-  inventory: GuildInventory;
-  guildCards: CardType[];
-  crates: Crate[];
   forceLogin: boolean;
 }) => {
-  const { guild, inventory, guildCards, crates } = props;
+  const guild = useRouter().query.guild as string;
+  const [inventory, updateInventory] = useAPIProp<GuildInventory>(
+    `/guilds/${guild}/inventory`
+  );
+  const [guildCards, updateGuildCards] = useAPIProp<CardType[]>(
+    `/guilds/${guild}/settings/cards`
+  );
+  const [crates, updateCrates] = useAPIProp<Crate[]>(
+    `/guilds/${guild}/settings/crates`
+  );
+
   const [viewingCard, setViewingCard] = useState(null as CardType | null);
   const [createCard, setCreateCard] = useState(false);
   const [stack, setStack] = useState(true);
@@ -39,6 +48,7 @@ export const GuildInventoryPage = (props: {
     }
   }, []);
   useEffect(() => {
+    if (!inventory) return;
     let c = [];
     if (!stack) {
       c = inventory.cards.map((v) => ({ ...v, amount: 1 }));
@@ -65,12 +75,10 @@ export const GuildInventoryPage = (props: {
         return rarityValue[b.card.rarity] - rarityValue[a.card.rarity];
       })
     );
-  }, [stack, inventory.cards]);
+  }, [stack, inventory?.cards]);
   return (
     <div
-      className={`relative ${
-        user ? ` gap-8 2xl:gap-0 px-8` : `ml-[5%] gap-8`
-      } relative flex flex-col items-center justify-center flex-grow`}
+      className={`gap-8 2xl:gap-0 px-8 relative flex flex-col items-center justify-center flex-grow`}
     >
       <div
         className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[150ch] lg:max-w-[100vw] w-auto pb-8 items-center`}
@@ -89,7 +97,7 @@ export const GuildInventoryPage = (props: {
                 </span>
 
                 <span className={`font-bold font-wsans`}>
-                  {inventory.money ?? 0} 円
+                  {!inventory ? `N/A` : inventory.money ?? 0} 円
                 </span>
               </div>
               <div
@@ -141,11 +149,17 @@ export const GuildInventoryPage = (props: {
           {cards.map((card, i) => (
             <InventoryCardRenderer
               card={card}
-              selected={card.id === inventory.selectedCard}
+              selected={card.id === inventory?.selectedCard}
               key={`inventory-card-render-${card.id}`}
+              updateInventory={updateInventory}
             />
           ))}
-          {!inventory.cards.length && (
+          {(inventory === undefined || guildCards === undefined) &&
+            // render 20 dummy cards while loading
+            Array.from({ length: 20 }).map((_, i) => (
+              <DummyInventoryCardRenderer />
+            ))}
+          {inventory && !inventory?.cards.length && (
             <div
               className={`flex w-screen flex-col gap-8 items-center justify-center mb-8 p-12 rounded-3xl border-gray-700`}
             >
@@ -155,7 +169,7 @@ export const GuildInventoryPage = (props: {
             </div>
           )}
         </div>
-        {!!crates.filter(
+        {!!crates?.filter(
           (x) => !x.opened && (x.guildID === guild || x.guildID === `@global`)
         ).length && (
           <div className={`flex flex-col gap-4`}>
@@ -204,16 +218,23 @@ export const GuildInventoryPage = (props: {
             Collected Guild Cards (
             {
               new Set(
-                inventory.cards.filter((x) => x.card.guild).map((x) => x.cardID)
+                inventory?.cards
+                  .filter((x) => x.card.guild)
+                  .map((x) => x.cardID)
               ).size
             }
-            /{guildCards.length})
+            /{guildCards?.length})
           </h2>
           <div
             className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 inf:grid-cols-5 lg:justify-center px-4 w-fit gap-4`}
           >
-            {guildCards.map((card, i) => {
-              if (inventory.cards.find((c) => c.cardID === card._id)) {
+            {(inventory === undefined || guildCards === undefined) &&
+              // render 20 dummy cards while loading
+              Array.from({ length: 20 }).map((_, i) => (
+                <DummyInventoryCardRenderer />
+              ))}
+            {guildCards?.map((card, i) => {
+              if (inventory?.cards.find((c) => c.cardID === card._id)) {
                 return null;
               }
               return (
@@ -230,83 +251,83 @@ export const GuildInventoryPage = (props: {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const guildID = context.query.guild as string;
-  //   read authy_cookie from context.req.cookies
-  const authy_cookie = context.req.cookies.authy_cookie;
-  //   if authy_cookie is undefined, redirect to login
-  if (!authy_cookie) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const guildID = context.query.guild as string;
+//   //   read authy_cookie from context.req.cookies
+//   const authy_cookie = context.req.cookies.authy_cookie;
+//   //   if authy_cookie is undefined, redirect to login
+//   if (!authy_cookie) {
+//     return {
+//       redirect: {
+//         destination: "/",
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  const guildInventory = await fetch(
-    `${getGuildShardURL(guildID)}/guilds/${guildID}/inventory`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authy_cookie}`,
-      },
-    }
-  );
-  if (guildInventory.status === 401) {
-    return {
-      // redirect: {
-      //   destination: "/",
-      //   permanent: false,
-      // },
-      props: {
-        forceLogin: true,
-      },
-    };
-  }
-  const guildInventoryJSON = await guildInventory.json();
+//   const guildInventory = await fetch(
+//     `${getGuildShardURL(guildID)}/guilds/${guildID}/inventory`,
+//     {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${authy_cookie}`,
+//       },
+//     }
+//   );
+//   if (guildInventory.status === 401) {
+//     return {
+//       // redirect: {
+//       //   destination: "/",
+//       //   permanent: false,
+//       // },
+//       props: {
+//         forceLogin: true,
+//       },
+//     };
+//   }
+//   const guildInventoryJSON = await guildInventory.json();
 
-  const inventory = guildInventoryJSON as GuildInventory;
+//   const inventory = guildInventoryJSON as GuildInventory;
 
-  const allCards = await fetch(
-    `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`
-  );
-  const allCardsJSON = (await allCards.json()) as CardType[];
-  // sort by rarity
+//   const allCards = await fetch(
+//     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`
+//   );
+//   const allCardsJSON = (await allCards.json()) as CardType[];
+//   // sort by rarity
 
-  allCardsJSON.sort((a, b) => rarityValue[a.rarity] - rarityValue[b.rarity]);
+//   allCardsJSON.sort((a, b) => rarityValue[a.rarity] - rarityValue[b.rarity]);
 
-  const crates = await fetch(`${getGuildShardURL(guildID)}/inventory/crates`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${authy_cookie}`,
-    },
-  });
-  const cratesJSON = await crates.json();
+//   const crates = await fetch(`${getGuildShardURL(guildID)}/inventory/crates`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${authy_cookie}`,
+//     },
+//   });
+//   const cratesJSON = await crates.json();
 
-  //   cards.push({
-  //     _id: "63e3f70bf538f8e190963d88",
-  //     name: "Sunset Dazai",
-  //     description: "Dazai with a sunset background",
-  //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
-  //     rarity: CardRarity.LEGENDARY,
-  //   });
-  //   cards.push({
-  //     _id: "63e3f70bf538f8e190963d8f",
-  //     name: "Dazai Thousand",
-  //     description: "The 1000 server milestone celebration card",
-  //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
-  //     rarity: CardRarity.EVENT_RARE,
-  //   });
-  return {
-    props: {
-      guild: guildID,
-      inventory,
-      guildCards: allCardsJSON,
-      crates: cratesJSON,
-    },
-  };
-};
+//   //   cards.push({
+//   //     _id: "63e3f70bf538f8e190963d88",
+//   //     name: "Sunset Dazai",
+//   //     description: "Dazai with a sunset background",
+//   //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
+//   //     rarity: CardRarity.LEGENDARY,
+//   //   });
+//   //   cards.push({
+//   //     _id: "63e3f70bf538f8e190963d8f",
+//   //     name: "Dazai Thousand",
+//   //     description: "The 1000 server milestone celebration card",
+//   //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
+//   //     rarity: CardRarity.EVENT_RARE,
+//   //   });
+//   return {
+//     props: {
+//       guild: guildID,
+//       inventory,
+//       guildCards: allCardsJSON,
+//       crates: cratesJSON,
+//     },
+//   };
+// };
 export default GuildInventoryPage;
