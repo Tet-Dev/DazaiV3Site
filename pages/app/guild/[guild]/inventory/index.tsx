@@ -33,7 +33,7 @@ export const GuildInventoryPage = (props: {
     `/guilds/${guild}/settings/cards`
   );
   const [crates, updateCrates] = useAPIProp<Crate[]>(
-    `/guilds/${guild}/settings/crates`
+    `/inventory/crates`
   );
 
   const [viewingCard, setViewingCard] = useState(null as CardType | null);

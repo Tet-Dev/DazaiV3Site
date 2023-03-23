@@ -42,3 +42,6 @@ a {
 -ms-overflow-style: none;  /* IE and Edge */
 scrollbar-width: none;  /* Firefox */
 }
+.glare-wrapper {
+  @apply !rounded-2xl
+}
