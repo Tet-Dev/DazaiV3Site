@@ -157,7 +157,7 @@ export const GuildInventoryPage = (props: {
           {(inventory === undefined || guildCards === undefined) &&
             // render 20 dummy cards while loading
             Array.from({ length: 20 }).map((_, i) => (
-              <DummyInventoryCardRenderer />
+              <DummyInventoryCardRenderer key={`dummy-card-${i}`} />
             ))}
           {inventory && !inventory?.cards.length && (
             <div
@@ -231,7 +231,7 @@ export const GuildInventoryPage = (props: {
             {(inventory === undefined || guildCards === undefined) &&
               // render 20 dummy cards while loading
               Array.from({ length: 20 }).map((_, i) => (
-                <DummyInventoryCardRenderer />
+                <DummyInventoryCardRenderer key={`dummy-card2-${i}`} />
               ))}
             {guildCards?.map((card, i) => {
               if (inventory?.cards.find((c) => c.cardID === card._id)) {
