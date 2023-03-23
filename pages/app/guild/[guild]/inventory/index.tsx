@@ -43,10 +43,10 @@ export const GuildInventoryPage = (props: {
   const router = useRouter();
   const user = useDiscordUser();
   useEffect(() => {
-    if (props.forceLogin) {
+    if (user === null) {
       router.push("/app/login");
     }
-  }, []);
+  }, [user]);
   useEffect(() => {
     if (!inventory) return;
     let c = [];
