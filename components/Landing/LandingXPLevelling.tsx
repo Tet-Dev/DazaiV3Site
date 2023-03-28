@@ -31,6 +31,7 @@ export const LandingXPLevelling = () => {
           className="fill-blue-600"
         ></path>
       </svg>
+      
     </div>
   );
 };

@@ -103,29 +103,31 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
               if (opening) return;
               setOpening(true);
               for (let i = 0; i < unopenedCrates.length; i++) {
-                const crate = unopenedCrates[i];
-                const res = await fetcher(
-                  `${await getGuildShardURL(crate.guildID)}/inventory/crates/${
-                    crate._id
-                  }/open`,
-                  {
-                    method: "POST",
+                (async () => {
+                  const crate = unopenedCrates[i];
+                  const res = await fetcher(
+                    `${await getGuildShardURL(
+                      crate.guildID
+                    )}/inventory/crates/${crate._id}/open`,
+                    {
+                      method: "POST",
+                    }
+                  );
+                  if (!res.ok) {
+                    if (res.status === 401) {
+                      localStorage.setItem(
+                        "redirect",
+                        globalThis?.location?.href
+                      );
+                      return router.push(
+                        `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
+                          window?.location?.origin
+                        )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
+                      );
+                    }
                   }
-                );
-                if (!res.ok) {
-                  if (res.status === 401) {
-                    localStorage.setItem(
-                      "redirect",
-                      globalThis?.location?.href
-                    );
-                    return router.push(
-                      `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
-                        window?.location?.origin
-                      )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
-                    );
-                  }
-                }
-                setCratesOpened((v) => v + 1);
+                  setCratesOpened((v) => v + 1);
+                })();
               }
               setOpening(false);
 
@@ -345,8 +347,15 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
               className={`w-full max-w-prose flex flex-col gap-4 items-center`}
             >
               <div
-                className={`flex flex-col gap-4 items-start md:items-center w-fit lg:w-full`}
+                className={`flex flex-col gap-4 items-start md:items-center w-full`}
               >
+                <span
+                  className={`text-lg lg:text-sm font-bold font-wsans text-gray-50/40 uppercase delay-500 duration-1000 transition-all ${
+                    stage >= 3 ? `opacity-100` : `opacity-0 scale-50`
+                  } ease-bounce md:w-full delay-75`}
+                >
+                  {crateIndex + 1}/{unopenedCrates.length}
+                </span>
                 <span
                   className={`text-lg lg:text-sm font-bold font-wsans text-gray-50/40 uppercase delay-500 duration-1000 transition-all ${
                     stage >= 3 ? `opacity-100` : `opacity-0 scale-50`
