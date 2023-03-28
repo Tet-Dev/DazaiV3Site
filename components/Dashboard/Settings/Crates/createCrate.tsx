@@ -463,7 +463,7 @@ export const CreateCrate = (props: {
         onClose={() => setSelectCardModalVisible(false)}
       >
         <div
-          className={`flex flex-col gap-4 p-6 w-[90vw] max-w-[75ch] max-h-[80vh]`}
+          className={`flex flex-col gap-4 p-6 w-[90vw] max-w-[75ch] max-h-[80vh] overflow-auto`}
         >
           <h1 className={`text-2xl font-poppins font-bold`}>
             Select a Card to Add
