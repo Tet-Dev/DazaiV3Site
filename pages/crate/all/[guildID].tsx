@@ -35,6 +35,7 @@ const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
   const { crates, guildID } = props;
   const [stage, setStage] = useState(0);
+  const [cratesOpened, setCratesOpened] = useState(0);
   const [unopenedCrates, setUnopenedCrates] = useState<Crate[]>([]);
   const [opening, setOpening] = useState(false);
   const [crateIndex, setCrateIndex] = useState(0);
@@ -101,7 +102,8 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
             onClick={async () => {
               if (opening) return;
               setOpening(true);
-              for (let crate of unopenedCrates) {
+              for (let i = 0; i < unopenedCrates.length; i++) {
+                const crate = unopenedCrates[i];
                 const res = await fetcher(
                   `${await getGuildShardURL(crate.guildID)}/inventory/crates/${
                     crate._id
@@ -123,6 +125,7 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
                     );
                   }
                 }
+                setCratesOpened((v) => v + 1);
               }
               setOpening(false);
 
@@ -131,7 +134,9 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
               // CrateTimer.getInstance().open();
             }}
           >
-            {opening ? "Opening..." : "Open All"}
+            {opening
+              ? `Opening (${cratesOpened}/${unopenedCrates.length})`
+              : "Open All"}
           </button>
         </div>
       </Transition>
@@ -415,7 +420,7 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: String }) => {
                 </Transition>
               </div>
             </div>
-        </div>
+          </div>
         </Transition>
       )}
     </>

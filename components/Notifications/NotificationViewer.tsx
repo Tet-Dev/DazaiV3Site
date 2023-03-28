@@ -55,7 +55,7 @@ export const NotificationViewer = (props: {
       leaveTo="opacity-0 translate-x-full"
     >
       <div
-        className={`flex flex-col gap-2 w-[48ch] max-w-[80vw] rounded-xl cursor-pointer z-50 shadow-md overflow-hidden bg-gray-850 hover:brightness-110 border-gray-100/10 border text-gray-100`}
+        className={`flex flex-col gap-2 w-[48ch] max-w-[80vw] rounded-xl cursor-pointer z-50 shadow-md overflow-hidden bg-gray-750 hover:brightness-110 border-gray-100/10 border text-gray-100`}
         onClick={() => {
           setIsVisible(0);
           notification.onClick && notification.onClick();
@@ -79,10 +79,10 @@ export const NotificationViewer = (props: {
             {notification.type.slice(1)}
           </span>
         </div>
-        <span className={`text-lg whitespace-normal px-4 pt-2`}>
+        <span className={`text-lg whitespace-normal px-4 pt-2 font-bold font-poppins`}>
           {notification.title}
         </span>
-        <div className={`text-sm whitespace-pre-wrap px-4 pb-2`}>
+        <div className={`text-sm whitespace-pre-wrap px-4 pb-2 font-wsans`}>
           {/* <MarkdownRenderer> */}
           {notification.message}
           {/* </MarkdownRenderer> */}

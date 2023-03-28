@@ -32,6 +32,7 @@ export const GuildInventoryPage = (props: {
   const { guild, inventory, shop } = props;
   const router = useRouter();
   const user = useDiscordUser();
+  const [buyingOffer, setBuyingOffer] = useState(false);
   console.log(shop);
   useEffect(() => {
     if (props.forceLogin) {
@@ -65,6 +66,8 @@ export const GuildInventoryPage = (props: {
                 inventory={inventory}
                 item={item}
                 key={`shop-item-${item._id}`}
+                buyingOffer={buyingOffer}
+                setBuyingOffer={setBuyingOffer}
               />
             );
           })}
