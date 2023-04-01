@@ -10,6 +10,7 @@ import {
 import { InventoryCardRendererNotOwned } from "../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned";
 import { InventoryCrateRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCrateRenderer";
 import { ShopOfferRenderer } from "../../../../../components/Dashboard/Shop/ShopOfferRenderer";
+import { clientID } from "../../../../../utils/constants";
 import { fetcher } from "../../../../../utils/discordFetcher";
 import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
 import { getGuildShardURL } from "../../../../../utils/ShardLib";
@@ -36,7 +37,13 @@ export const GuildInventoryPage = (props: {
   console.log(shop);
   useEffect(() => {
     if (props.forceLogin) {
-      router.push("/app/login");
+      localStorage.setItem("redirect", globalThis?.location?.href);
+      router.push(
+        `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
+          window?.location?.origin
+        )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
+      );
+      return;
     }
   }, []);
 

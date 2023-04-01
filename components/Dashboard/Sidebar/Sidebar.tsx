@@ -105,7 +105,7 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
             <GuildSidebarModule
               name="Inventory"
               icon={<ArchiveBoxIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
-              route={`/app/guild/${guildID}/inventory`}
+              route={`/app/guild/${guildID}/inventory/@me`}
               // disabled={"Coming soon!"}
             />
             <GuildSidebarModule

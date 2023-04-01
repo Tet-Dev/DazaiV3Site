@@ -1,8 +1,8 @@
-import { Switch } from "@headlessui/react";
-import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { Switch, Transition } from "@headlessui/react";
+import { PencilIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Card,
   InventoryCardRenderer,
@@ -10,6 +10,7 @@ import {
 import { InventoryCardRendererNotOwned } from "../../../../../components/Dashboard/Inventory/InventoryCardRendererNotOwned";
 import { InventoryCrateRenderer } from "../../../../../components/Dashboard/Inventory/InventoryCrateRenderer";
 import { DummyInventoryCardRenderer } from "../../../../../components/Dashboard/Inventory/InventoryDummyCardRenderer";
+import { clientID } from "../../../../../utils/constants";
 import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
 import { useAPIProp } from "../../../../../utils/hooks/useProp";
 import { getGuildShardURL } from "../../../../../utils/ShardLib";
@@ -25,26 +26,46 @@ export const GuildInventoryPage = (props: {
   guild: string;
   forceLogin: boolean;
 }) => {
-  const guild = useRouter().query.guild as string;
+  const { guild, userID } = useRouter().query as {
+    guild: string;
+    userID: string;
+  };
   const [inventory, updateInventory] = useAPIProp<GuildInventory>(
-    `/guilds/${guild}/inventory`
+    `/guilds/${guild}/inventory/${userID === "@me" ? `` : userID}`
   );
   const [guildCards, updateGuildCards] = useAPIProp<CardType[]>(
     `/guilds/${guild}/settings/cards`
   );
-  const [crates, updateCrates] = useAPIProp<Crate[]>(
-    `/inventory/crates`
-  );
+  const [crates, updateCrates] = useAPIProp<Crate[]>(`/inventory/crates`);
 
   const [viewingCard, setViewingCard] = useState(null as CardType | null);
   const [createCard, setCreateCard] = useState(false);
   const [stack, setStack] = useState(true);
   const [cards, setCards] = useState<Card[]>([]);
+  const [popup, setPopup] = useState(0);
+
   const router = useRouter();
   const user = useDiscordUser();
   useEffect(() => {
+    if (inventory?.viewingPerson?.id === user?.id && user) {
+      setPopup(-1);
+    }
+    if (
+      (inventory?.viewingPerson?.id !== user?.id && user && inventory) ||
+      (user === undefined && inventory)
+    ) {
+      setPopup((p) => (p === 0 ? 1 : p));
+    }
+  }, [inventory, user]);
+  useEffect(() => {
     if (user === null) {
-      router.push("/app/login");
+      localStorage.setItem("redirect", globalThis?.location?.href);
+      router.push(
+        `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
+          window?.location?.origin
+        )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
+      );
+      return;
     }
   }, [user]);
   useEffect(() => {
@@ -88,7 +109,7 @@ export const GuildInventoryPage = (props: {
             className={`flex flex-row lg:flex-col gap-16 lg:gap-6 items-center`}
           >
             <h1 className={`text-3xl font-bold font-poppins lg:text-xl`}>
-              Rank Card Inventory
+              Inventory
             </h1>{" "}
             <div className={`flex flex-row gap-4`}>
               <div className={`p-2 bg-gray-900 rounded-2xl px-4`}>
@@ -247,6 +268,45 @@ export const GuildInventoryPage = (props: {
           </div>
         </div>
       </div>
+
+      <Transition
+        show={popup === 1}
+        enter={`transition ease-bounce duration-500 delay-1000`}
+        enterFrom={`translate-y-full opacity-0`}
+        enterTo={`translate-y-0 opacity-100`}
+        leave={`transition ease-bounce duration-300`}
+        leaveFrom={`translate-y-0 opacity-100`}
+        leaveTo={`translate-y-full opacity-0`}
+        as={Fragment}
+      >
+        <div
+          className={`absolute max-w-[90vw] w-fit p-1.5 px-4 bg-gray-900 bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-row gap-2 rounded-2xl font-wsans items-center text-gray-300 text-sm lg:text-xs`}
+        >
+          <span className={``}>Viewing</span>
+          <div className={`flex flex-row gap-px items-center`}>
+            <div
+              className={`flex flex-row gap-2 p-0.5 pr-3 md:px-3 rounded-full bg-indigo-500/30 items-center`}
+            >
+              <img
+                src={inventory?.viewingPerson?.avatarURL}
+                className={`w-8 h-8 lg:w-6 lg:h-6 rounded-full bg-gray-900/50 p-0.5 md:hidden`}
+              />
+
+              <span className={`text-gray-50 font-bold`}>
+                {inventory?.viewingPerson?.name}
+              </span>
+            </div>
+            <span className={``}>&apos;s</span>
+          </div>
+          <span className={``}>Inventory</span>
+          <button
+            className={`text-gray-300 flex flex-row gap-1 bg-black hover:bg-white hover:text-gray-900 p-1.5 rounded-full transition-all`}
+            onClick={() => setPopup(-1)}
+          >
+            <XMarkIcon className={`w-4 h-4`} />
+          </button>
+        </div>
+      </Transition>
     </div>
   );
 };
