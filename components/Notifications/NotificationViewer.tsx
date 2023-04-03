@@ -65,7 +65,7 @@ export const NotificationViewer = (props: {
         }}
       >
         <div
-          className={`flex flex-row gap-1.5 bg-${iconColor}-500 bg-opacity-25 p-1.5 items-center px-4`}
+          className={`flex flex-row gap-1.5 bg-${iconColor}-500 brightness-125 bg-opacity-10 p-1.5 items-center px-4`}
         >
           {notification.image ? (
             <img src={notification.image} className="w-6 h-6" />

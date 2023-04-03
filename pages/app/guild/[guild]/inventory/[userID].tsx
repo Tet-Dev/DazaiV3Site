@@ -36,38 +36,64 @@ export const GuildInventoryPage = (props: {
   const [guildCards, updateGuildCards] = useAPIProp<CardType[]>(
     `/guilds/${guild}/settings/cards`
   );
-  const [crates, updateCrates] = useAPIProp<Crate[]>(`/inventory/crates`);
+  const [crates, updateCrates] = useAPIProp<Crate[]>(
+    userID === "@me" ? `/inventory/crates/` : `/inventory/crates/user/${userID}`
+  );
 
   const [viewingCard, setViewingCard] = useState(null as CardType | null);
   const [createCard, setCreateCard] = useState(false);
   const [stack, setStack] = useState(true);
   const [cards, setCards] = useState<Card[]>([]);
   const [popup, setPopup] = useState(0);
+  const [self, setSelf] = useState(false);
+  const [sortedGuildCards, setSortedGuildCards] = useState([] as CardType[]);
 
   const router = useRouter();
   const user = useDiscordUser();
   useEffect(() => {
-    if (inventory?.viewingPerson?.id === user?.id && user) {
+    if (
+      (inventory?.viewingPerson?.id === user?.id && user) ||
+      (inventory && !inventory.viewingPerson)
+    ) {
       setPopup(-1);
+      setSelf(true);
     }
     if (
-      (inventory?.viewingPerson?.id !== user?.id && user && inventory) ||
+      (inventory?.viewingPerson?.id !== user?.id &&
+        user &&
+        inventory?.viewingPerson) ||
       (user === undefined && inventory)
     ) {
       setPopup((p) => (p === 0 ? 1 : p));
     }
   }, [inventory, user]);
   useEffect(() => {
-    if (user === null) {
-      localStorage.setItem("redirect", globalThis?.location?.href);
-      router.push(
-        `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
-          window?.location?.origin
-        )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
+    if (guildCards) {
+      setSortedGuildCards(
+        guildCards.sort((a, b) => {
+          if (a.guild === undefined && b.guild !== undefined) {
+            return 1;
+          }
+          if (a.rarity === b.rarity) {
+            return a.name.localeCompare(b.name);
+          }
+          return rarityValue[b.rarity] - rarityValue[a.rarity];
+        })
       );
-      return;
     }
-  }, [user]);
+  }, [guildCards]);
+
+  // useEffect(() => {
+  //   if (user === null) {
+  //     localStorage.setItem("redirect", globalThis?.location?.href);
+  //     router.push(
+  //       `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
+  //         window?.location?.origin
+  //       )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
+  //     );
+  //     return;
+  //   }
+  // }, [user]);
   useEffect(() => {
     if (!inventory) return;
     let c = [];
@@ -89,7 +115,11 @@ export const GuildInventoryPage = (props: {
     }
     setCards(
       c.sort((a, b) => {
-        // sort by rarity and then by name
+        // sort by if guild is undefined, then rarity and then by name
+        if (a.card.guild === undefined && b.card.guild !== undefined) {
+          return 1;
+        }
+
         if (a.card.rarity === b.card.rarity) {
           return a.card.name.localeCompare(b.card.name);
         }
@@ -142,14 +172,14 @@ export const GuildInventoryPage = (props: {
             </div>
           </div>
           <div
-            className={`flex flex-row gap-4 items-center font-bold lg:bg-blend-hard-light lg:hidden`}
+            className={`flex flex-row gap-4 items-center font-medium text-gray-100/30 text-sm lg:bg-blend-hard-light lg:hidden`}
           >
             Stack Cards:
             <Switch
               checked={stack}
               onChange={setStack}
               className={`${
-                stack ? "bg-indigo-500" : "bg-gray-200"
+                stack ? "bg-indigo-500" : "bg-gray-900"
               } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
             >
               <span
@@ -160,10 +190,66 @@ export const GuildInventoryPage = (props: {
             </Switch>
           </div>
         </div>
-        <span className={`text-gray-400 font-wsans lg:px-8 `}>
+        <span
+          className={`text-gray-400 font-wsans lg:px-8 ${
+            (cards.length || crates?.length) && `hidden`
+          }`}
+        >
           Your rank card inventory is where you can view all of the rank cards
           you own and use them on your server!
         </span>
+        {!!crates?.filter(
+          (x) => !x.opened && (x.guildID === guild || x.guildID === `@global`)
+        ).length && (
+          <div className={`flex flex-col gap-4 w-full items-center`}>
+            <div
+              className={`flex flex-row gap-2 items-center justify-between w-full`}
+            >
+              <h2 className={`text-lg font-bold font-poppins wf`}>
+                Guild Crates (
+                {
+                  crates.filter(
+                    (x) =>
+                      !x.opened &&
+                      (x.guildID === guild || x.guildID === `@global`)
+                  ).length
+                }
+                )
+              </h2>
+              {self && (
+                <button
+                  className={`bg-indigo-500 group-hover:bg-indigo-400 text-gray-50 font-wsans font-bold text-sm px-4 py-2 rounded-xl transition-all w-fit`}
+                  onClick={() => {
+                    router.push(`/crate/all/${guild}`);
+                  }}
+                >
+                  Open All Crates
+                </button>
+              )}
+            </div>
+            <div
+              className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 inf:grid-cols-5 lg:justify-center w-fit gap-4`}
+            >
+              {crates
+                .filter(
+                  (x) =>
+                    !x.opened &&
+                    (x.guildID === guild || x.guildID === `@global`)
+                )
+                .map((crate, i) => (
+                  <InventoryCrateRenderer
+                    crate={crate}
+                    guildID={guild}
+                    key={`inventory-crate-render-${crate._id}`}
+                    selfOwned={self}
+                  />
+                ))}
+            </div>
+          </div>
+        )}
+        <h2 className={`text-lg font-bold font-poppins w-full`}>
+          Rank Cards ({cards.length})
+        </h2>
         <div
           className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 inf:grid-cols-5 lg:justify-center px-4 w-fit`}
         >
@@ -173,6 +259,7 @@ export const GuildInventoryPage = (props: {
               selected={card.id === inventory?.selectedCard}
               key={`inventory-card-render-${card.id}`}
               updateInventory={updateInventory}
+              selfOwned={self}
             />
           ))}
           {(inventory === undefined || guildCards === undefined) &&
@@ -190,50 +277,7 @@ export const GuildInventoryPage = (props: {
             </div>
           )}
         </div>
-        {!!crates?.filter(
-          (x) => !x.opened && (x.guildID === guild || x.guildID === `@global`)
-        ).length && (
-          <div className={`flex flex-col gap-4`}>
-            <div className={`flex flex-row gap-2 items-center justify-center`}>
-              <h2 className={`text-lg font-bold font-poppins`}>
-                Guild Crates (
-                {
-                  crates.filter(
-                    (x) =>
-                      !x.opened &&
-                      (x.guildID === guild || x.guildID === `@global`)
-                  ).length
-                }
-                )
-              </h2>
-              <button
-                className={`bg-indigo-500 group-hover:bg-indigo-400 text-gray-50 font-wsans font-bold text-sm px-4 py-2 rounded-xl transition-all w-fit`}
-                onClick={() => {
-                  router.push(`/crate/all/${guild}`);
-                }}
-              >
-                Open All
-              </button>
-            </div>
-            <div
-              className={`flex flex-row flex-wrap justify-evenly px-6 gap-4`}
-            >
-              {crates
-                .filter(
-                  (x) =>
-                    !x.opened &&
-                    (x.guildID === guild || x.guildID === `@global`)
-                )
-                .map((crate, i) => (
-                  <InventoryCrateRenderer
-                    crate={crate}
-                    guildID={guild}
-                    key={`inventory-crate-render-${crate._id}`}
-                  />
-                ))}
-            </div>
-          </div>
-        )}
+
         <div className={`flex flex-col gap-4`}>
           <h2 className={`text-lg font-bold font-poppins w-full`}>
             Collected Guild Cards (
@@ -244,17 +288,17 @@ export const GuildInventoryPage = (props: {
                   .map((x) => x.cardID)
               ).size
             }
-            /{guildCards?.length})
+            /{sortedGuildCards?.length})
           </h2>
           <div
             className={`grid md:grid-cols-1 xl:grid-cols-2 2.5xl:grid-cols-3 3xl:grid-cols-5 inf:grid-cols-5 lg:justify-center px-4 w-fit gap-4`}
           >
-            {(inventory === undefined || guildCards === undefined) &&
+            {(inventory === undefined || sortedGuildCards === undefined) &&
               // render 20 dummy cards while loading
               Array.from({ length: 20 }).map((_, i) => (
                 <DummyInventoryCardRenderer key={`dummy-card2-${i}`} />
               ))}
-            {guildCards?.map((card, i) => {
+            {sortedGuildCards?.map((card, i) => {
               if (inventory?.cards.find((c) => c.cardID === card._id)) {
                 return null;
               }

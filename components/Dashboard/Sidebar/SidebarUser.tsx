@@ -10,12 +10,13 @@ import { useMemo, useState } from "react";
 import { BotGuildData } from "../../../utils/types";
 
 export const GuildSidebarUser = (props: {
-  guild: Partial<APIGuild> | null | undefined;
+  guild?: Partial<APIGuild> | null | undefined;
   skeleton?: boolean;
-  guildData: Partial<BotGuildData> | null | undefined;
+  guildData?: Partial<BotGuildData> | null | undefined;
   user: APIUser | null | undefined;
+  global?: boolean;
 }) => {
-  const { guild, skeleton, guildData, user } = props;
+  const { guild, skeleton, guildData, user, global } = props;
   const router = useRouter();
   const [popout, setPopout] = useState(false);
   const highestUserRole = useMemo(() => {
@@ -100,24 +101,28 @@ export const GuildSidebarUser = (props: {
           >
             {user ? `${user?.username}#${user?.discriminator}` : `00000#0000`}
           </div>
-          <div
-            className={`bg-black text-gray-300 rounded-lg px-2 py-1 text-sm 2xl:text-xs w-fit flex flex-row gap-2 items-center 2xl:hidden ${
-              skeleton && `blur-sm animate-pulse`
-            }`}
-          >
+          {!global && (
             <div
-              className={`rounded-md w-3 h-3`}
-              style={{
-                backgroundColor: highestUserRole?.color
-                  ? `#${highestUserRole?.color.toString(16)}`
-                  : `#ffffff`,
-              }}
-            />
+              className={`bg-black text-gray-300 rounded-lg px-2 py-1 text-sm 2xl:text-xs w-fit flex flex-row gap-2 items-center 2xl:hidden ${
+                skeleton && `blur-sm animate-pulse`
+              }`}
+            >
+              <div
+                className={`rounded-md w-3 h-3`}
+                style={{
+                  backgroundColor: highestUserRole?.color
+                    ? `#${highestUserRole?.color.toString(16)}`
+                    : `#ffffff`,
+                }}
+              />
 
-            {skeleton ? `LOADING` : highestUserRole?.name || ""}
-          </div>
+              {skeleton ? `LOADING` : highestUserRole?.name || ""}
+            </div>
+          )}
         </div>
-        <ChevronRightIcon className={`w-5 h-5 text-gray-100 md:-rotate-90 transition-all`} />
+        <ChevronRightIcon
+          className={`w-5 h-5 text-gray-100 md:-rotate-90 transition-all`}
+        />
       </div>
     </div>
   );

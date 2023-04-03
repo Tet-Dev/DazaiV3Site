@@ -12,7 +12,9 @@ module.exports = {
         gradient: 'gradient 1s linear infinite',
         'gradient-medium': 'gradient 2s linear infinite',
         'gradient-slow': 'gradient 3s linear infinite',
+        'gradienttoplefttobottomright': 'gradienttoplefttobottomright 1s linear infinite',
         'bounce-mini': 'bounce-mini 8s ease-in-out infinite',
+        'bounce-mini2': 'bounce-mini2 3s ease-in-out infinite',
       },
       keyframes: {
         'reverse-spin': {
@@ -27,6 +29,16 @@ module.exports = {
           },
           '50%': {
             transform: 'translateY(15px)',
+            // 'animation-timing-function': 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
+        'bounce-mini2': {
+          '0%, 100%': {
+            transform: 'translateY(0px)',
+            // 'animation-timing-function': 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateY(5px)',
             // 'animation-timing-function': 'cubic-bezier(0, 0, 0.2, 1)',
           },
         },
@@ -51,6 +63,20 @@ module.exports = {
           to: {
             'background-position': '200% center',
             'background-size': '200%',
+          },
+        },
+        gradienttoplefttobottomright: {
+          "0%": {
+            "background-position": "0% 0%",
+            "background-size": "200% 200%",
+          },
+          "50%": {
+            "background-position": "100% 100%",
+            "background-size": "200% 200%",
+          },
+          "100%": {
+            "background-position": "0% 0%",
+            "background-size": "200% 200%",
           },
         },
       },

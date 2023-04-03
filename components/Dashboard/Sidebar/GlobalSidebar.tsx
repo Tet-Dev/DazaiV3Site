@@ -22,10 +22,7 @@ import { GuildSidebarUser } from "./SidebarUser";
 import { useRouter } from "next/router";
 import { promptLogin } from "../../../utils/helpers/promptLogin";
 
-export const GuildSidebar = (props: { guildID: string | undefined }) => {
-  const { guildID } = props;
-  const guild = useDiscordGuild(guildID);
-  const guildData = useGuildData(guildID);
+export const GlobalSidebar = () => {
   const user = useDiscordUser();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -64,13 +61,13 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
           className={`flex flex-col gap-12 p-8 bg-gray-800 rounded-3xl shadow-2xl h-full shrink-0`}
         >
           <div className={`flex flex-row gap-4 items-center w-full`}>
-            <GuildIconRenderer
-              guild={guild}
+            <img
+              src={`/images/landing/dazaiTrans.png`}
               className={`rounded-3xl w-8 h-8 flex flex-row items-center justify-center bg-gray-850 2xl:hidden`}
             />
             <div className={`flex flex-col gap-2`}>
               <div className={`text-xl font-bold text-gray-100 font-poppins`}>
-                {guild?.name}
+                Dazai Global
               </div>
               {/* <div className={`text-gray-700`}>#{guild?.id}</div> */}
             </div>
@@ -91,10 +88,10 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
               route={`/app/`}
               // disabled={"Coming soon!"}
             />
-            <GuildSidebarModule
+            {/* <GuildSidebarModule
               name="Music"
               icon={<MusicalNoteIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
-              route={`/app/guild/${guildID}/music`}
+              route={`/app/guild/${}/music`}
             />
             <GuildSidebarModule
               name="Leaderboard"
@@ -113,63 +110,13 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
               icon={<CurrencyDollarIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
               route={`/app/guild/${guildID}/shop`}
               // disabled={"Coming soon!"}
-            />
+            /> */}
           </div>
-          {guildData?.hasAdmin && (
-            <div className={`flex flex-col gap-6`}>
-              <span className={`text-gray-400 text-sm font-wsans font-bold`}>
-                Server Admin
-              </span>
-              <div className={`flex flex-col gap-8 lg:gap-6 px-2`}>
-                {/* <GuildSidebarModule
-            name="Dashboard"
-            icon={<HomeIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
-            route={`/app/guild/${guildID}`}
-          /> */}
-                <GuildSidebarModule
-                  name="Server Rank Cards"
-                  icon={
-                    <RectangleStackIcon className={`w-6 h-6 md:w-4 md:h-4`} />
-                  }
-                  route={`/app/guild/${guildID}/settings/rankcards`}
-                  // disabled={"Coming soon!"}
-                />
-                <GuildSidebarModule
-                  name="Server Crates"
-                  icon={<ArchiveBoxIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
-                  route={`/app/guild/${guildID}/settings/crates`}
-                  // disabled={"Coming soon!"}
-                />
-                <GuildSidebarModule
-                  name="Server Shop Bundles"
-                  icon={
-                    <CurrencyDollarIcon className={`w-6 h-6 md:w-4 md:h-4`} />
-                  }
-                  route={`/app/guild/${guildID}/settings/shop`}
-                  // disabled={"Coming soon!"}
-                />
-                <GuildSidebarModule
-                  name="Levelup Rewards"
-                  icon={<GiftIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
-                  route={`/app/guild/${guildID}/settings/leveluprewards`}
-                  // disabled={"Coming soon!"}
-                />
-                <GuildSidebarModule
-                  name="Permissions"
-                  icon={<ShieldCheckIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
-                  route={`/app/guild/${guildID}/permissions`}
-                  disabled={"Coming soon!"}
-                />
-              </div>
-            </div>
-          )}
-
           <div className={`flex flex-grow`} />
           <GuildSidebarUser
             user={user}
-            guild={guild}
-            guildData={guildData}
             skeleton={!user}
+            global
           />
         </div>
       </div>

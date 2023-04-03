@@ -54,7 +54,7 @@ export const Navbar = () => {
         }
       >
         <button
-          className={`p-2 text-center h-fit w-32 rounded-full font-bold text-lg text-white bg-purple-600 hover:bg-purple-500 disabled:opacity-30 disabled:pointer-events-none transition-all`}
+          className={`p-2 px-6 text-center h-fit rounded-full font-bold text-lg text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-30 disabled:pointer-events-none transition-all`}
           disabled={user === undefined ? true : false}
         >
           {user ? `Dashboard` : `Login`}

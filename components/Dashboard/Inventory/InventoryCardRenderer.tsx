@@ -11,6 +11,7 @@ import {
 } from "../../../utils/types";
 import { Modal } from "../../Modal";
 import Tilt from "react-parallax-tilt";
+import { GlobeAltIcon } from "@heroicons/react/24/outline";
 export interface Card {
   cardID: string;
   id: string;
@@ -22,8 +23,10 @@ export const InventoryCardRenderer = (props: {
   card: Card;
   selected?: boolean;
   updateInventory: () => void;
+  selfOwned?: boolean;
 }) => {
   const { card, cardID, id, amount } = props.card;
+  const { selfOwned } = props;
   const [modalOpen, setmodalOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
   const router = useRouter();
@@ -76,6 +79,13 @@ export const InventoryCardRenderer = (props: {
               className={`absolute z-10 bottom-2 right-2 p-2 bg-gray-900/70 backdrop-blur-sm w-12 h-8 flex flex-row items-center justify-center rounded-xl text-sm font-medium font-wsans`}
             >
               x{amount}
+            </div>
+          )}
+          {!card.guild && (
+            <div
+              className={`absolute z-10 top-2.5 right-2.5 p-1 bg-gray-900/70 backdrop-blur-sm w-fit h-fit flex flex-row items-center justify-center rounded-full text-xs font-medium font-wsans`}
+            >
+              <GlobeAltIcon className={`w-4 h-4`} />
             </div>
           )}
 
@@ -207,7 +217,7 @@ export const InventoryCardRenderer = (props: {
                       setmodalOpen(false);
                     }
                   }}
-                  disabled={updating || props.selected}
+                  disabled={updating || props.selected || !selfOwned}
                 >
                   {props.selected ? `SELECTED` : `SELECT`}
                 </button>
@@ -215,6 +225,7 @@ export const InventoryCardRenderer = (props: {
                   <button
                     className={`rounded-full px-3 py-1.5 text-[0.5rem] bg-rose-500 text-gray-100 font-bold flex flex-row gap-2 items-center hover:bg-rose-300 hover:text-white hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
                     onClick={async () => {
+                      if (!selfOwned) return;
                       if (updating) return;
                       setUpdating(true);
                       const res = await fetcher(
@@ -231,7 +242,7 @@ export const InventoryCardRenderer = (props: {
                         setmodalOpen(false);
                       }
                     }}
-                    disabled={updating || props.selected}
+                    disabled={updating || props.selected || !selfOwned}
                   >
                     Sell for {card.sellPrice}円
                   </button>
@@ -299,20 +310,29 @@ export const InventoryCardRenderer = (props: {
                   >
                     {rarityWordMap[card.rarity]}
                   </span>
-                  {!!(amount - 1) && (
-                    <div
-                      className={`bg-black px-6 p-1 rounded-full flex flex-row font-wsans font-bold text-sm items-center gap-2 text-white`}
-                    >
-                      Owned:{" "}
+                  <div className={`flex flex-col gap-2 items-end`}>
+                    {!!(amount - 1) && (
                       <div
-                        className={`font-extrabold bg-gradient-to-r ${
-                          nonAnimatedRarityGradientMap[card.rarity]
-                        } leading-loose bg-clip-text text-transparent`}
+                        className={`bg-black px-6 p-1 rounded-full flex flex-row font-wsans font-bold text-sm items-center gap-2 text-white`}
                       >
-                        {`x${amount}`}
+                        Owned:{" "}
+                        <div
+                          className={`font-extrabold bg-gradient-to-r ${
+                            nonAnimatedRarityGradientMap[card.rarity]
+                          } leading-loose bg-clip-text text-transparent`}
+                        >
+                          {`x${amount}`}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                    {!card.guild && (
+                      <div
+                        className={`flex flex-row font-wsans font-medium text-xs items-center gap-2 text-gray-100/50`}
+                      >
+                        Global Card
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div
                   className={`flex items-center gap-4 w-full justify-between`}
@@ -372,7 +392,7 @@ export const InventoryCardRenderer = (props: {
                         setmodalOpen(false);
                       }
                     }}
-                    disabled={updating || props.selected}
+                    disabled={updating || props.selected || !selfOwned}
                   >
                     {props.selected ? `SELECTED` : `SELECT`}
                   </button>
@@ -380,6 +400,7 @@ export const InventoryCardRenderer = (props: {
                     <button
                       className={`rounded-full px-3 py-1.5 text-[0.5rem] bg-rose-500 text-gray-100 font-bold flex flex-row gap-2 items-center hover:bg-rose-300 hover:text-white hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}
                       onClick={async () => {
+                        if (!selfOwned) return;
                         if (updating) return;
                         setUpdating(true);
                         const res = await fetcher(
@@ -396,7 +417,7 @@ export const InventoryCardRenderer = (props: {
                           setmodalOpen(false);
                         }
                       }}
-                      disabled={updating}
+                      disabled={updating || !selfOwned}
                     >
                       Sell for {card.sellPrice}円
                     </button>

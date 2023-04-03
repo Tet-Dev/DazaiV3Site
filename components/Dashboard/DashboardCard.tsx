@@ -44,7 +44,7 @@ export const DashboardCard = (props: {
                 ? guild?.icon?.match(/http(s)?:\/\//)
                   ? guild.icon
                   : `https://cdn.discordapp.com/icons/${guild?.id}/${guild?.icon}.png?size=512`
-                : "/images/landing/landingbg.png"
+                : "/images/landing/landingbgsmall.png"
             }
             className={`w-full h-full object-center object-cover`}
           />
@@ -91,14 +91,14 @@ export const DashboardCard = (props: {
           (botSetup ? (
             <Link href={`/app/guild/${guild?.id}`}>
               <button
-                className={`py-4 px-6 md:px-3 md:w-auto md:py-2 md:text-xs h-fit w-36 rounded-2xl font-bold uppercase text-sm text-white bg-purple-700 hover:bg-purple-500 transition-all`}
+                className={`py-4 px-8 md:px-3 md:w-auto md:py-2 md:text-xs h-fit rounded-full font-bold uppercase text-sm text-white bg-indigo-500 hover:bg-indigo-700 transition-all`}
               >
                 Dashboard
               </button>
             </Link>
           ) : (
             <button
-              className={`py-4 px-6 md:px-3 md:w-auto md:py-2 md:text-xs w-36 rounded-2xl font-bold uppercase text-sm text-white bg-neutral-900 hover:bg-purple-900 transition-all shadow-lg`}
+              className={`py-4 px-8 md:px-3 md:w-auto md:py-2 md:text-xs h-fit rounded-full font-bold uppercase text-sm text-white bg-neutral-900 hover:bg-indigo-900 transition-all shadow-lg flex flex-row gap-1`}
               onClick={() => {
                 window.open(
                   `https://discord.com/oauth2/authorize?client_id=${clientID}&permissions=8&scope=bot%20applications.commands&guild_id=${guild?.id}`,
@@ -107,7 +107,7 @@ export const DashboardCard = (props: {
                 );
               }}
             >
-              Setup Dazai
+              <span className={`hidden md:block`}>Click to</span> Setup Dazai
             </button>
           ))}
         {skeleton && (

@@ -1,24 +1,14 @@
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Crate } from "../../../utils/types";
+import { Crate } from "../../../../utils/types";
 
-export const InventoryCrateRenderer = (props: {
-  crate: Crate;
-  guildID: string;
-  selfOwned: boolean;
-}) => {
-  const { crate, guildID, selfOwned } = props;
+export const OpenCrateRenderer = (props: { crate: Crate; guildID: string }) => {
+  const { crate, guildID } = props;
   const router = useRouter();
   return (
     <div
-      className={`flex flex-col gap-4 bg-gray-800 rounded-3xl relative w-72 h-48 lg:w-full border border-gray-100/5 group ${
-        selfOwned && `cursor-pointer`
-      }`}
-      onClick={() => {
-        if (!selfOwned) return;
-        router.push(`/crate/${crate._id}`);
-      }}
+      className={`flex flex-col gap-4 bg-gray-800 rounded-3xl relative w-72 h-48 lg:w-full border border-gray-100/5 group cursor-default`}
     >
       <div
         className={`bg-gradient-to-r from-indigo-300 via-purple-400 to-indigo-300  absolute w-full h-full top-0 left-0 opacity-40 rounded-3xl`}
@@ -43,22 +33,11 @@ export const InventoryCrateRenderer = (props: {
           {crate.name}
         </h3>
       </div>
-      <div
-        className={`absolute top-4 left-4 flex flex-col z-30 ${
-          !selfOwned && `hidden`
-        }`}
-      >
-        <button
-          className={`bg-black group-hover:bg-indigo-500 text-gray-50 font-wsans font-bold text-sm px-4 py-2 rounded-xl transition-all`}
-        >
-          Open
-        </button>
-      </div>
       {crate.guildID === `@global` && (
         <div
-          className={`absolute z-10 top-2.5 right-2.5 p-1 bg-gray-900/70 backdrop-blur-sm w-fit h-fit flex flex-row items-center justify-center rounded-full text-xs font-medium font-wsans`}
+          className={`absolute z-10 top-2.5 right-2.5 p-1 bg-gray-900/70 backdrop-blur-sm w-fit h-fit flex flex-row items-center justify-center rounded-full text-xs font-medium font-wsans gap-1`}
         >
-          <GlobeAltIcon className={`w-4 h-4`} />
+          <GlobeAltIcon className={`w-4 h-4`} /> <span>Global Crate</span>
         </div>
       )}
     </div>

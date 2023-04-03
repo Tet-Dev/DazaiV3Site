@@ -12,6 +12,7 @@ import { NotificationsManager } from "../components/Notifications/NotificationMa
 import { HiddenColorLoader } from "../components/HiddenColorLoader";
 import { ProgressBar } from "../components/ProgressBar";
 import { useNProgress } from "../utils/nprogress";
+import { GlobalSidebar } from "../components/Dashboard/Sidebar/GlobalSidebar";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -34,6 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         {router.query.guild && (
           <GuildSidebar guildID={router.query.guild as string} />
         )}
+        {router.pathname.startsWith("/app/@global") && <GlobalSidebar />}
         <Component {...pageProps} />
       </div>
     </>

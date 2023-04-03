@@ -18,44 +18,44 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
 
   return (
     <>
-      <div>
-        {/* <span className={`text-gray-50/40 w-fit font-wsans font-medium`}>
+      {/* <div> */}
+      {/* <span className={`text-gray-50/40 w-fit font-wsans font-medium`}>
           {props.selected ? `Selected` : <>&nbsp;</>}
         </span> */}
+      <div
+        className={` w-fit rounded-2xl shadow-lg relative shrink-0 z-10 h-fit group hover:scale-105 ease-in duration-200 cursor-pointer opacity-80 hover:opacity-100 bg-gradient-to-r ${
+          rarityGradientMap[card.rarity]
+        }  p-1 overflow-hidden shrink-0 opacity-20 brightness-50`}
+        //   onClick={() => {
+        //     setViewingCard(card);
+        //     setCreateCard(false);
+        //   }}
+        onClick={() => setmodalOpen(true)}
+        key={`card-inventory-${card._id}`}
+      >
         <div
-          className={`card rounded-2xl shadow-lg relative shrink-0 z-10 h-fit group hover:scale-105 ease-in duration-200 cursor-pointer opacity-80 hover:opacity-100 bg-gradient-to-r ${
-            rarityGradientMap[card.rarity]
-          } animate-gradient p-1 overflow-hidden shrink-0 opacity-20 brightness-50`}
-          //   onClick={() => {
-          //     setViewingCard(card);
-          //     setCreateCard(false);
-          //   }}
-          onClick={() => setmodalOpen(true)}
-          key={`card-inventory-${card._id}`}
+          className={`w-[17.75rem] h-[6.64rem] object-cover z-10 transition-all pointer-events-none brightness-75 group-hover:brightness-100 ease-in duration-200 rounded-2xl overflow-hidden`}
         >
-          <div
-            className={`w-[17.75rem] h-[6.64rem] object-cover z-10 transition-all pointer-events-none brightness-75 group-hover:brightness-100 ease-in duration-200 rounded-2xl overflow-hidden`}
-          >
-            {card.rarity === "secret_rare" ? (
-              <div
-                className={`bg-gray-900 w-full h-full flex flex-row items-center justify-center`}
-              >
-                <span className={`font-black font-wsans text-6xl`}>?</span>
-              </div>
-            ) : (
-              <img src={card.url} alt="" className={`w-full h-full`} />
-            )}
-          </div>
-          <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20`}
-          >
-            <span className={`font-bold text-2xl uppercase font-wsans`}>
-              {" "}
-              Locked{" "}
-            </span>
-          </div>
+          {card.rarity === "secret_rare" ? (
+            <div
+              className={`bg-gray-900 w-full h-full flex flex-row items-center justify-center`}
+            >
+              <span className={`font-black font-wsans text-6xl text-gray-500`}>?</span>
+            </div>
+          ) : (
+            <img src={card.url} alt="" className={`w-full h-full`} />
+          )}
+        </div>
+        <div
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20`}
+        >
+          <span className={`font-bold text-2xl uppercase font-wsans`}>
+            {" "}
+            Locked{" "}
+          </span>
         </div>
       </div>
+      {/* </div> */}
       <Modal
         visible={modalOpen}
         onClose={() => setmodalOpen(false)}
@@ -63,7 +63,7 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
         hideBG
       >
         <div
-          className={`flex flex-col p-6 gap-6 rounded-3xl border-gray-100/10 bg-gray-800 max-w-prose lg:max-w-[90vw] ${
+          className={`flex flex-col p-6 gap-6 rounded-3xl border-gray-100/10 bg-gray-800 lg:max-w-[90vw] ${
             updating && `opacity-50 pointer-events-none`
           } transition-all lg:w-screen`}
         >
@@ -103,16 +103,16 @@ export const InventoryCardRendererNotOwned = (props: { card: CardType }) => {
           </div>
           <div className={`flex flex-col justify-center items-center`}>
             <div
-              className={`card rounded-3xl shadow-lg w-full p-1.5 relative overflow-hidden shrink-0 z-10`}
+              className={`card rounded-3xl shadow-lg w-fit p-1.5 relative overflow-hidden shrink-0 z-10`}
             >
               <div
-                className={`w-full h-auto object-cover z-10 rounded-3xl pointer-events-none overflow-hidden`}
+                className={`w-[65ch] h-auto object-cover z-10 rounded-3xl pointer-events-none overflow-hidden`}
               >
                 {card.rarity === "secret_rare" ? (
                   <div
                     className={`bg-gray-900 w-full h-full flex flex-row items-center justify-center aspect-[1024/340]`}
                   >
-                    <span className={`font-black font-wsans text-6xl`}>?</span>
+                    <span className={`font-black text-gray-700 animate-pulse font-wsans text-6xl`}>?</span>
                   </div>
                 ) : (
                   <img src={card.url} alt="" className={`w-full h-full`} />

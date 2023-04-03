@@ -236,7 +236,7 @@ export const CratePage = (props: { crate: Crate }) => {
                   className={` px-6 py-2 md:px-4 md:py-1 md:mt-8 md:text-base bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed`}
                   onClick={() => {
                     if (crate.guildID && crate.guildID !== `@global`)
-                      router.push(`/app/guild/${crate.guildID}/inventory`);
+                      router.push(`/app/guild/${crate.guildID}/inventory/@me`);
                     else router.push(`/app`);
                   }}
                   // disabled={stage === 5}
