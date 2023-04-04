@@ -1,11 +1,11 @@
 import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
-import { CreateRankCard } from "../../../../../components/Dashboard/Settings/RankCards/createRankCard";
-import { ViewRankCard } from "../../../../../components/Dashboard/Settings/RankCards/ViewRankCard";
-import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
-import { getGuildShardURL } from "../../../../../utils/ShardLib";
-import { CardRarity, CardType } from "../../../../../utils/types";
+import { CreateRankCard } from "../../../../components/Dashboard/Settings/RankCards/createRankCard";
+import { ViewRankCard } from "../../../../components/Dashboard/Settings/RankCards/ViewRankCard";
+import { useDiscordUser } from "../../../../utils/hooks/useDiscordUser";
+import { getGuildShardURL } from "../../../../utils/ShardLib";
+import { CardRarity, CardType } from "../../../../utils/types";
 
 export const RankCardSettings = (props: {
   guild: string;
@@ -136,7 +136,7 @@ export const RankCardSettings = (props: {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const guildID = context.query.guild as string;
+  const guildID = "@global" as string;
 
   const guildCards = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,

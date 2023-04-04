@@ -81,7 +81,7 @@ export const InventoryCardRenderer = (props: {
               x{amount}
             </div>
           )}
-          {!card.guild && (
+          {card.guild === `@global` && (
             <div
               className={`absolute z-10 top-2.5 right-2.5 p-1 bg-gray-900/70 backdrop-blur-sm w-fit h-fit flex flex-row items-center justify-center rounded-full text-xs font-medium font-wsans`}
             >
@@ -202,8 +202,8 @@ export const InventoryCardRenderer = (props: {
                     setUpdating(true);
                     const res = await fetcher(
                       `${await getGuildShardURL(
-                        router.query.guild as string
-                      )}/guilds/${router.query.guild}/inventory/selectCard`,
+                        card.guild as string
+                      )}/guilds/${card.guild}/inventory/selectCard`,
                       {
                         method: "POST",
                         body: JSON.stringify({
@@ -230,8 +230,8 @@ export const InventoryCardRenderer = (props: {
                       setUpdating(true);
                       const res = await fetcher(
                         `${await getGuildShardURL(
-                          router.query.guild as string
-                        )}/guilds/${router.query.guild}/inventory/sell/${id}`,
+                          card.guild as string
+                        )}/guilds/${card.guild}/inventory/sell/${id}`,
                         {
                           method: "POST",
                         }
@@ -325,7 +325,7 @@ export const InventoryCardRenderer = (props: {
                         </div>
                       </div>
                     )}
-                    {!card.guild && (
+                    {card.guild === `@global` && (
                       <div
                         className={`flex flex-row font-wsans font-medium text-xs items-center gap-2 text-gray-100/50`}
                       >
@@ -377,8 +377,8 @@ export const InventoryCardRenderer = (props: {
                       setUpdating(true);
                       const res = await fetcher(
                         `${await getGuildShardURL(
-                          router.query.guild as string
-                        )}/guilds/${router.query.guild}/inventory/selectCard`,
+                          card.guild as string
+                        )}/guilds/${card.guild}/inventory/selectCard`,
                         {
                           method: "POST",
                           body: JSON.stringify({
@@ -405,8 +405,8 @@ export const InventoryCardRenderer = (props: {
                         setUpdating(true);
                         const res = await fetcher(
                           `${await getGuildShardURL(
-                            router.query.guild as string
-                          )}/guilds/${router.query.guild}/inventory/sell/${id}`,
+                            card.guild as string
+                          )}/guilds/${card.guild}/inventory/sell/${id}`,
                           {
                             method: "POST",
                           }

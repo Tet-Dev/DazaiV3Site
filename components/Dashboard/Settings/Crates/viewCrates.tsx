@@ -422,11 +422,11 @@ export const ViewCrate = (props: {
           onClick={async () => {
             setUpdating(true);
             const guildShardURL = await getGuildShardURL(
-              router.query.guild as string
+              crate.guild as string
             );
 
             const res = await fetcher(
-              `${guildShardURL}/guilds/${router.query.guild}/settings/crates/${crate._id}`,
+              `${guildShardURL}/guilds/${crate.guild}/settings/crates/${crate._id}`,
               {
                 method: "PATCH",
                 headers: {

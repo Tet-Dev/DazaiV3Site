@@ -64,7 +64,7 @@ const DashboardIndex = () => {
         className={`w-full flex-grow text-white flex flex-row items-start justify-center`}
       >
         <div
-          className={`flex flex-row gap-8 flex-wrap justify-center max-w-[90%] h-full`}
+          className={`flex flex-row gap-8 flex-wrap justify-center max-w-[90%] h-full w-[192ch]`}
         >
           <div
             className={`w-full h-48 lg:h-32 md:h-16 rounded-3xl relative group top-0 z-50  bg-gray-900 pointer-events-none`}

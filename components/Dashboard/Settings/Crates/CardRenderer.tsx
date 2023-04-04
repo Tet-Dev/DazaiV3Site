@@ -122,7 +122,7 @@ export const SettingsCardRenderer = (props: {
           </span>
           <div className={`flex flex-row gap-4 justify-end w-full`}>
             <Link
-              href={`/app/guild/${router.query.guild}/settings/rankcards?card=${card._id}`}
+              href={`/app/guild/${card.guild}/settings/rankcards?card=${card._id}`}
             >
               <button
                 className={`rounded-2xl px-4 py-2 border border-gray-50/10 w-fit bg-gray-50/5 flex flex-row gap-2 items-center hover:bg-indigo-500 hover:border-transparent transition-all disabled:opacity-50 disabled:pointer-events-none`}

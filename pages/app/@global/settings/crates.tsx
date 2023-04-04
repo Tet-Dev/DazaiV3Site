@@ -1,11 +1,11 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
-import { CreateCrate } from "../../../../../components/Dashboard/Settings/Crates/createCrate";
-import { ViewCrate } from "../../../../../components/Dashboard/Settings/Crates/viewCrates";
-import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
-import { getGuildShardURL } from "../../../../../utils/ShardLib";
-import { CardType, CrateTemplate } from "../../../../../utils/types";
+import { CreateCrate } from "../../../../components/Dashboard/Settings/Crates/createCrate";
+import { ViewCrate } from "../../../../components/Dashboard/Settings/Crates/viewCrates";
+import { useDiscordUser } from "../../../../utils/hooks/useDiscordUser";
+import { getGuildShardURL } from "../../../../utils/ShardLib";
+import { CardType, CrateTemplate } from "../../../../utils/types";
 
 export const CrateSettings = (props: {
   guildID: string;
@@ -179,7 +179,7 @@ export const CrateSettings = (props: {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const guildID = context.query.guild as string;
+  const guildID = `@global`;
 
   const guildCards = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,
@@ -218,6 +218,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let viewingCrate = (context.query.c as string)
     ? cratesJSON.find((crate) => crate._id === context.query.c)
     : null;
+    console.log(cratesJSON)
   return {
     props: {
       guildID,

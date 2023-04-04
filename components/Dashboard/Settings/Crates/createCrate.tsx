@@ -408,11 +408,11 @@ export const CreateCrate = (props: {
           onClick={async () => {
             setUpdating(true);
             const guildShardURL = await getGuildShardURL(
-              router.query.guild as string
+              props.cards[0].guild as string
             );
 
             const res = await fetcher(
-              `${guildShardURL}/guilds/${router.query.guild}/settings/crates/`,
+              `${guildShardURL}/guilds/${props.cards[0].guild}/settings/crates/`,
               {
                 method: "POST",
                 headers: {

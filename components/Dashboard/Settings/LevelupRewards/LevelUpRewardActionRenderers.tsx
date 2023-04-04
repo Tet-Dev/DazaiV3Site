@@ -118,7 +118,9 @@ export const LevelUpRewardActionCard = (props: {
       className={`bg-gray-900 px-4 rounded-3xl relative group cursor-pointer hover:bg-gray-750 transition-all p-1`}
       onClick={() => {
         if (card) {
-          router.push(`/app/guild/${guildID}/settings/rankcards?card=${card._id}`);
+          router.push(
+            `/app/guild/${guildID}/settings/rankcards?card=${card._id}`
+          );
         }
       }}
     >

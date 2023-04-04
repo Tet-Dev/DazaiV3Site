@@ -173,8 +173,8 @@ export const CreateBundle = (props: { guild: string; onClose: () => void }) => {
               setUpdating(true);
               const res = await fetcher(
                 `${await getGuildShardURL(
-                  router.query.guild as string
-                )}/guilds/${router.query.guild}/shop/items`,
+                  guild as string
+                )}/guilds/${guild}/shop/items`,
                 {
                   method: "POST",
                   body: JSON.stringify({

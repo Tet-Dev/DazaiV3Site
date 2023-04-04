@@ -169,8 +169,8 @@ export const ViewBundle = (props: {
             if (updating) return;
             setUpdating(true);
             const res = await fetcher(
-              `${await getGuildShardURL(router.query.guild as string)}/guilds/${
-                router.query.guild
+              `${await getGuildShardURL(bundle.guildID as string)}/guilds/${
+                bundle.guildID
               }/shop/items/${bundle._id as string}`,
               {
                 method: "PATCH",

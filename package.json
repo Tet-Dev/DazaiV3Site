@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ffmpeg/core": "^0.11.0",
+    "@ffmpeg/ffmpeg": "^0.11.6",
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.14",
     "@loadable/component": "^5.15.2",
@@ -21,6 +23,7 @@
     "@types/react-dom": "18.0.9",
     "@types/three": "^0.149.0",
     "add": "^2.0.6",
+    "decode-gif": "https://github.com/laoqiu/decode-gif.git",
     "discord-api-types": "^0.37.19",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.4",

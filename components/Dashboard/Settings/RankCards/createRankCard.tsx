@@ -1,6 +1,7 @@
 import { ExclamationTriangleIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { cropResizeGif } from "gif-cropper-resizer-browser";
 import { GifCodec, GifFrame, GifUtil } from "gifwrap";
+import decodeGif from "decode-gif";
 import Jimp from "jimp";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -14,6 +15,7 @@ import {
 } from "../../../../utils/types";
 import SelectMenu from "../../../Misc/SelectMenu";
 import { Modal } from "../../../Modal";
+import { createFFmpeg } from "@ffmpeg/ffmpeg";
 
 const toBase64 = (file: File) =>
   new Promise((resolve, reject) => {
@@ -22,17 +24,23 @@ const toBase64 = (file: File) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   }) as Promise<string | ArrayBuffer | null>;
-export const CreateRankCard = (props: { onUpdate: () => void }) => {
+export const CreateRankCard = (props: {
+  onUpdate: () => void;
+  guild: string;
+}) => {
+  const { guild } = props;
   const [editMode, setEditMode] = useState(false);
   const [cardName, setCardName] = useState("");
   const [cardDescription, setCardDescription] = useState("");
   const [rarity, setRarity] = useState(CardRarity.COMMON);
   const [updating, setUpdating] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
   const [fileHover, setFileHover] = useState(false);
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [fileURL, setFileURL] = useState(null as string | null);
+  const [processingProgress, setProcessingProgress] = useState("" as string);
   useEffect(() => {
     if (!file) {
       setFileURL(null);
@@ -260,8 +268,8 @@ export const CreateRankCard = (props: { onUpdate: () => void }) => {
               setUpdating(true);
               const res = await fetcher(
                 `${await getGuildShardURL(
-                  router.query.guild as string
-                )}/guilds/${router.query.guild}/settings/cards`,
+                  guild as string
+                )}/guilds/${guild}/settings/cards`,
                 {
                   method: "POST",
                   body: JSON.stringify({
@@ -277,7 +285,7 @@ export const CreateRankCard = (props: { onUpdate: () => void }) => {
                 setUpdating(false);
                 return;
               } else {
-                props.onUpdate()
+                props.onUpdate();
                 setUpdating(false);
               }
             }}
@@ -321,6 +329,8 @@ export const CreateRankCard = (props: { onUpdate: () => void }) => {
             //  if its a gif, use gifshot to crop
             console.log(file.type);
             if ([`image/png`, `image/jpeg`].includes(file.type)) {
+              setProcessing(true);
+              setProcessingProgress("Loading image...");
               const imgBuffer = Buffer.from(await file.arrayBuffer());
               console.log(Jimp);
               const image = await Jimp.read(imgBuffer);
@@ -331,53 +341,73 @@ export const CreateRankCard = (props: { onUpdate: () => void }) => {
                 crop.width,
                 crop.height
               );
+              setProcessingProgress("Resizing image...");
               image.scaleToFit(1024, 340, Jimp.RESIZE_BEZIER);
               const croppedBuffer = await croppedImage.getBase64Async(
                 "image/png"
               );
+              setProcessingProgress("Done!");
               console.log(croppedBuffer.substring(0, 100));
               setCroppedFile(croppedBuffer);
               setFile(null);
             }
             console.log(file.type);
             if (file.type === `image/gif`) {
+              setProcessing(true);
+              setProcessingProgress("Loading conversion tools...");
               console.log(`cropping gif`);
               const imgBuffer = Buffer.from(await file.arrayBuffer());
-              const gifData = await GifUtil.read(imgBuffer);
-              console.log(gifData);
-              const newFrames = gifData.frames.map((frame) => {
-                const jimpShare = GifUtil.copyAsJimp(Jimp, frame) as Jimp;
-                const crop = cropArea.current;
-                const croppedImage = jimpShare.crop(
-                  crop.x,
-                  crop.y,
-                  crop.width,
-                  crop.height
-                );
-                croppedImage.scaleToFit(
-                  1024,
-                  340,
-                  Jimp.RESIZE_NEAREST_NEIGHBOR
-                );
 
-                return new GifFrame(croppedImage.bitmap, {});
+              // const gifData = await codec.decodeGif(imgBuffer);
+              // console.log(gifData);
+
+              console.log(
+                "FFMEPG LOADING",
+                `${location.origin}/ffmpeg/dist/ffmpeg-core.js`
+              );
+              setProcessingProgress("Processing GIF...");
+              const ffmpeg = createFFmpeg({
+                mainName: "main",
+                corePath:
+                  "https://unpkg.com/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js",
+                progress: (e) => null,
               });
-              const codec = new GifCodec({});
-              console.log({ newFrames });
-              const newGif = await codec.encodeGif(newFrames, {
-                loops: 0,
-              });
-              console.log({ newGif });
-              const newGifDataURL = `data:image/gif;base64,${newGif.buffer.toString(
+              // load ffmpeg.wasm code
+              await ffmpeg.load();
+              console.log("FFMEPG LOADED");
+              // write file to  memory filesystem
+              ffmpeg.FS("writeFile", file.name, new Uint8Array(imgBuffer));
+              // convert video into mp4
+              const crop = cropArea.current;
+              await ffmpeg.run(
+                "-i",
+                file.name,
+                "-vf",
+                `crop=${crop.width}:${crop.height}:${crop.x}:${
+                  crop.y
+                },scale=${1024}:${340}`,
+                "output.gif"
+              );
+              setProcessingProgress("Converting file...");
+              // read file from Memory filesystem
+              const data = Buffer.from(ffmpeg.FS("readFile", "output.gif"));
+              console.log("FFMEPG DONE", data);
+
+              const newGifDataURL = `data:image/gif;base64,${data.toString(
                 `base64`
               )}`;
+
               console.log(newGifDataURL.substring(0, 100));
               setCroppedFile(newGifDataURL);
               setFile(null);
             }
+            setProcessing(false);
           }}
+          disabled={processing}
         >
-          Looks good!
+          {processing
+            ? processingProgress || `Processing image...`
+            : `Looks good!`}
         </button>
       </Modal>
     </>

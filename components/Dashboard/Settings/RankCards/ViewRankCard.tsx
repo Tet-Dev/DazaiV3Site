@@ -160,14 +160,14 @@ export const ViewRankCard = (props: {
           onClick={async () => {
             setUpdating(true);
             const guildShardURL = await getGuildShardURL(
-              router.query.guild as string
+              card.guild as string
             );
             let int = parseInt(`${cardPrice}`);
             if (isNaN(int)) {
               int = 0;
             }
             const res = await fetcher(
-              `${guildShardURL}/guilds/${router.query.guild}/settings/cards/${card._id}`,
+              `${guildShardURL}/guilds/${card.guild}/settings/cards/${card._id}`,
               {
                 method: 'PATCH',
                 headers: {

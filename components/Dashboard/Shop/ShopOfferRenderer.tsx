@@ -17,8 +17,8 @@ export const ShopOfferRenderer = (props: {
   const buyBundle = async (v: ShopItem) => {
     if ((inventory.money ?? 0) < shopItem.price) return;
     const res = await fetcher(
-      `${await getGuildShardURL(router.query.guild as string)}/guilds/${
-        router.query.guild
+      `${await getGuildShardURL(shopItem.guildID as string)}/guilds/${
+        shopItem.guildID
       }/shop/items/${shopItem._id as string}/buy`,
       {
         method: "POST",
