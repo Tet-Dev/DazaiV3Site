@@ -116,7 +116,7 @@ export const GlobalSidebar = () => {
           {user?.id === botOwnerID  && (
             <div className={`flex flex-col gap-6`}>
               <span className={`text-gray-400 text-sm font-wsans font-bold`}>
-                Server Admin
+                Global Dazai Admin
               </span>
               <div className={`flex flex-col gap-8 lg:gap-6 px-2`}>
                 {/* <GuildSidebarModule
@@ -125,7 +125,7 @@ export const GlobalSidebar = () => {
             route={`/app/@global`}
           /> */}
                 <GuildSidebarModule
-                  name="Server Rank Cards"
+                  name="Global Rank Cards"
                   icon={
                     <RectangleStackIcon className={`w-6 h-6 md:w-4 md:h-4`} />
                   }
@@ -133,31 +133,31 @@ export const GlobalSidebar = () => {
                   // disabled={"Coming soon!"}
                 />
                 <GuildSidebarModule
-                  name="Server Crates"
+                  name="Global Crates"
                   icon={<ArchiveBoxIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
                   route={`/app/@global/settings/crates`}
                   // disabled={"Coming soon!"}
                 />
                 <GuildSidebarModule
-                  name="Server Shop Bundles"
+                  name="Global Shop Bundles"
                   icon={
                     <CurrencyDollarIcon className={`w-6 h-6 md:w-4 md:h-4`} />
                   }
                   route={`/app/@global/settings/shop`}
                   // disabled={"Coming soon!"}
                 />
-                <GuildSidebarModule
+                {/* <GuildSidebarModule
                   name="Levelup Rewards"
                   icon={<GiftIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
                   route={`/app/@global/settings/leveluprewards`}
                   // disabled={"Coming soon!"}
-                />
-                <GuildSidebarModule
+                /> */}
+                {/* <GuildSidebarModule
                   name="Permissions"
                   icon={<ShieldCheckIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
                   route={`/app/@global/permissions`}
                   disabled={"Coming soon!"}
-                />
+                /> */}
               </div>
             </div>
           )}

@@ -19,7 +19,8 @@ const GlobalDashboard = () => {
     <div
       className={`flex flex-row flex-grow w-full h-full justify-center`}
     >
-      
+      <div className={`bg-gray-850 w-full`}>
+        </div>
     </div>
   );
 };
