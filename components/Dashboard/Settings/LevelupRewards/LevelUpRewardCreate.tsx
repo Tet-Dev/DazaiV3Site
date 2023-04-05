@@ -72,7 +72,7 @@ export const LevelUpRewardCreate = (props: {
                 },
                 {
                   id: "everyNLevels",
-                  name: "Every N levels where N is a number (eg. Every 5 Lvls. starting from Lv. 2)",
+                  name: "Every N levels where N is a number",
                 },
               ]}
               onSelect={(item) => {

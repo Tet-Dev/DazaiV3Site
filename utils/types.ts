@@ -1,4 +1,4 @@
-import { APIGuild, APIRole } from "discord-api-types/v10";
+import { APIGuild, APIRole, APIUser } from "discord-api-types/v10";
 import { ObjectId } from "mongodb";
 export type DiscordOauthBundle = {
   access_token: string;
@@ -7,6 +7,19 @@ export type DiscordOauthBundle = {
   refresh_token: string;
   scope: string;
 };
+export type RawUserData = {
+  _id: ObjectId;
+  userID: string;
+  votes: number;
+  points: number;
+  highestStreak: number;
+  currentStreak: number;
+  lastVote: number;
+  premiumUntil: number;
+  remindVote: boolean;
+  disableLevelUpMessages: boolean;
+};
+export type UserData = RawUserData & {user:APIUser}
 export type BotGuildData = {
   name: string;
   id: string;

@@ -13,7 +13,7 @@ import { MusicThumbnailRenderer } from "./MusicThumbnailRenderer";
 
 export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
   const { queue } = props;
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   const router = useRouter();
   const guildID = router.query.guild as string;
   const [location, setLocation] = useState("");

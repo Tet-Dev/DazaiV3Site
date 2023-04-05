@@ -7,12 +7,14 @@ import {
   Bars3Icon,
   CurrencyDollarIcon,
   GiftIcon,
+  GlobeAltIcon,
   HomeIcon,
   MusicalNoteIcon,
   QueueListIcon,
   RectangleStackIcon,
   ShieldCheckIcon,
   SparklesIcon,
+  StarIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useDiscordUser } from "../../../utils/hooks/useDiscordUser";
@@ -24,7 +26,7 @@ import { promptLogin } from "../../../utils/helpers/promptLogin";
 import { botOwnerID } from "../../../utils/constants";
 
 export const GlobalSidebar = () => {
-  const user = useDiscordUser();
+  const { user } = useDiscordUser();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   if (user === null) {
@@ -59,7 +61,7 @@ export const GlobalSidebar = () => {
           <XMarkIcon className={`w-6 h-6`} />
         </div>
         <div
-          className={`flex flex-col gap-12 p-8 bg-gray-800 rounded-3xl shadow-2xl h-full shrink-0`}
+          className={`flex flex-col gap-12 lg:gap-6 lg:p-6 p-8 bg-gray-800 rounded-3xl shadow-2xl h-full shrink-0`}
         >
           <div className={`flex flex-row gap-4 items-center w-full`}>
             <img
@@ -78,16 +80,16 @@ export const GlobalSidebar = () => {
               user === undefined ? "blur-md pointer-events-none" : ""
             } overflow-auto`}
           >
-            {/* <GuildSidebarModule
-            name="Dashboard"
-            icon={<HomeIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
-            route={`/app/@global`}
-          /> */}
             <GuildSidebarModule
               name="Back to Server List"
               icon={<QueueListIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
               route={`/app/`}
               // disabled={"Coming soon!"}
+            />
+            <GuildSidebarModule
+              name="Voting"
+              icon={<StarIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
+              route={`/app/@global`}
             />
             {/* <GuildSidebarModule
               name="Music"
@@ -113,7 +115,7 @@ export const GlobalSidebar = () => {
               // disabled={"Coming soon!"}
             /> */}
           </div>
-          {user?.id === botOwnerID  && (
+          {user?.id === botOwnerID && (
             <div className={`flex flex-col gap-6`}>
               <span className={`text-gray-400 text-sm font-wsans font-bold`}>
                 Global Dazai Admin
@@ -146,12 +148,12 @@ export const GlobalSidebar = () => {
                   route={`/app/@global/settings/shop`}
                   // disabled={"Coming soon!"}
                 />
-                {/* <GuildSidebarModule
-                  name="Levelup Rewards"
+                <GuildSidebarModule
+                  name="Global Voting Rewards"
                   icon={<GiftIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
                   route={`/app/@global/settings/leveluprewards`}
                   // disabled={"Coming soon!"}
-                /> */}
+                />
                 {/* <GuildSidebarModule
                   name="Permissions"
                   icon={<ShieldCheckIcon className={`w-6 h-6 md:w-4 md:h-4`} />}

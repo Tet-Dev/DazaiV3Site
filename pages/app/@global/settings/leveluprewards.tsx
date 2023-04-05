@@ -32,11 +32,11 @@ export const LevelUpRewards = (props: {
       >
         <div className={`flex flex-col gap-6`}>
           <h1 className={`text-3xl font-bold font-poppins`}>
-            Server-Wide Custom Level Up Rewards
+            Voting Streak Rewards
           </h1>
           <span className={`text-gray-400 font-wsans`}>
-            Set level rewards to incentivize your members to level up and gain
-            new cool cosmetics & roles!
+            Set voting rewards to incentivize your members to level up and gain
+            new cool cosmetics!
           </span>
         </div>
         <div className={`flex flex-col gap-6`}>
@@ -90,7 +90,7 @@ export const LevelUpRewards = (props: {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const guildID = context.query.guild as string;
+  const guildID = `@global`
 
   const levelRewards = await fetch(
     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/levelrewards`,

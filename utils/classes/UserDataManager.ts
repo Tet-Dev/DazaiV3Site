@@ -3,6 +3,8 @@ import EventEmitter from "events";
 import localforage from "localforage";
 import { discordAPI } from "../constants";
 import { fetcher } from "../discordFetcher";
+import { getGuildShardURL } from "../ShardLib";
+import { UserData } from "../types";
 
 export class UserDataManager extends EventEmitter {
   static instance: UserDataManager;
@@ -12,8 +14,8 @@ export class UserDataManager extends EventEmitter {
     }
     return UserDataManager.instance;
   }
-  discordSelf: APIUser | null | undefined = undefined;
-  userCacheMap: Map<string, APIUser> = new Map();
+  discordSelf: UserData | null | undefined = undefined;
+  userCacheMap: Map<string, UserData> = new Map();
   private constructor() {
     super();
     this.getSelf();
@@ -22,7 +24,7 @@ export class UserDataManager extends EventEmitter {
   async loadCache() {
     localforage.getItem("discordSelf").then((discordSelf) => {
       if (discordSelf) {
-        this.discordSelf = discordSelf as APIUser;
+        this.discordSelf = discordSelf as UserData;
         this.emit("selfUpdate", this.discordSelf);
       }
     });
@@ -32,13 +34,24 @@ export class UserDataManager extends EventEmitter {
     //   }
     // })
   }
+  async loadCachedUser() {
+    const cachedUser = await localforage.getItem("discordSelf");
+    const cachedUserVersion = await localforage.getItem("discordSelfVersion");
+    if (cachedUserVersion === 1) {
+      if (cachedUser) {
+        this.discordSelf = cachedUser as UserData;
+        this.emit("selfUpdate", this.discordSelf);
+      }
+    }
+  }
   async getSelf() {
-    const dself = await fetcher(`${discordAPI}/users/@me`, {
+    const dself = await fetcher(`${await getGuildShardURL()}/user/@me`, {
       method: "GET",
     }).then((res) => (res.ok ? res.json() : null));
     this.discordSelf = dself;
     this.emit("selfUpdate", dself);
     await localforage.setItem("discordSelf", dself);
+    await localforage.setItem("discordSelfVersion", 1);
     return dself;
   }
 }

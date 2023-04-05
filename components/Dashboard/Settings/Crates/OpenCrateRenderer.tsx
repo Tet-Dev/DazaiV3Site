@@ -3,7 +3,10 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { Crate } from "../../../../utils/types";
 
-export const OpenCrateRenderer = (props: { crate: Crate; guildID: string }) => {
+export const OpenCrateRenderer = (props: { crate: {
+  name: string;
+  guildID: string;
+}; guildID: string }) => {
   const { crate, guildID } = props;
   const router = useRouter();
   return (

@@ -32,7 +32,7 @@ export const GuildMusicNowPlaying = (props: {
 }) => {
   const { musicData, position, guildID } = props;
   const [showNP, setShowNP] = useState(false);
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   if (!musicData.track) return null;
   return (
     <>

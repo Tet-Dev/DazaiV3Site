@@ -49,7 +49,7 @@ const GuildDashboard = (props: {
   const guildID = router.query.guild as string;
   const [musicData, setMusicData] = useState(null as null | MusicData);
   const [position, setPosition] = useState(0);
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   useEffect(() => {
     if (musicData?.status !== "playing") return;
     console.log("setting position", musicData.position);

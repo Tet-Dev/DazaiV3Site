@@ -12,7 +12,7 @@ export const Navbar = () => {
   useEffect(() => {
     setLocation(window.location.origin);
   }, []);
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   return (
     <div
       className={`p-2 pr-4 flex flex-row gap-8 absolute top-4 right-4 z-30 bg-black rounded-full w-fit items-center`}
