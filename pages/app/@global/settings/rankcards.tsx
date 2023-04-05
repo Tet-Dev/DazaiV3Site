@@ -1,24 +1,33 @@
 import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { CreateRankCard } from "../../../../components/Dashboard/Settings/RankCards/createRankCard";
 import { ViewRankCard } from "../../../../components/Dashboard/Settings/RankCards/ViewRankCard";
 import { useDiscordUser } from "../../../../utils/hooks/useDiscordUser";
+import { useAPIProp } from "../../../../utils/hooks/useProp";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import { CardRarity, CardType } from "../../../../utils/types";
 
-export const RankCardSettings = (props: {
-  guild: string;
-  cards: CardType[];
-  selectedCard: CardType | null;
-}) => {
-  const { guild, selectedCard } = props;
-  const [cards, setCards] = useState(props.cards);
-  const [viewingCard, setViewingCard] = useState(
-    selectedCard ?? (null as CardType | null)
+export const RankCardSettings = (props: {}) => {
+  const guild = `@global`;
+  const selectedCard = useRouter().query.card as string | undefined;
+  const [cards, updateCards] = useAPIProp<CardType[]>(
+    `/guilds/${guild}/settings/cards?revealsecretrarecards=1`,
+    guild
   );
+
+  const [viewingCard, setViewingCard] = useState(null as CardType | null);
   const [createCard, setCreateCard] = useState(false);
-  const {user} = useDiscordUser();
+  useEffect(() => {
+    if (selectedCard && cards) {
+      const card = cards?.find((c) => c._id.toString() === selectedCard);
+      if (card) {
+        setViewingCard(card);
+      }
+    }
+  }, [cards, selectedCard]);
+  const { user } = useDiscordUser();
   return (
     <div
       className={`relative grid grid-cols-12 ${
@@ -41,16 +50,7 @@ export const RankCardSettings = (props: {
           <ViewRankCard
             card={viewingCard}
             onSave={async () => {
-              const res = await fetch(
-                `${getGuildShardURL(guild)}/guilds/${guild}/settings/cards`,
-                {
-                  method: "GET",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-              setCards(await res.json());
+              updateCards();
               setViewingCard(null);
             }}
             key={`view-card-${viewingCard._id}`}
@@ -58,16 +58,7 @@ export const RankCardSettings = (props: {
         ) : createCard ? (
           <CreateRankCard
             onUpdate={async () => {
-              const res = await fetch(
-                `${getGuildShardURL(guild)}/guilds/${guild}/settings/cards`,
-                {
-                  method: "GET",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-              setCards(await res.json());
+              updateCards()
               setViewingCard(null);
               setCreateCard(false);
             }}
@@ -78,7 +69,7 @@ export const RankCardSettings = (props: {
             className={`flex flex-grow flex-col gap-8 items-center justify-center border-2 mb-8 p-12 rounded-3xl border-dashed border-gray-700`}
           >
             <span className={`text-gray-500 font-wsans text-2xl `}>
-              {cards.length
+              {cards?.length
                 ? `Click on a card in the list on the right to view`
                 : `Click on the "Add Card" button to add your first card!`}
             </span>
@@ -94,9 +85,9 @@ export const RankCardSettings = (props: {
         <span
           className={`text-gray-200 font-wsans font-medium text-end w-full`}
         >
-          {cards.length} / 250 card slots used
+          {cards?.length} / 250 card slots used
         </span>
-        {cards.map((card) => (
+        {cards?.map((card) => (
           <div
             className={`card rounded-3xl shadow-lg relative shrink-0 z-10 h-fit group hover:scale-105 ease-in duration-200 cursor-pointer opacity-80 hover:opacity-100 border-4 ${
               viewingCard === card ? `border-indigo-500` : `border-gray-100/20`
@@ -135,41 +126,41 @@ export const RankCardSettings = (props: {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const guildID = "@global" as string;
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const guildID = "@global" as string;
 
-  const guildCards = await fetch(
-    `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const cards = (await guildCards.json()) as CardType[];
-  //   cards.push({
-  //     _id: "63e3f70bf538f8e190963d88",
-  //     name: "Sunset Dazai",
-  //     description: "Dazai with a sunset background",
-  //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
-  //     rarity: CardRarity.LEGENDARY,
-  //   });
-  //   cards.push({
-  //     _id: "63e3f70bf538f8e190963d8f",
-  //     name: "Dazai Thousand",
-  //     description: "The 1000 server milestone celebration card",
-  //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
-  //     rarity: CardRarity.EVENT_RARE,
-  //   });
-  return {
-    props: {
-      guild: guildID,
-      cards,
-      selectedCard: context.query.card
-        ? cards.find((card) => card._id === context.query.card)
-        : null,
-    },
-  };
-};
+//   const guildCards = await fetch(
+//     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,
+//     {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+//   const cards = (await guildCards.json()) as CardType[];
+//   //   cards.push({
+//   //     _id: "63e3f70bf538f8e190963d88",
+//   //     name: "Sunset Dazai",
+//   //     description: "Dazai with a sunset background",
+//   //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
+//   //     rarity: CardRarity.LEGENDARY,
+//   //   });
+//   //   cards.push({
+//   //     _id: "63e3f70bf538f8e190963d8f",
+//   //     name: "Dazai Thousand",
+//   //     description: "The 1000 server milestone celebration card",
+//   //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
+//   //     rarity: CardRarity.EVENT_RARE,
+//   //   });
+//   return {
+//     props: {
+//       guild: guildID,
+//       cards,
+//       selectedCard: context.query.card
+//         ? cards.find((card) => card._id === context.query.card)
+//         : null,
+//     },
+//   };
+// };
 export default RankCardSettings;

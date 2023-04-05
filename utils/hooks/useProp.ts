@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetcher } from "../discordFetcher";
 import { getGuildShardURL } from "../ShardLib";
+import { useDiscordUser } from "./useDiscordUser";
 
 /**
  *
@@ -14,6 +15,7 @@ export const useAPIProp = <T>(
 ) => {
   const [value, setValue] = useState(undefined as null | undefined | T);
   const [error, setError] = useState(undefined as null | undefined | string);
+  const user = useDiscordUser()
   const update = useCallback(async () => {
     if (!APIPath) return null;
     const guildURL = await getGuildShardURL(guildID);
@@ -34,7 +36,7 @@ export const useAPIProp = <T>(
 
   useEffect(() => {
     update();
-  }, [APIPath, requestInit]);
+  }, [APIPath, requestInit, user]);
   return [value, update, error] as [
     null | undefined | T,
     () => Promise<void>,

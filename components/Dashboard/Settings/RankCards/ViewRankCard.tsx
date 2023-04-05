@@ -167,7 +167,7 @@ export const ViewRankCard = (props: {
               int = 0;
             }
             const res = await fetcher(
-              `${guildShardURL}/guilds/${card.guild}/settings/cards/${card._id}`,
+              `${guildShardURL}/guilds/${card.guild}/settings/cards/${card._id}?revealsecretrarecards=1`,
               {
                 method: 'PATCH',
                 headers: {

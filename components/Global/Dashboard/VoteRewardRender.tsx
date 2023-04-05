@@ -102,17 +102,19 @@ const VoteRewardEntryCard = (props: {
         onClick={() => setmodalOpen(true)}
         key={`card-inventory-${card?._id}`}
       >
-        <img
-          src={card?.url}
-          alt=""
-          className={`w-full h-full object-cover blur-lg group-hover:opacity-100 opacity-0 transition-all absolute top-0 left-0 z-0`}
-        />
+        {card?.rarity !== "secret_rare" && (
+          <img
+            src={card?.url}
+            alt=""
+            className={`w-full h-full object-cover blur-lg group-hover:opacity-100 opacity-0 transition-all absolute top-0 left-0 z-0`}
+          />
+        )}
         <div
           className={`w-full h-full object-cover z-10 transition-all pointer-events-none ease-in duration-200 rounded-3xl overflow-hidden bg-gray-900`}
         >
           {card?.rarity === "secret_rare" ? (
             <div
-              className={`bg-gray-900 w-full h-full flex flex-row items-center justify-center`}
+              className={`bg-gray-900 group-hover:bg-gray-800 w-full h-full flex flex-row items-center justify-center transition-all`}
             >
               <span className={`font-black font-wsans text-6xl text-gray-500`}>
                 ?
@@ -187,7 +189,7 @@ const VoteRewardEntryCard = (props: {
               >
                 {card?.rarity === "secret_rare" ? (
                   <div
-                    className={`bg-gray-900 w-full h-full flex flex-row items-center justify-center aspect-[1024/340]`}
+                    className={`bg-gray-900 w-[65ch] h-full flex flex-row items-center justify-center aspect-[1024/340]`}
                   >
                     <span
                       className={`font-black text-gray-700 animate-pulse font-wsans text-6xl`}

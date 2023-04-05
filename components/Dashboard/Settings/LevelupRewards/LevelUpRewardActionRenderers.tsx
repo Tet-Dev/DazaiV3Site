@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { fetcher } from "../../../../utils/discordFetcher";
 import { useGuildData } from "../../../../utils/hooks/useGuildData";
 import { useAPIProp } from "../../../../utils/hooks/useProp";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
@@ -98,17 +99,12 @@ export const LevelUpRewardActionCard = (props: {
   guildID: string;
 }) => {
   const { action, guildID } = props;
-  const [card, setCard] = useState(null as null | CardType | undefined);
   const router = useRouter();
-  useEffect(() => {
-    fetch(
-      `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards/${
-        action.cardID
-      }`
-    )
-      .then((res) => res.json())
-      .then(setCard);
-  }, [action.cardID]);
+  const [card, updateCard] = useAPIProp<CardType>(
+    `/guilds/${guildID}/settings/cards/${action.cardID}?revealsecretrarecards=1`,
+    guildID
+  );
+
   return (
     <div
       className={`bg-gray-900 px-4 rounded-3xl relative group cursor-pointer hover:bg-gray-750 transition-all p-1`}

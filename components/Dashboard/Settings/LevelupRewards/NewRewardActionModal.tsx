@@ -48,7 +48,7 @@ export const NewRewardActionModal = (props: {
   useEffect(() => {
     (async () => {
       const guildCards = await fetcher(
-        `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,
+        `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards?revealsecretrarecards=1`,
         {
           method: "GET",
           headers: {

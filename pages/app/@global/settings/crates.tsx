@@ -1,23 +1,39 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { CreateCrate } from "../../../../components/Dashboard/Settings/Crates/createCrate";
 import { ViewCrate } from "../../../../components/Dashboard/Settings/Crates/viewCrates";
 import { useDiscordUser } from "../../../../utils/hooks/useDiscordUser";
+import { useAPIProp } from "../../../../utils/hooks/useProp";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import { CardType, CrateTemplate } from "../../../../utils/types";
 
-export const CrateSettings = (props: {
-  guildID: string;
-  crates: CrateTemplate[];
-  cards: CardType[];
-  viewingCrate: CrateTemplate | null;
-}) => {
-  const { guildID, viewingCrate: vc } = props;
-  const [crates, setCrates] = useState(props.crates);
-  const [viewingCrate, setViewingCrate] = useState(vc as CrateTemplate | null);
+export const CrateSettings = (props: {}) => {
+  const router = useRouter();
+  const guildID = `@global`;
+  const [crates, updateCrates] = useAPIProp<CrateTemplate[]>(
+    `/guilds/${guildID}/settings/crates`,
+    guildID
+  );
+  const [cards, updateCards] = useAPIProp<CardType[]>(
+    `/guilds/${guildID}/settings/cards?revealsecretrarecards=1`,
+    guildID
+  );
+
+  const [viewingCrate, setViewingCrate] = useState(
+    null as CrateTemplate | null
+  );
+  useEffect(() => {
+    if (router.query.c && crates) {
+      const crate = crates.find((c) => c._id.toString() === router.query.c);
+      if (crate) {
+        setViewingCrate(crate);
+      }
+    }
+  }, [crates, router]);
   const [createCrate, setCreateCrate] = useState(false);
-  const {user} = useDiscordUser();
+  const { user } = useDiscordUser();
   return (
     <div
       className={`relative grid grid-cols-12 ${
@@ -40,19 +56,7 @@ export const CrateSettings = (props: {
           <ViewCrate
             crate={viewingCrate}
             onSave={async () => {
-              const crates = await fetch(
-                `${getGuildShardURL(
-                  guildID
-                )}/guilds/${guildID}/settings/crates`,
-                {
-                  method: "GET",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-              const cratesJSON = (await crates.json()) as CrateTemplate[];
-              setCrates(cratesJSON);
+              updateCrates();
               setCreateCrate(false);
               setViewingCrate(null);
               // const res = await fetch(
@@ -67,36 +71,24 @@ export const CrateSettings = (props: {
               // setCards(await res.json());
               // setViewingCard(null);
             }}
-            cards={props.cards}
+            cards={cards!}
           />
         ) : createCrate ? (
           <CreateCrate
             onSave={async () => {
               setCreateCrate(false);
-              const crates = await fetch(
-                `${getGuildShardURL(
-                  guildID
-                )}/guilds/${guildID}/settings/crates`,
-                {
-                  method: "GET",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-              const cratesJSON = (await crates.json()) as CrateTemplate[];
-              setCrates(cratesJSON);
+              updateCrates();
               setCreateCrate(false);
               setViewingCrate(null);
             }}
-            cards={props.cards}
+            cards={cards!}
           />
         ) : (
           <div
             className={`flex flex-grow flex-col gap-8 items-center justify-center border-2 mb-8 p-12 rounded-3xl border-dashed border-gray-700`}
           >
             <span className={`text-gray-500 font-wsans text-2xl `}>
-              {crates.length
+              {crates?.length
                 ? `Click on a crate in the list on the right to view`
                 : `Click on the "Add Crate" button to add your first Crate!`}
             </span>
@@ -112,10 +104,10 @@ export const CrateSettings = (props: {
         <span
           className={`text-gray-200 font-wsans font-medium text-end w-full`}
         >
-          {crates.length} / 10 crate slots used
+          {crates?.length} / 10 crate slots used
         </span>
         <div className={`gap-4 grid grid-cols-2 w-full`}>
-          {crates.map((crate) => (
+          {crates?.map((crate) => (
             <div
               className={`card rounded-3xl shadow-lg relative shrink-0 z-10 h-fit group hover:scale-105 ease-in duration-200 cursor-pointer opacity-80 hover:opacity-100 border-4 ${
                 viewingCrate === crate
@@ -178,54 +170,56 @@ export const CrateSettings = (props: {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const guildID = `@global`;
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const guildID = `@global`;
 
-  const guildCards = await fetch(
-    `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const cards = (await guildCards.json()) as CardType[];
-  const crates = await fetch(
-    `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/crates`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const cratesJSON = (await crates.json()) as CrateTemplate[];
-  //   cards.push({
-  //     _id: "63e3f70bf538f8e190963d88",
-  //     name: "Sunset Dazai",
-  //     description: "Dazai with a sunset background",
-  //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
-  //     rarity: CardRarity.LEGENDARY,
-  //   });
-  //   cards.push({
-  //     _id: "63e3f70bf538f8e190963d8f",
-  //     name: "Dazai Thousand",
-  //     description: "The 1000 server milestone celebration card",
-  //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
-  //     rarity: CardRarity.EVENT_RARE,
-  //   });
-  let viewingCrate = (context.query.c as string)
-    ? cratesJSON.find((crate) => crate._id === context.query.c)
-    : null;
-    console.log(cratesJSON)
-  return {
-    props: {
-      guildID,
-      cards,
-      crates: cratesJSON,
-      viewingCrate,
-    },
-  };
-};
+//   const guildCards = await fetch(
+//     `${getGuildShardURL(
+//       guildID
+//     )}/guilds/${guildID}/settings/cards?revealsecretrarecards=1`,
+//     {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+//   const cards = (await guildCards.json()) as CardType[];
+//   const crates = await fetch(
+//     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/crates`,
+//     {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+//   const cratesJSON = (await crates.json()) as CrateTemplate[];
+//   //   cards.push({
+//   //     _id: "63e3f70bf538f8e190963d88",
+//   //     name: "Sunset Dazai",
+//   //     description: "Dazai with a sunset background",
+//   //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
+//   //     rarity: CardRarity.LEGENDARY,
+//   //   });
+//   //   cards.push({
+//   //     _id: "63e3f70bf538f8e190963d8f",
+//   //     name: "Dazai Thousand",
+//   //     description: "The 1000 server milestone celebration card",
+//   //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
+//   //     rarity: CardRarity.EVENT_RARE,
+//   //   });
+//   let viewingCrate = (context.query.c as string)
+//     ? cratesJSON.find((crate) => crate._id === context.query.c)
+//     : null;
+//   console.log(cratesJSON);
+//   return {
+//     props: {
+//       guildID,
+//       cards,
+//       crates: cratesJSON,
+//       viewingCrate,
+//     },
+//   };
+// };
 export default CrateSettings;
