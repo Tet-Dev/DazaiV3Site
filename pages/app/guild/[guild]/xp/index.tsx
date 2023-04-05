@@ -39,7 +39,7 @@ const GuildXP = (props: {
 }) => {
   const { leaderboard, guild, guildID } = props;
   const router = useRouter();
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
 
   return (
     <>

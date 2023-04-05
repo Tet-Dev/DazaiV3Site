@@ -18,7 +18,7 @@ export const RankCardSettings = (props: {
     selectedCard ?? (null as CardType | null)
   );
   const [createCard, setCreateCard] = useState(false);
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   return (
     <div
       className={`relative grid grid-cols-12 ${

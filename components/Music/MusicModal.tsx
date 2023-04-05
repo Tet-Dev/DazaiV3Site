@@ -27,7 +27,7 @@ export const MusicModal = (props: {
   onClose: () => void;
 }) => {
   const { guildID, open, onClose } = props;
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   const [searchResult, setSearchResult] = useState(
     undefined as SearchResults | undefined
   );

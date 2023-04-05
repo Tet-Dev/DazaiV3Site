@@ -92,7 +92,7 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: string }) => {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="h-screen w-screen absolute top-0 left-0 z-10 pt-[10%] flex flex-col gap-4 items-center px-8">
+        <div className="h-screen w-screen absolute top-0 left-0 z-10 py-[10%] flex flex-col gap-4 items-center px-8">
           <div className={`flex flex-col items-center gap-2`}>
             <div
               className={`flex flex-row gap-4 w-full px-8 items-center pb-4`}

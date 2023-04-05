@@ -11,7 +11,9 @@ import {
 
 export const LevelUpRewardActionEntry = (props: {
   action: LevelUpRewardActionType;
-  levelUpReward: LevelUpRewardType;
+  levelUpReward: {
+    guildID: string;
+  };
   onDelete: () => void;
   editing: boolean;
 }) => {

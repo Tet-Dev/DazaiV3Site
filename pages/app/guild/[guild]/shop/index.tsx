@@ -32,7 +32,7 @@ export const GuildInventoryPage = (props: {
 }) => {
   const { guild, inventory, shop } = props;
   const router = useRouter();
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   const [buyingOffer, setBuyingOffer] = useState(false);
   console.log(shop);
   useEffect(() => {

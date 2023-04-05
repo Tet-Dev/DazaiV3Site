@@ -51,6 +51,7 @@
   "devDependencies": {
     "@types/jimp": "^0.2.28",
     "@types/loadable__component": "^5.13.4",
+    "@types/localforage": "^0.0.34",
     "@types/nprogress": "^0.2.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.19",

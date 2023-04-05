@@ -20,7 +20,7 @@ export const ShopSettings = (props: {
     selectedCard ?? (null as ShopItem | null)
   );
   const [createBundle, setCreateBundle] = useState(false);
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   return (
     <div
       className={`relative grid grid-cols-12 ${

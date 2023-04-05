@@ -19,7 +19,7 @@ const DashboardIndex = () => {
     [botGuilds]
   );
   const [refreshing, setRefreshing] = useState(false);
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   const router = useRouter();
   const sortedGuilds = useMemo(
     () =>
@@ -131,13 +131,13 @@ const DashboardIndex = () => {
               >
                 <Link href={"/app/@global"}>
                   <button
-                    className={`py-3 px-6 lg:px-4 w-fit lg:py-2 lg:text-base rounded-full font-bold text-lg text-white bg-indigo-500 hover:bg-indigo-900 transition-all shadow-lg pointer-events-auto`}
+                    className={`py-3 px-6 lg:px-4 w-fit lg:py-2 lg:text-base md:text-xs md:py-1.5 md:px-3 rounded-full font-bold text-lg text-white bg-indigo-500 hover:bg-indigo-900 transition-all shadow-lg pointer-events-auto`}
                   >
                     Global Dashboard
                   </button>
                 </Link>
                 <button
-                  className={`py-3 px-6 lg:px-4 w-fit lg:py-2 lg:text-base rounded-full font-bold text-lg text-white bg-gray-800 hover:bg-indigo-900 transition-all shadow-lg pointer-events-auto`}
+                  className={`py-3 px-6 lg:px-4 w-fit lg:py-2 lg:text-base md:text-xs md:py-1.5 md:px-3 rounded-full font-bold text-lg text-white bg-gray-800 hover:bg-indigo-900 transition-all shadow-lg pointer-events-auto`}
                   onClick={() => {
                     window.open(
                       `https://top.gg/bot/${clientID}/vote`,

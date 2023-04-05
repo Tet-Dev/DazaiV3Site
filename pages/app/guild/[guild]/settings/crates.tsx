@@ -17,7 +17,7 @@ export const CrateSettings = (props: {
   const [crates, setCrates] = useState(props.crates);
   const [viewingCrate, setViewingCrate] = useState(vc as CrateTemplate | null);
   const [createCrate, setCreateCrate] = useState(false);
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   return (
     <div
       className={`relative grid grid-cols-12 ${

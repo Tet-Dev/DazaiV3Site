@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useGuildData } from "../../../../utils/hooks/useGuildData";
+import { useAPIProp } from "../../../../utils/hooks/useProp";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
   CardRarity,
   CardType,
+  Crate,
   CrateTemplate,
   LevelUpRewardCardActionType,
   LevelUpRewardCrateActionType,
@@ -58,17 +60,11 @@ export const LevelUpRewardActionCrate = (props: {
   guildID: string;
 }) => {
   const { action, guildID } = props;
-  const [crate, setCrate] = useState(null as null | CrateTemplate | undefined);
   const router = useRouter();
-  useEffect(() => {
-    fetch(
-      `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/crate/${
-        action.crateID
-      }`
-    )
-      .then((res) => res.json())
-      .then(setCrate);
-  }, [action.crateID]);
+  const [crate, updateCrate] = useAPIProp<CrateTemplate>(
+    `/guilds/${guildID}/settings/crate/${action.crateID}`,
+    guildID
+  );
   return (
     <div
       className={`bg-gray-900 px-4 rounded-3xl relative group cursor-pointer hover:bg-gray-750 transition-all p-1`}

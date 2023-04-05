@@ -260,7 +260,7 @@ export const ViewRankCard = (props: {
           card.sellPrice ? 'justify-between' : 'justify-end'
         } w-full items-center`}
       >
-        {card.sellPrice && (
+        {!!card.sellPrice && (
           <span className={`text-gray-100/50 font-wsans text-sm`}>
             Sells for{' '}
             <b className={`text-base text-gray-300`}>{card.sellPrice} 円</b>

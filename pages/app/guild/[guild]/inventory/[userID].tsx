@@ -49,7 +49,7 @@ export const GuildInventoryPage = (props: {
   const [sortedGuildCards, setSortedGuildCards] = useState([] as CardType[]);
 
   const router = useRouter();
-  const user = useDiscordUser();
+  const {user} = useDiscordUser();
   useEffect(() => {
     if (
       (inventory?.viewingPerson?.id === user?.id && user) ||
