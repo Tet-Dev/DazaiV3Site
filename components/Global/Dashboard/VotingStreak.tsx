@@ -205,14 +205,20 @@ export const VotingStreak = () => {
                     "noopener,noreferrer,width=625,height=970"
                   );
                 }}
-                disabled={((userData as UserData)?.lastVote || 0) > Date.now()}
+                disabled={
+                  ((userData as UserData)?.lastVote || 0) +
+                    12 * 1000 * 60 * 60 >
+                  Date.now()
+                }
               >
                 Vote
                 {(userData as UserData)?.userID &&
-                  ((userData as UserData)?.lastVote || 0) >= Date.now() &&
-                  `(${calculateTimeLeftToNextVote(
+                  ((userData as UserData)?.lastVote || 0) +
+                    12 * 1000 * 60 * 60 >=
+                    Date.now() &&
+                  ` (${calculateTimeLeftToNextVote(
                     (userData as UserData).lastVote
-                  )}`}
+                  )})`}
               </button>
               {/* </Link> */}
               <button
