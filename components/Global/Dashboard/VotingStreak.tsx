@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { clientID } from "../../../utils/constants";
 import { useDiscordUser } from "../../../utils/hooks/useDiscordUser";
 import { useAPIProp } from "../../../utils/hooks/useProp";
@@ -13,6 +13,24 @@ import {
 import { LevelUpRewardActionEntry } from "../../Dashboard/Settings/LevelupRewards/LevelUpRewardActionEntry";
 import { Modal } from "../../Modal";
 import { VoteRewardEntry } from "./VoteRewardRender";
+const calculateTimeLeftToNextVote = (lastVote: number) => {
+  const now = Date.now();
+  const timeSinceLastVote = now - lastVote;
+  const timeLeftToNextVote = 12 * 60 * 60 * 1000 - timeSinceLastVote;
+  // return in hh:mm:ss format
+  const hours = Math.floor(timeLeftToNextVote / (60 * 60 * 1000));
+  const minutes = Math.floor(
+    (timeLeftToNextVote - hours * 60 * 60 * 1000) / (60 * 1000)
+  );
+  const seconds = Math.floor(
+    (timeLeftToNextVote - hours * 60 * 60 * 1000 - minutes * 60 * 1000) / 1000
+  );
+  // pad with 0s
+  const hoursStr = hours.toString().padStart(2, "0");
+  const minutesStr = minutes.toString().padStart(2, "0");
+  const secondsStr = seconds.toString().padStart(2, "0");
+  return `${hoursStr}:${minutesStr}:${secondsStr}`;
+};
 
 const calculateRewardAtLevel = (
   level: number,
@@ -101,11 +119,7 @@ export const VotingStreak = () => {
     if (!userData || !(userData as UserData).userID) return [];
 
     // get starting 0 to current level + 20
-    return getRewardAtLevelsInInterval(
-      1,
-      30,
-      rewards || []
-    );
+    return getRewardAtLevelsInInterval(1, 30, rewards || []);
   }, [userData, rewards]);
   const rewardAtLevel = useMemo(() => {
     if (!userData || !(userData as UserData).userID) return [];
@@ -115,6 +129,26 @@ export const VotingStreak = () => {
     );
   }, [userData, rewards]);
   const [viewAll, setViewAll] = useState(false);
+  useEffect(() => {
+    if (viewAll && userData && (userData as UserData).userID) {
+      setTimeout(() => {
+        document
+          .getElementById(
+            `levelupreward${(userData as UserData).currentStreak + 1}`
+          )
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 150);
+    }
+    return () => {};
+  }, [viewAll, userData]);
+  const [forceUpdate, setForceUpdate] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setForceUpdate((x) => x + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [forceUpdate]);
+
   return (
     <>
       <div className={`flex flex-col gap-2`}>
@@ -166,14 +200,19 @@ export const VotingStreak = () => {
                 className={`py-3 px-6 lg:px-4 w-fit lg:py-2 lg:text-base md:text-xs md:py-1.5 md:px-3 rounded-full font-bold text-lg text-white bg-indigo-500 hover:bg-indigo-900 transition-all shadow-lg pointer-events-auto disabled:opacity-50 disabled:cursor-not-allowed`}
                 onClick={() => {
                   window.open(
-                    `https://top.gg/bot/${clientID}/vote`,
+                    `https://top.gg/bot/747901310749245561/vote`,
                     "_blank",
                     "noopener,noreferrer,width=625,height=970"
                   );
                 }}
-                disabled
+                disabled={((userData as UserData)?.lastVote || 0) > Date.now()}
               >
-                Vote (9:59:59)
+                Vote
+                {(userData as UserData)?.userID &&
+                  ((userData as UserData)?.lastVote || 0) >= Date.now() &&
+                  `(${calculateTimeLeftToNextVote(
+                    (userData as UserData).lastVote
+                  )}`}
               </button>
               {/* </Link> */}
               <button
@@ -197,9 +236,15 @@ export const VotingStreak = () => {
           </h2>
           <div className="flex flex-col gap-4 grow overflow-auto p-2">
             {rewardArray.map((x, i) => (
-              <div className={`flex flex-col gap-2`} key={
-                `levelupreward${i}`
-              }>
+              <div
+                className={`flex flex-col gap-2 ${
+                  x.level < (userData as UserData).currentStreak + 1
+                    ? "opacity-50"
+                    : ""
+                }`}
+                key={`levelupreward${i}`}
+                id={`levelupreward${x.level}`}
+              >
                 <h3 className={`text-2xl font-bold font-poppins text-gray-100`}>
                   {x.level} Vote{x.level === 1 ? "" : "s"}
                 </h3>
