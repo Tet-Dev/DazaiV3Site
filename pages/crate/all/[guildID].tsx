@@ -192,7 +192,7 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: string }) => {
                     //   await sleep(5);
                     // }
                     setCratesOpened((v) => v + 1);
-                    if (i === 3) {
+                    if (i === 3 || i === unopenedCrates.length - 1) {
                       setStage(2);
                     }
                   }
