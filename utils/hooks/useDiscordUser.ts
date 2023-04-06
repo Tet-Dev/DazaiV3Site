@@ -10,7 +10,7 @@ export const useDiscordUser = () => {
       setUser(UserDataManager.getInstance().discordSelf);
 
     const listener = (user: UserData) => {
-      setUser(user);
+      setUser(JSON.parse(JSON.stringify(user)));
     };
     UserDataManager.getInstance().on("selfUpdate", listener);
     return () => {
