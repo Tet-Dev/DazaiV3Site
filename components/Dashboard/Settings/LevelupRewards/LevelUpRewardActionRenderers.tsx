@@ -111,7 +111,7 @@ export const LevelUpRewardActionCard = (props: {
       onClick={() => {
         if (card) {
           router.push(
-            `/app/guild/${guildID}/settings/rankcards?card=${card._id}`
+            `/app${guildID !== `@global` ? `/guild`: ``}/${guildID}/settings/rankcards?card=${card._id}`
           );
         }
       }}

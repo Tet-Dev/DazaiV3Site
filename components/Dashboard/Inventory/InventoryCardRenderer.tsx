@@ -24,9 +24,10 @@ export const InventoryCardRenderer = (props: {
   selected?: boolean;
   updateInventory: () => void;
   selfOwned?: boolean;
+  globalMode?: boolean;
 }) => {
   const { card, cardID, id, amount } = props.card;
-  const { selfOwned } = props;
+  const { selfOwned, globalMode } = props;
   const [modalOpen, setmodalOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
   const router = useRouter();
@@ -201,9 +202,9 @@ export const InventoryCardRenderer = (props: {
                     if (updating) return;
                     setUpdating(true);
                     const res = await fetcher(
-                      `${await getGuildShardURL(
-                        card.guild as string
-                      )}/guilds/${card.guild}/inventory/selectCard`,
+                      `${await getGuildShardURL(card.guild as string)}/guilds/${
+                        card.guild
+                      }/inventory/selectCard`,
                       {
                         method: "POST",
                         body: JSON.stringify({
@@ -377,8 +378,12 @@ export const InventoryCardRenderer = (props: {
                       setUpdating(true);
                       const res = await fetcher(
                         `${await getGuildShardURL(
-                          card.guild as string
-                        )}/guilds/${card.guild}/inventory/selectCard`,
+                          globalMode
+                            ? (card.guild as string)
+                            : (router.query.guild as string)
+                        )}/guilds/${
+                          globalMode ? card.guild : router.query.guild
+                        }/inventory/selectCard`,
                         {
                           method: "POST",
                           body: JSON.stringify({

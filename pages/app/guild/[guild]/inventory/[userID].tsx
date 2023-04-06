@@ -132,7 +132,7 @@ export const GuildInventoryPage = (props: {
       className={`gap-8 2xl:gap-0 px-8 relative flex flex-col items-center justify-center flex-grow`}
     >
       <div
-        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[150ch] lg:max-w-[100vw] w-auto pb-8 items-center`}
+        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[200ch] lg:max-w-[100vw] w-auto pb-8 items-center`}
       >
         <div className={`flex flex-col gap-4 w-full`}>
           <div
@@ -284,7 +284,7 @@ export const GuildInventoryPage = (props: {
             {
               new Set(
                 inventory?.cards
-                  .filter((x) => x.card.guild)
+                  .filter((x) => x.card.guild === guild)
                   .map((x) => x.cardID)
               ).size
             }

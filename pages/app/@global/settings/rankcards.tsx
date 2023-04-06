@@ -58,7 +58,7 @@ export const RankCardSettings = (props: {}) => {
         ) : createCard ? (
           <CreateRankCard
             onUpdate={async () => {
-              updateCards()
+              updateCards();
               setViewingCard(null);
               setCreateCard(false);
             }}
