@@ -12,7 +12,7 @@ export const legalPage = () => {
         Dazai is a Discord bot that allows users to customize their own
         backgrounds and provides generative features. This privacy policy
         explains what data Dazai collects, how it is used, and how it is stored.
-      </p>
+      </p> 
 
       <h2>Data Collection</h2>
       <p>
