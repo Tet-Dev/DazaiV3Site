@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useElementSizeCalculation } from "../../utils/hooks/useElementSizeCalculation";
 import {
   startLandingTimer,
@@ -10,8 +10,10 @@ import {
 export const LandingHero = () => {
   const update = useLandingTimer();
   const titleSize = useElementSizeCalculation("heroText");
-  useLayoutEffect(() => {
+  useEffect(() => {
     let loaded = false;
+    if (softUpdate.current > 0) loaded = true;
+
     const onLoad = () => {
       if (loaded) return;
       loaded = true;
@@ -30,6 +32,11 @@ export const LandingHero = () => {
       window.removeEventListener("load", onLoad);
     };
   }, []);
+  const softUpdate = useRef(0);
+  useLayoutEffect(() => {
+    softUpdate.current = update;
+  }, [update]);
+
   return (
     <>
       {/* <h1
@@ -86,7 +93,12 @@ export const LandingHero = () => {
             />
           </div>
           <div className={`absolute bottom-0 left-0 w-full shadow-none`}>
-            <svg id="visual" viewBox="0 0 2400 600" version="1.1" className="saturate-[0.8]">
+            <svg
+              id="visual"
+              viewBox="0 0 2400 600"
+              version="1.1"
+              className="saturate-[0.8]"
+            >
               <path
                 d="M0 246L57.2 260C114.3 274 228.7 302 343 302.8C457.3 303.7 571.7 277.3 686 288.2C800.3 299 914.7 347 1028.8 374.7C1143 402.3 1257 409.7 1371.2 410.7C1485.3 411.7 1599.7 406.3 1714 407C1828.3 407.7 1942.7 414.3 2057 398C2171.3 381.7 2285.7 342.3 2342.8 322.7L2400 303L2400 601L2342.8 601C2285.7 601 2171.3 601 2057 601C1942.7 601 1828.3 601 1714 601C1599.7 601 1485.3 601 1371.2 601C1257 601 1143 601 1028.8 601C914.7 601 800.3 601 686 601C571.7 601 457.3 601 343 601C228.7 601 114.3 601 57.2 601L0 601Z"
                 className={`transition-all duration-1000 delay-700 ease-in-out fill-purple-500 ${

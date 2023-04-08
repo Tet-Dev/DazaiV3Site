@@ -1,11 +1,11 @@
 import { APIUser } from "discord-api-types/v10";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { UserDataManager } from "../classes/UserDataManager";
 import { UserData } from "../types";
 
 export const useDiscordUser = () => {
   const [user, setUser] = useState(undefined as UserData | null | undefined);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (UserDataManager.getInstance().discordSelf)
       setUser(UserDataManager.getInstance().discordSelf);
 

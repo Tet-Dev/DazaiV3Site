@@ -20,7 +20,11 @@ const DashboardIndex = () => {
   );
   const [refreshing, setRefreshing] = useState(false);
   const {user} = useDiscordUser();
+
   const router = useRouter();
+  useEffect(()=>{
+
+  },[user])
   const sortedGuilds = useMemo(
     () =>
       !!guilds &&
