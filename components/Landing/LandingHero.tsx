@@ -55,7 +55,7 @@ export const LandingHero = () => {
             src="/images/landing/landingbgsmall.jpg"
             alt="hero-bg"
             className={`w-full h-full object-cover ${
-              update >= 3 ? `opacity-20 blur-sm` : `opacity-0`
+              update >= 3 ? `opacity-10 blur-sm` : `opacity-0`
             }`}
           />
         </div>
@@ -147,13 +147,13 @@ export const LandingHero = () => {
                 Dazai
               </h1>
               <div
-                className={`px-6 py-3 text-3xl font-bold font-poppins bg-black h-fit w-fit backdrop-blur-lg rounded-2xl ${
+                className={`px-6 py-3 text-2xl font-bold font-poppins bg-indigo-800 h-fit w-fit backdrop-blur-lg rounded-xl ${
                   update >= 2
                     ? `opacity-100`
                     : `opacity-0 -translate-x-full scale-90`
                 } transition-all duration-500 delay-[300ms] ease-out`}
               >
-                v3
+                v3.0
               </div>
             </div>
             <div

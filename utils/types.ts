@@ -162,8 +162,8 @@ export const rarityWordMap = {
 
 export const rarityGradientMap = {
   [CardRarity.LEGENDARY]: "from-indigo-500 to-indigo-500 via-pink-400",
-  [CardRarity.MYTHIC]: "from-pink-500 via-red-500 to-pink-500",
-  [CardRarity.EPIC]: "from-rose-500 via-fuchsia-500 to-rose-500",
+  [CardRarity.MYTHIC]: "from-pink-500 via-orange-400 to-pink-500",
+  [CardRarity.EPIC]: "from-purple-500 via-red-500 to-purple-500",
   [CardRarity.SUPER_RARE]: "from-blue-500 via-violet-500 to-blue-500",
   [CardRarity.RARE]: "from-green-500 via-teal-500 to-green-500",
   [CardRarity.COMMON]: "from-gray-500 via-gray-500 to-gray-500",

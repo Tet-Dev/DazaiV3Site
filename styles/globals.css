@@ -12,7 +12,7 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   width: 100%;
   height: 100%;
-  @apply text-gray-50
+  @apply text-gray-50 font-wsans
 }
 
 a {
@@ -45,3 +45,13 @@ scrollbar-width: none;  /* Firefox */
 .glare-wrapper {
   @apply !rounded-2xl
 }
+/* all headings should be poppins */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-poppins;
+}
+/* all text should be work sans */
