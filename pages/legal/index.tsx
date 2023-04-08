@@ -26,7 +26,7 @@ export const legalPage = () => {
         The data collected by Dazai is used to create generative features, such
         as allowing users to customize their own backgrounds. This data is also
         used for debugging and analytics purposes, which helps us improve
-        Dazai's functionality and performance.
+        Dazai&apos;s functionality and performance.
       </p>
 
       <h2>Data Access</h2>
@@ -57,7 +57,7 @@ export const legalPage = () => {
       <h2>Additional Information</h2>
       <p>
         Users should be aware that their data is used for generative features,
-        debugging, and analytics purposes. If any changes are made to Dazai's
+        debugging, and analytics purposes. If any changes are made to Dazai&apos;s
         data practices, this privacy policy will be updated accordingly.
       </p>
       <h1>Terms of Service Agreement for Dazai</h1>
