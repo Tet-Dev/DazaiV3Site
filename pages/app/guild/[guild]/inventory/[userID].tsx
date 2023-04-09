@@ -116,7 +116,7 @@ export const GuildInventoryPage = (props: {
     setCards(
       c.sort((a, b) => {
         // sort by if guild is undefined, then rarity and then by name
-        if (a.card.guild === undefined && b.card.guild !== undefined) {
+        if (a.card.guild === '@global' && b.card.guild !== '@global') {
           return 1;
         }
 
