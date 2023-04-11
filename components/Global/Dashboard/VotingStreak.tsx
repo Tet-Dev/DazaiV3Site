@@ -119,7 +119,7 @@ export const VotingStreak = () => {
     if (!userData || !(userData as UserData).userID) return [];
 
     // get starting 0 to current level + 20
-    return getRewardAtLevelsInInterval(1, 30, rewards || []);
+    return getRewardAtLevelsInInterval(1, (((userData as UserData).highestStreak || 0) + 30), rewards || []);
   }, [userData, rewards]);
   const rewardAtLevel = useMemo(() => {
     if (!userData || !(userData as UserData).userID) return [];

@@ -14,7 +14,9 @@ const LandingPage = () => {
   const router = useRouter();
   const landingTimer = useLandingTimer();
   return (
-    <div className={`w-full h-full flex flex-col bg-gray-850 overflow-hidden pb-64`}>
+    <div
+      className={`w-full h-full flex flex-col bg-gray-850 overflow-hidden pb-64`}
+    >
       <Navbar />
       <LandingHero />
       {landingTimer >= 3 && (
@@ -22,6 +24,9 @@ const LandingPage = () => {
           <LandingCustomRankCards />
         </>
       )}
+      <h3 className={`text-2xl text-gray-50/80 text-center mt-64`}>
+        Site is still in development, so some features may not work as intended.
+      </h3>
     </div>
   );
 };
