@@ -11,11 +11,12 @@ import { useDiscordUser } from "./useDiscordUser";
 export const useAPIProp = <T>(
   APIPath?: string,
   guildID?: string,
-  requestInit?: RequestInit
+  requestInit?: RequestInit,
+  cacheable?: boolean
 ) => {
   const [value, setValue] = useState(undefined as null | undefined | T);
   const [error, setError] = useState(undefined as null | undefined | string);
-  const user = useDiscordUser()
+  const user = useDiscordUser();
   const update = useCallback(async () => {
     if (!APIPath) return null;
     const guildURL = await getGuildShardURL(guildID);

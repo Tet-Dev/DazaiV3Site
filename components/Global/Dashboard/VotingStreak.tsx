@@ -136,8 +136,8 @@ export const VotingStreak = () => {
           .getElementById(
             `levelupreward${(userData as UserData).currentStreak + 1}`
           )
-          ?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 150);
+          ?.scrollIntoView({ behavior: "auto", block: "center" });
+      }, 250);
     }
     return () => {};
   }, [viewAll, userData]);

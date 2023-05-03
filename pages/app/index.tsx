@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { clientID } from "../../utils/constants";
 import { useDiscordUser } from "../../utils/hooks/useDiscordUser";
 import Link from "next/link";
+import { promptLogin } from "../../utils/helpers/promptLogin";
 
 const DashboardIndex = () => {
   const guilds = useAllGuilds();
@@ -19,12 +20,10 @@ const DashboardIndex = () => {
     [botGuilds]
   );
   const [refreshing, setRefreshing] = useState(false);
-  const {user} = useDiscordUser();
+  const { user } = useDiscordUser();
 
   const router = useRouter();
-  useEffect(()=>{
-
-  },[user])
+  useEffect(() => {}, [user]);
   const sortedGuilds = useMemo(
     () =>
       !!guilds &&
@@ -40,14 +39,14 @@ const DashboardIndex = () => {
   );
   useEffect(() => {
     if (!localStorage.getItem("token")) {
-      localStorage.setItem("redirect", globalThis?.location?.href);
-      router.push(
-        `https://discord.com/api/oauth2/authorize?client_id=${clientID}&redirect_uri=${encodeURIComponent(
-          globalThis?.location?.href
-        )}%2Fauth&response_type=code&scope=identify%20email%20connections%20guilds`
-      );
+      promptLogin();
     }
   }, []);
+  useEffect(() => {
+    if (user === null) {
+      promptLogin();
+    }
+  }, [user]);
   return (
     <div
       className={`w-full h-screen bg-gray-900 flex flex-col gap-16 py-16 px-8 overflow-auto`}

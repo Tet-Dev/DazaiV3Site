@@ -39,6 +39,7 @@
     "node-fetch": "^3.3.0",
     "nprogress": "^0.2.0",
     "react": "18.2.0",
+    "react-animation-on-scroll": "^5.1.0",
     "react-confetti-explosion": "^2.0.1",
     "react-dom": "18.2.0",
     "react-easy-crop": "^4.6.3",

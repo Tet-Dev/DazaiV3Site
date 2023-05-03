@@ -379,16 +379,22 @@ export const CreateRankCard = (props: {
               ffmpeg.FS("writeFile", file.name, new Uint8Array(imgBuffer));
               // convert video into mp4
               const crop = cropArea.current;
-              await ffmpeg.run(
-                "-i",
-                file.name,
-                "-vf",
-                `crop=${crop.width}:${crop.height}:${crop.x}:${
-                  crop.y
-                },scale=${1024}:${340}`,
-                "output.gif"
-              );
+              await ffmpeg
+                .run(
+                  "-i",
+                  file.name,
+                  "-vf",
+                  `crop=${crop.width}:${crop.height}:${crop.x}:${
+                    crop.y
+                  },scale=${1024}:${340}:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=225[p];[s1][p]paletteuse=dither=sierra2_4a`,
+                  "output.gif"
+                )
+                .catch((e) => {
+                  console.log(e);
+                });
+
               setProcessingProgress("Converting file...");
+
               // read file from Memory filesystem
               const data = Buffer.from(ffmpeg.FS("readFile", "output.gif"));
               console.log("FFMEPG DONE", data);
