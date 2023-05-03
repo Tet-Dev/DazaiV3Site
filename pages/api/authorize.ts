@@ -14,7 +14,7 @@ export default async (
   res: NextApiResponse<DiscordAuthData>
 ) => {
   const { code, uri } = JSON.parse(req.body);
-  const data = (await fetch(`${discordAPI}/oauth2/token`, {
+  const dataReq = await fetch(`${discordAPI}/oauth2/token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -26,7 +26,12 @@ export default async (
       code: code,
       redirect_uri: uri,
     }).toString(),
-  }).then((data) => (data.ok ? data.json() : null))) as DiscordOauthBundle;
+  });
+  const data = dataReq.ok && ((await dataReq.json()) as DiscordOauthBundle);
+  console.log(dataReq.status);
+  if (!data) {
+    console.log(await dataReq.text());
+  }
   console.log(data, {
     client_id: clientID,
     client_secret: process.env.CLIENT_SECRET!,
