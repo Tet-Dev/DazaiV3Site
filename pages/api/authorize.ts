@@ -27,7 +27,7 @@ export default async (
       redirect_uri: uri,
     }).toString(),
   });
-  const data = dataReq.ok && ((await dataReq.json()) as DiscordOauthBundle);
+  const data = (dataReq.ok && (await dataReq.json())) as DiscordOauthBundle;
   console.log(dataReq.status);
   if (!data) {
     console.log(await dataReq.text());
@@ -39,6 +39,7 @@ export default async (
     code: code,
     redirect_uri: uri,
   });
+
   // set auth cookie that expires in data.expires_in
   res.setHeader(
     "Set-Cookie",
