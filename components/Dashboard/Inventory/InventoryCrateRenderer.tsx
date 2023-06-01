@@ -17,7 +17,7 @@ export const InventoryCrateRenderer = (props: {
       }`}
       onClick={() => {
         if (!selfOwned) return;
-        router.push(`/crate/${crate._id}`);
+        router.push(`/crate/new/${crate._id}`);
       }}
     >
       <div

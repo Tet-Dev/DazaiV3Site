@@ -9,7 +9,7 @@ import { fetcher } from "../../../../utils/discordFetcher";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
   BundleItem,
-  CardRarity,
+  Rarity,
   CardType,
   rarityGradientMap,
   rarityWordMap,

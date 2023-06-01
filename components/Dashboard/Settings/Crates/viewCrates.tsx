@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { fetcher } from "../../../../utils/discordFetcher";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
-  CardRarity,
+  Rarity,
   CardType,
   CrateTemplate,
   rarityGradientMap,
@@ -28,7 +28,7 @@ export const ViewCrate = (props: {
   const [crateItems, setCrateItems] = useState(crate.items);
   const [crateDropRates, setCrateDropRates] = useState(
     crate.dropRates as {
-      [key in CardRarity]: number | string;
+      [key in Rarity]: number | string;
     }
   );
   const [updating, setUpdating] = useState(false);
@@ -99,12 +99,12 @@ export const ViewCrate = (props: {
         >
           <SelectMenu
             label="Rarity"
-            selectItems={Object.values(CardRarity).map((x) => ({
+            selectItems={Object.values(Rarity).map((x) => ({
               id: x,
               name: rarityWordMap[x],
             }))}
             selectedItemId={rarity}
-            onSelect={(x) => setRarity(x.id as CardRarity)}
+            onSelect={(x) => setRarity(x.id as Rarity)}
             className={`w-full`}
           />
         </div> */}
@@ -138,7 +138,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.SECRET_RARE]
+                rarityGradientMap[Rarity.SECRET_RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Secret Rare
@@ -168,7 +168,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.COMMON]
+                rarityGradientMap[Rarity.COMMON]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Common
@@ -196,7 +196,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.RARE]
+                rarityGradientMap[Rarity.RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Rare
@@ -224,7 +224,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.SUPER_RARE]
+                rarityGradientMap[Rarity.SUPER_RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Super Rare
@@ -252,7 +252,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.EPIC]
+                rarityGradientMap[Rarity.EPIC]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Epic
@@ -280,7 +280,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.MYTHIC]
+                rarityGradientMap[Rarity.MYTHIC]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Mythic
@@ -308,7 +308,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.LEGENDARY]
+                rarityGradientMap[Rarity.LEGENDARY]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Legendary
@@ -336,7 +336,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.EVENT_RARE]
+                rarityGradientMap[Rarity.EVENT_RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Event Rare
@@ -528,7 +528,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.SECRET_RARE]
+                rarityGradientMap[Rarity.SECRET_RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Secret Rare
@@ -542,7 +542,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.COMMON]
+                rarityGradientMap[Rarity.COMMON]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Common
@@ -557,7 +557,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.RARE]
+                rarityGradientMap[Rarity.RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Rare
@@ -572,7 +572,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.SUPER_RARE]
+                rarityGradientMap[Rarity.SUPER_RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Super Rare
@@ -587,7 +587,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.EPIC]
+                rarityGradientMap[Rarity.EPIC]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Epic
@@ -602,7 +602,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.MYTHIC]
+                rarityGradientMap[Rarity.MYTHIC]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Mythic
@@ -617,7 +617,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.LEGENDARY]
+                rarityGradientMap[Rarity.LEGENDARY]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Legendary
@@ -632,7 +632,7 @@ export const ViewCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.EVENT_RARE]
+                rarityGradientMap[Rarity.EVENT_RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Event Rare

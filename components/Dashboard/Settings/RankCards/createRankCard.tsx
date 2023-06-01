@@ -9,7 +9,7 @@ import Cropper, { Area } from "react-easy-crop";
 import { fetcher } from "../../../../utils/discordFetcher";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
-  CardRarity,
+  Rarity,
   rarityGradientMap,
   rarityWordMap,
 } from "../../../../utils/types";
@@ -32,7 +32,7 @@ export const CreateRankCard = (props: {
   const [editMode, setEditMode] = useState(false);
   const [cardName, setCardName] = useState("");
   const [cardDescription, setCardDescription] = useState("");
-  const [rarity, setRarity] = useState(CardRarity.COMMON);
+  const [rarity, setRarity] = useState(Rarity.COMMON);
   const [updating, setUpdating] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
@@ -147,12 +147,12 @@ export const CreateRankCard = (props: {
           >
             <SelectMenu
               label="Rarity"
-              selectItems={Object.values(CardRarity).map((x) => ({
+              selectItems={Object.values(Rarity).map((x) => ({
                 id: x,
                 name: rarityWordMap[x],
               }))}
               selectedItemId={rarity}
-              onSelect={(x) => setRarity(x.id as CardRarity)}
+              onSelect={(x) => setRarity(x.id as Rarity)}
               className={`w-full`}
             />
           </div>

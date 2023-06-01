@@ -5,7 +5,7 @@ import { useGuildData } from "../../../../utils/hooks/useGuildData";
 import { useAPIProp } from "../../../../utils/hooks/useProp";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
-  CardRarity,
+  Rarity,
   CardType,
   Crate,
   CrateTemplate,

@@ -5,7 +5,7 @@ import { NotificationsClass } from "../../../../utils/classes/NotificationsClass
 import { fetcher } from "../../../../utils/discordFetcher";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
-  CardRarity,
+  Rarity,
   LevelUpRewardType,
   rarityGradientMap,
 } from "../../../../utils/types";

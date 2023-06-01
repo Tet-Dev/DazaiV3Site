@@ -7,7 +7,7 @@ import { CreateBundle } from "../../../../components/Dashboard/Settings/Shop/Cre
 import { ViewBundle } from "../../../../components/Dashboard/Settings/Shop/ViewBundle";
 import { useDiscordUser } from "../../../../utils/hooks/useDiscordUser";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
-import { CardRarity, CardType, ShopItem } from "../../../../utils/types";
+import { Rarity, CardType, ShopItem } from "../../../../utils/types";
 
 export const ShopSettings = (props: {
   guild: string;

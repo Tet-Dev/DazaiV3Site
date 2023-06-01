@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { fetcher } from "../../../utils/discordFetcher";
 import { getGuildShardURL } from "../../../utils/ShardLib";
 import {
-  CardRarity,
+  Rarity,
   CardType,
   nonAnimatedRarityGradientMap,
   rarityGradientMap,
@@ -51,7 +51,7 @@ export const DummyInventoryCardRenderer = (props: { owned?: boolean }) => {
         </span> */}
       <div
         className={`card rounded-2xl shadow-lg relative shrink-0 z-10 h-fit group hover:scale-105 ease-in duration-200 cursor-pointer opacity-80 hover:opacity-100 bg-gradient-to-r ${
-          rarityGradientMap[CardRarity.COMMON]
+          rarityGradientMap[Rarity.COMMON]
         } p-1 overflow-hidden shrink-0 w-fit`}
         //   onClick={() => {
         //     setViewingCard(card);

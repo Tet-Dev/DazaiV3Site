@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { fetcher } from "../../../../utils/discordFetcher";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
-  CardRarity,
+  Rarity,
   CardType,
   CrateTemplate,
   rarityGradientMap,
@@ -25,16 +25,16 @@ export const CreateCrate = (props: {
   const [crateDescription, setCrateDescription] = useState("");
   const [crateItems, setCrateItems] = useState([] as string[]);
   const [crateDropRates, setCrateDropRates] = useState({
-    [CardRarity.SECRET_RARE]: 0,
-    [CardRarity.COMMON]: 0,
-    [CardRarity.RARE]: 0,
-    [CardRarity.SUPER_RARE]: 0,
-    [CardRarity.EPIC]: 0,
-    [CardRarity.MYTHIC]: 0,
-    [CardRarity.LEGENDARY]: 0,
-    [CardRarity.EVENT_RARE]: 0,
+    [Rarity.SECRET_RARE]: 0,
+    [Rarity.COMMON]: 0,
+    [Rarity.RARE]: 0,
+    [Rarity.SUPER_RARE]: 0,
+    [Rarity.EPIC]: 0,
+    [Rarity.MYTHIC]: 0,
+    [Rarity.LEGENDARY]: 0,
+    [Rarity.EVENT_RARE]: 0,
   } as {
-    [key in CardRarity]: number | string;
+    [key in Rarity]: number | string;
   });
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState("");
@@ -85,12 +85,12 @@ export const CreateCrate = (props: {
         >
           <SelectMenu
             label="Rarity"
-            selectItems={Object.values(CardRarity).map((x) => ({
+            selectItems={Object.values(Rarity).map((x) => ({
               id: x,
               name: rarityWordMap[x],
             }))}
             selectedItemId={rarity}
-            onSelect={(x) => setRarity(x.id as CardRarity)}
+            onSelect={(x) => setRarity(x.id as Rarity)}
             className={`w-full`}
           />
         </div> */}
@@ -124,7 +124,7 @@ export const CreateCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.SECRET_RARE]
+                rarityGradientMap[Rarity.SECRET_RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Secret Rare
@@ -154,7 +154,7 @@ export const CreateCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.COMMON]
+                rarityGradientMap[Rarity.COMMON]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Common
@@ -182,7 +182,7 @@ export const CreateCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.RARE]
+                rarityGradientMap[Rarity.RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Rare
@@ -210,7 +210,7 @@ export const CreateCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.SUPER_RARE]
+                rarityGradientMap[Rarity.SUPER_RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Super Rare
@@ -238,7 +238,7 @@ export const CreateCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.EPIC]
+                rarityGradientMap[Rarity.EPIC]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Epic
@@ -266,7 +266,7 @@ export const CreateCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.MYTHIC]
+                rarityGradientMap[Rarity.MYTHIC]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Mythic
@@ -294,7 +294,7 @@ export const CreateCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.LEGENDARY]
+                rarityGradientMap[Rarity.LEGENDARY]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Legendary
@@ -322,7 +322,7 @@ export const CreateCrate = (props: {
           <div className={`flex flex-row gap-2 items-center`}>
             <span
               className={`font-wsans font-bold text-xl text-transparent bg-gradient-to-r ${
-                rarityGradientMap[CardRarity.EVENT_RARE]
+                rarityGradientMap[Rarity.EVENT_RARE]
               } animate-gradient-medium bg-clip-text leading-loose`}
             >
               Event Rare

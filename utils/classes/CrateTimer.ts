@@ -9,8 +9,12 @@ export class CrateTimer extends EventEmitter {
     return CrateTimer.instance;
   }
   opening: boolean = false;
+// crateData:
   constructor() {
     super();
+  }
+  async loadAudioFiles(){
+
   }
   async open() {
     if (this.opening) return;

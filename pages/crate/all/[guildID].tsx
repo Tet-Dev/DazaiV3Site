@@ -6,7 +6,7 @@ import ConfettiExplosion from "react-confetti-explosion";
 // import { CrateCanvas } from "../../components/Crates/CrateCanvas";
 import { CrateTimer } from "../../../utils/classes/CrateTimer";
 import {
-  CardRarity,
+  Rarity,
   CardType,
   Crate,
   rarityGradientMap,
@@ -24,14 +24,14 @@ import { OpenCrateRenderer } from "../../../components/Dashboard/Settings/Crates
 import { useGuildData } from "../../../utils/hooks/useGuildData";
 
 const rarityParticleColorMap = {
-  [CardRarity.LEGENDARY]: ["##818cf8", "#db2777", "#8b5cf6"],
-  [CardRarity.MYTHIC]: ["#f87171", "#be123c", "#9d174d"],
-  [CardRarity.EPIC]: ["#f472b6", "#e148ec", "#9748ec"],
-  [CardRarity.SUPER_RARE]: ["#2495ff", "#87ffff", "#7040ff"],
-  [CardRarity.RARE]: ["#34d399", "#00b303", "#00b591"],
-  [CardRarity.COMMON]: ["#a0aec0", "#bdcade", "#4a5568"],
-  [CardRarity.EVENT_RARE]: ["#f6e05e", "#80ffce", "#a3ffa9"],
-  [CardRarity.SECRET_RARE]: ["#a0aec0", "#cfe2ff", "#fce3ff"],
+  [Rarity.LEGENDARY]: ["##818cf8", "#db2777", "#8b5cf6"],
+  [Rarity.MYTHIC]: ["#f87171", "#be123c", "#9d174d"],
+  [Rarity.EPIC]: ["#f472b6", "#e148ec", "#9748ec"],
+  [Rarity.SUPER_RARE]: ["#2495ff", "#87ffff", "#7040ff"],
+  [Rarity.RARE]: ["#34d399", "#00b303", "#00b591"],
+  [Rarity.COMMON]: ["#a0aec0", "#bdcade", "#4a5568"],
+  [Rarity.EVENT_RARE]: ["#f6e05e", "#80ffce", "#a3ffa9"],
+  [Rarity.SECRET_RARE]: ["#a0aec0", "#cfe2ff", "#fce3ff"],
 };
 
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));

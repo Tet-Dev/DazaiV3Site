@@ -19,7 +19,7 @@ export type RawUserData = {
   remindVote: boolean;
   disableLevelUpMessages: boolean;
 };
-export type UserData = RawUserData & {user:APIUser}
+export type UserData = RawUserData & { user: APIUser };
 export type BotGuildData = {
   name: string;
   id: string;
@@ -72,7 +72,7 @@ export type GuildLeaderboardEntry = GuildMemeberXP & {
 
 // CRATES
 
-export enum CardRarity {
+export enum Rarity {
   COMMON = "common",
   RARE = "rare",
   SUPER_RARE = "super_rare",
@@ -83,14 +83,14 @@ export enum CardRarity {
   SECRET_RARE = "secret_rare",
 }
 export const rarityValue = {
-  [CardRarity.COMMON]: 1,
-  [CardRarity.RARE]: 2,
-  [CardRarity.SUPER_RARE]: 3,
-  [CardRarity.EPIC]: 4,
-  [CardRarity.MYTHIC]: 5,
-  [CardRarity.LEGENDARY]: 6,
-  [CardRarity.EVENT_RARE]: 7,
-  [CardRarity.SECRET_RARE]: 8,
+  [Rarity.COMMON]: 1,
+  [Rarity.RARE]: 2,
+  [Rarity.SUPER_RARE]: 3,
+  [Rarity.EPIC]: 4,
+  [Rarity.MYTHIC]: 5,
+  [Rarity.LEGENDARY]: 6,
+  [Rarity.EVENT_RARE]: 7,
+  [Rarity.SECRET_RARE]: 8,
 };
 
 export type CardType = {
@@ -98,7 +98,7 @@ export type CardType = {
   name: string;
   description: string;
   url: string;
-  rarity: CardRarity;
+  rarity: Rarity;
   guild?: string;
   sellPrice?: number;
 };
@@ -113,6 +113,15 @@ export type Crate = {
   openedAt?: number;
   name: string;
   description: string;
+};
+export type CardPack = {
+  _id: string | ObjectId;
+  userID: string;
+  guildID: string;
+  createdAt: number;
+  opened?: boolean;
+  openedAt?: number;
+  pack: CrateTemplate;
 };
 
 export type ShopItem = {
@@ -144,52 +153,54 @@ export type CrateTemplate = {
   description: string;
   items: string[];
   dropRates: {
-    [key in CardRarity]: number;
+    [key in Rarity]: number;
   };
   guild?: string;
+  count?: number | [number, number] | null;
+  packURL?: string;
 };
 
 export const rarityWordMap = {
-  [CardRarity.COMMON]: "Common",
-  [CardRarity.RARE]: "Rare",
-  [CardRarity.SUPER_RARE]: "Super Rare",
-  [CardRarity.EPIC]: "Epic",
-  [CardRarity.MYTHIC]: "Mythic",
-  [CardRarity.LEGENDARY]: "Legendary",
-  [CardRarity.EVENT_RARE]: "Event Rare",
-  [CardRarity.SECRET_RARE]: "Secret Rare",
+  [Rarity.COMMON]: "Common",
+  [Rarity.RARE]: "Rare",
+  [Rarity.SUPER_RARE]: "Super Rare",
+  [Rarity.EPIC]: "Epic",
+  [Rarity.MYTHIC]: "Mythic",
+  [Rarity.LEGENDARY]: "Legendary",
+  [Rarity.EVENT_RARE]: "Event Rare",
+  [Rarity.SECRET_RARE]: "Secret Rare",
 };
 
 export const rarityGradientMap = {
-  [CardRarity.LEGENDARY]: "from-indigo-500 to-indigo-500 via-pink-400",
-  [CardRarity.MYTHIC]: "from-pink-500 via-orange-400 to-pink-500",
-  [CardRarity.EPIC]: "from-purple-500 via-red-500 to-purple-500",
-  [CardRarity.SUPER_RARE]: "from-blue-500 via-violet-500 to-blue-500",
-  [CardRarity.RARE]: "from-green-500 via-teal-500 to-green-500",
-  [CardRarity.COMMON]: "from-gray-500 via-gray-500 to-gray-500",
-  [CardRarity.EVENT_RARE]: "from-yellow-200 via-emerald-200 to-yellow-200",
-  [CardRarity.SECRET_RARE]: "from-gray-700 via-gray-500 to-gray-700",
+  [Rarity.LEGENDARY]: "from-indigo-500 to-indigo-500 via-pink-400",
+  [Rarity.MYTHIC]: "from-pink-500 via-orange-400 to-pink-500",
+  [Rarity.EPIC]: "from-purple-500 via-red-500 to-purple-500",
+  [Rarity.SUPER_RARE]: "from-blue-500 via-violet-500 to-blue-500",
+  [Rarity.RARE]: "from-green-500 via-teal-500 to-green-500",
+  [Rarity.COMMON]: "from-gray-500 via-gray-500 to-gray-500",
+  [Rarity.EVENT_RARE]: "from-yellow-200 via-emerald-200 to-yellow-200",
+  [Rarity.SECRET_RARE]: "from-gray-700 via-gray-500 to-gray-700",
 };
 export const nonAnimatedRarityGradientMap = {
-  [CardRarity.LEGENDARY]: "from-indigo-500 to-pink-400",
-  [CardRarity.MYTHIC]: "from-orange-400 to-rose-400",
-  [CardRarity.EPIC]: "from-rose-500 to-fuchsia-500",
-  [CardRarity.SUPER_RARE]: "from-blue-500 to-violet-500",
-  [CardRarity.RARE]: "from-green-500 to-teal-500",
-  [CardRarity.COMMON]: "from-gray-500 to-gray-500",
-  [CardRarity.EVENT_RARE]: "from-yellow-200 to-emerald-200",
-  [CardRarity.SECRET_RARE]: "from-gray-700 to-gray-500",
+  [Rarity.LEGENDARY]: "from-indigo-500 to-pink-400",
+  [Rarity.MYTHIC]: "from-orange-400 to-rose-400",
+  [Rarity.EPIC]: "from-rose-500 to-fuchsia-500",
+  [Rarity.SUPER_RARE]: "from-blue-500 to-violet-500",
+  [Rarity.RARE]: "from-green-500 to-teal-500",
+  [Rarity.COMMON]: "from-gray-500 to-gray-500",
+  [Rarity.EVENT_RARE]: "from-yellow-200 to-emerald-200",
+  [Rarity.SECRET_RARE]: "from-gray-700 to-gray-500",
 };
 
 export const rarityParticleColorMap = {
-  [CardRarity.LEGENDARY]: ["##818cf8", "#db2777", "#8b5cf6"],
-  [CardRarity.MYTHIC]: ["#f87171", "#be123c", "#9d174d"],
-  [CardRarity.EPIC]: ["#f472b6", "#e148ec", "#9748ec"],
-  [CardRarity.SUPER_RARE]: ["#2495ff", "#87ffff", "#7040ff"],
-  [CardRarity.RARE]: ["#34d399", "#00b303", "#00b591"],
-  [CardRarity.COMMON]: ["#a0aec0", "#bdcade", "#4a5568"],
-  [CardRarity.EVENT_RARE]: ["#f6e05e", "#80ffce", "#a3ffa9"],
-  [CardRarity.SECRET_RARE]: ["#a0aec0", "#cfe2ff", "#fce3ff"],
+  [Rarity.LEGENDARY]: ["##818cf8", "#db2777", "#8b5cf6"],
+  [Rarity.MYTHIC]: ["#f87171", "#be123c", "#9d174d"],
+  [Rarity.EPIC]: ["#f472b6", "#e148ec", "#9748ec"],
+  [Rarity.SUPER_RARE]: ["#2495ff", "#87ffff", "#7040ff"],
+  [Rarity.RARE]: ["#34d399", "#00b303", "#00b591"],
+  [Rarity.COMMON]: ["#a0aec0", "#bdcade", "#4a5568"],
+  [Rarity.EVENT_RARE]: ["#f6e05e", "#80ffce", "#a3ffa9"],
+  [Rarity.SECRET_RARE]: ["#a0aec0", "#cfe2ff", "#fce3ff"],
 };
 
 export type GuildInventory = {

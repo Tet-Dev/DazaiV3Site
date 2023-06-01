@@ -3,17 +3,47 @@ import {
   EffectComposer,
   BrightnessContrast,
   SSAO,
+  Bloom,
+  Glitch,
+  Noise,
 } from "@react-three/postprocessing";
 import { MathUtils } from "three";
-import { SpotLightShadow, SpotLight } from "@react-three/drei";
-import { Crate } from "./Crate";
-import { CrateCamera } from "./CrateCamera";
-import { useState, useEffect, Suspense } from "react";
-import { CrateTimer } from "../../utils/classes/CrateTimer";
+import {
+  SpotLightShadow,
+  SpotLight,
+  OrbitControls,
+  useTexture,
+  Stars,
+} from "@react-three/drei";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import { PackTimer } from "../../utils/classes/PackTimer";
+import { CardPackThree } from "./CardPack";
+import { CardCamera } from "./CardCamera";
+import {
+  getBackgroundColor,
+  getComplemetaryColor,
+  getEmissiveColor,
+  useImageColorScheme,
+} from "../../utils/hooks/useImageColorScheme";
 
-export const CrateCanvas = () => {
+export const CardCanvas = () => {
   const [brightness, setBrightness] = useState(0);
+  const image = "/bsdcardpack.png";
+  const colorScheme = useImageColorScheme(image);
+  const primaryColor = useMemo(() => {
+    console.log({ cs: colorScheme, gb: getBackgroundColor(colorScheme!) });
+    if (!colorScheme) return "#000000";
+    return getBackgroundColor(colorScheme);
+  }, [colorScheme]);
+  const complementColor = useMemo(() => {
+    if (!colorScheme) return "#000000";
+    return getComplemetaryColor(colorScheme);
+  }, [colorScheme]);
+  const emissiveColor = useMemo(() => {
+    if (!colorScheme) return "#000000";
+    return getEmissiveColor(colorScheme);
+  }, [colorScheme]);
+
   useEffect(() => {
     const openSequenceListener = async () => {
       for (let i = 0; i < 100; i++) {
@@ -21,32 +51,34 @@ export const CrateCanvas = () => {
         setBrightness((prev) => prev + 0.01);
       }
     };
-    CrateTimer.getInstance().on("crateOpen", openSequenceListener);
+    PackTimer.getInstance().on("preOpen", openSequenceListener);
     return () => {
-      CrateTimer.getInstance().off("crateOpen", openSequenceListener);
+      PackTimer.getInstance().off("preOpen", openSequenceListener);
     };
   }, []);
   return (
     <Suspense
       fallback={
         <div className={`pt-[66%] font-wsans text-3xl`}>
-          Loading Crate Render
+          Loading Card Pack...
         </div>
       }
     >
       <Canvas
-        className={`!h-screen`}
+        className={`!h-screen cursor-pointer`}
         shadows="soft"
-        
+        onClick={() => {
+          PackTimer.getInstance().open();
+          PackTimer.getInstance().tapCard()
+        }}
       >
-        <color attach="background" args={["#a182ff"]} />
-        <fog attach="fog" args={["#a182ff", 4, 20]} />
-        <ambientLight intensity={0.25} />
+        <color attach="background" args={[primaryColor]} />
+        <fog attach="fog" args={[primaryColor, 4, 20]} />
         <SpotLight
-          distance={40}
+          distance={50}
           intensity={1}
           angle={MathUtils.degToRad(45)}
-          color={"#b00c3f"}
+          color={emissiveColor}
           position={[6, 5, 4]}
           // target={}
           volumetric={false}
@@ -82,10 +114,10 @@ export const CrateCanvas = () => {
           />
         </SpotLight>
         <SpotLight
-          distance={40}
+          distance={50}
           intensity={1}
           angle={MathUtils.degToRad(45)}
-          color={"#0c8cbf"}
+          color={complementColor}
           position={[-2, 8, 4]}
           // target={}
           volumetric={false}
@@ -123,22 +155,30 @@ export const CrateCanvas = () => {
         </SpotLight>
         {/* <directionalLight intensity={0.5} position={[0, 10, 0]} castShadow  /> */}
 
-        <Crate />
-        <CrateCamera />
+        {/* <Crate />
+        <CrateCamera /> */}
+        <CardCamera />
+        <CardPackThree textureURL={image} emissiveColor={emissiveColor} />
         {/* <OrbitControls /> */}
         {/* <ambientLight intensity={0.1} color={`#ffffff`} /> */}
         <mesh receiveShadow position={[0, 0.2, 0]} rotation-x={-Math.PI / 2}>
           <planeGeometry args={[50, 50]} />
-          <meshPhongMaterial color={`#a182ff`} />
+          <meshPhongMaterial color={primaryColor} />
         </mesh>
-        <EffectComposer resolutionScale={1}>
-          {/* <Bloom radius={4} luminanceThreshold={0.4} intensity={1} /> */}
-          <BrightnessContrast brightness={brightness} contrast={0} />
+        <EffectComposer resolutionScale={2}>
+          <Bloom
+            radius={100}
+            luminanceThreshold={0.4}
+            intensity={1}
+            luminanceSmoothing={0}
+          />
+          {/* <BrightnessContrast brightness={brightness} contrast={0} /> */}
           {/* make good ambient occlusion */}
           {/* <SSAO samples={10} /> */}
-          {/* <Noise opacity={0.05} /> */}
+          {/* <Noise opacity={0.1} /> */}
           {/* <Glitch /> */}
         </EffectComposer>
+        <Stars radius={250} depth={50} count={5000} factor={1} saturation={1} />
       </Canvas>
     </Suspense>
   );

@@ -12,7 +12,7 @@ import Cropper, { Area } from "react-easy-crop";
 import { fetcher } from "../../../../utils/discordFetcher";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
-  CardRarity,
+  Rarity,
   rarityGradientMap,
   rarityWordMap,
   ShopItem,

@@ -15,7 +15,7 @@ import { fetcher } from "../../../../../utils/discordFetcher";
 import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
 import { getGuildShardURL } from "../../../../../utils/ShardLib";
 import {
-  CardRarity,
+  Rarity,
   CardType,
   Crate,
   GuildInventory,

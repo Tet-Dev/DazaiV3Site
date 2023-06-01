@@ -1,25 +1,27 @@
 "use client";
+
 import { Transition } from "@headlessui/react";
-import { GetServerSideProps } from "next/types";
-import { useEffect, useState } from "react";
+import { ObjectId } from "mongodb";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
-// import { CrateCanvas } from "../../components/Crates/CrateCanvas";
-import { CrateTimer } from "../../utils/classes/CrateTimer";
+import { CrateTimer } from "../../../utils/classes/CrateTimer";
+import Mongo from "../../../utils/classes/Mongo";
+import { clientID } from "../../../utils/constants";
+import { fetcher } from "../../../utils/discordFetcher";
+import { getGuildShardURL } from "../../../utils/ShardLib";
+import Tilt from "react-parallax-tilt";
 import {
-  Rarity,
+  rarityParticleColorMap,
+  rarityGradientMap,
+  rarityWordMap,
   CardType,
   Crate,
-  rarityGradientMap,
-  rarityParticleColorMap,
-  rarityWordMap,
-} from "../../utils/types";
-import Tilt from "react-parallax-tilt";
-import { fetcher } from "../../utils/discordFetcher";
-import { getGuildShardURL } from "../../utils/ShardLib";
-import Mongo from "../../utils/classes/Mongo";
-import { ObjectId } from "mongodb";
-import { useRouter } from "next/router";
-import { clientID } from "../../utils/constants";
+} from "../../../utils/types";
+import { CardCanvas } from "../../../components/CardPack/CardPackPreview";
+import { CardCamera } from "../../../components/CardPack/CardCamera";
+import { PackTimer } from "../../../utils/classes/PackTimer";
 
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export const CratePage = (props: { crate: Crate }) => {
@@ -68,14 +70,14 @@ export const CratePage = (props: { crate: Crate }) => {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="h-screen w-screen absolute top-0 left-0 z-10 pt-[10%] flex flex-col gap-4 px-8">
+        <div className=" w-[90%] absolute bottom-8 left-1/2 -translate-x-1/2 z-10 pt-[10%] flex flex-col gap-4 px-8 max-w-prose cursor-pointer">
           <h1 className="text-5xl lg:text-3xl text-center font-poppins font-bold">
             {crate.name}
           </h1>
-          <span className="text-2xl lg:text-lg text-center font-wsans font-medium">
+          <span className="text-xl lg:text-lg text-center font-wsans">
             {crate.description}
           </span>
-          <button
+          {/* <button
             className="mx-auto px-8 py-4 bg-indigo-500 hover:bg-indigo-600 rounded-2xl text-2xl font-wsans font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={opening}
             onClick={async () => {
@@ -107,7 +109,10 @@ export const CratePage = (props: { crate: Crate }) => {
             }}
           >
             {opening ? "Opening..." : "Open Crate"}
-          </button>
+          </button> */}
+          <span className="text-lg lg:text-md text-center font-wsans text-gray-100/50">
+            Tap anywhere to open
+          </span>
         </div>
       </Transition>
       {/* {stage} */}
@@ -124,6 +129,7 @@ export const CratePage = (props: { crate: Crate }) => {
         <CrateCanvas />
       </Transition> */}
 
+      <CardCanvas />
       <Transition
         show={stage >= 2}
         enter="transition-opacity duration-1000"

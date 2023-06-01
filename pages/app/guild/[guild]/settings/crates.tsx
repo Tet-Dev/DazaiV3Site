@@ -198,14 +198,14 @@ export const CrateSettings = (props: {}) => {
 //   //     name: "Sunset Dazai",
 //   //     description: "Dazai with a sunset background",
 //   //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
-//   //     rarity: CardRarity.LEGENDARY,
+//   //     rarity: Rarity.LEGENDARY,
 //   //   });
 //   //   cards.push({
 //   //     _id: "63e3f70bf538f8e190963d8f",
 //   //     name: "Dazai Thousand",
 //   //     description: "The 1000 server milestone celebration card",
 //   //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
-//   //     rarity: CardRarity.EVENT_RARE,
+//   //     rarity: Rarity.EVENT_RARE,
 //   //   });
 //   let viewingCrate = (context.query.c as string)
 //     ? cratesJSON.find((crate) => crate._id === context.query.c)

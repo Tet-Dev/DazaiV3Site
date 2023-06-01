@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { fetcher } from '../../../../utils/discordFetcher';
 import { getGuildShardURL } from '../../../../utils/ShardLib';
 import {
-  CardRarity,
+  Rarity,
   CardType,
   rarityGradientMap,
   rarityWordMap,
@@ -111,12 +111,12 @@ export const ViewRankCard = (props: {
         >
           <SelectMenu
             label='Rarity'
-            selectItems={Object.values(CardRarity).map((x) => ({
+            selectItems={Object.values(Rarity).map((x) => ({
               id: x,
               name: rarityWordMap[x],
             }))}
             selectedItemId={rarity}
-            onSelect={(x) => setRarity(x.id as CardRarity)}
+            onSelect={(x) => setRarity(x.id as Rarity)}
             className={`w-full h-full`}
             overrideClasses={`h-full`}
           />
