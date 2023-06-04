@@ -147,6 +147,9 @@ export type CrateTemplate = {
     [key in CardRarity]: number;
   };
   guild?: string;
+  showDrops?: boolean;
+  showRates?: boolean;
+  showCrateDetails?: boolean;
 };
 
 export const rarityWordMap = {

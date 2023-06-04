@@ -1,23 +1,22 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { CreateCrate } from "../../../../../components/Dashboard/Settings/Crates/createCrate";
-import { ViewCrate } from "../../../../../components/Dashboard/Settings/Crates/viewCrates";
-import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
-import { useAPIProp } from "../../../../../utils/hooks/useProp";
-import { getGuildShardURL } from "../../../../../utils/ShardLib";
-import { CardType, CrateTemplate } from "../../../../../utils/types";
-
+import { useState, useEffect } from "react";
+import { CreateCrate } from "../../../../components/Dashboard/Settings/Crates/createCrate";
+import { ViewCrateClientside } from "../../../../components/Dashboard/Settings/Crates/viewCrateClientSide";
+import { ViewCrate } from "../../../../components/Dashboard/Settings/Crates/viewCrates";
+import { useDiscordUser } from "../../../../utils/hooks/useDiscordUser";
+import { useAPIProp } from "../../../../utils/hooks/useProp";
+import { CrateTemplate, CardType } from "../../../../utils/types";
 export const CrateSettings = (props: {}) => {
   const router = useRouter();
   const guildID = router.query.guild as string;
   const [crates, updateCrates] = useAPIProp<CrateTemplate[]>(
-    `/guilds/${guildID}/settings/crates?reveal=1`,
+    guildID ? `/guilds/${guildID}/settings/crates` : undefined,
     guildID
   );
   const [cards, updateCards] = useAPIProp<CardType[]>(
-    `/guilds/${guildID}/settings/cards?revealsecretrarecards=1`,
+    guildID ? `/guilds/${guildID}/settings/cards` : undefined,
     guildID
   );
 
@@ -32,7 +31,6 @@ export const CrateSettings = (props: {}) => {
       }
     }
   }, [crates, router]);
-  const [createCrate, setCreateCrate] = useState(false);
   const { user } = useDiscordUser();
   return (
     <div
@@ -44,20 +42,17 @@ export const CrateSettings = (props: {}) => {
         className={`col-span-8 relative h-screen flex flex-col gap-6 py-8 overflow-auto transition-all px-4`}
       >
         <h1 className={`text-3xl font-bold font-poppins`}>
-          Server-Wide Custom Crates
+          Server-Wide Crate Encyclopedia
         </h1>
         <span className={`text-gray-400 font-wsans`}>
-          Hehe, funny gatcha go brrr. You can create your own custom crates and
-          make earning those rank cards all that much more fun! You can create
-          up to 10 crates for free.
+          View all the crates in your server here.
         </span>
 
-        {viewingCrate ? (
-          <ViewCrate
+        {viewingCrate && (
+          <ViewCrateClientside
             crate={viewingCrate}
             onSave={async () => {
               updateCrates();
-              setCreateCrate(false);
               setViewingCrate(null);
               // const res = await fetch(
               //   `${getGuildShardURL(guild)}/guilds/${guild}/settings/cards`,
@@ -73,26 +68,6 @@ export const CrateSettings = (props: {}) => {
             }}
             cards={cards!}
           />
-        ) : createCrate ? (
-          <CreateCrate
-            onSave={async () => {
-              setCreateCrate(false);
-              updateCrates()
-              setCreateCrate(false);
-              setViewingCrate(null);
-            }}
-            cards={cards!}
-          />
-        ) : (
-          <div
-            className={`flex flex-grow flex-col gap-8 items-center justify-center border-2 mb-8 p-12 rounded-3xl border-dashed border-gray-700`}
-          >
-            <span className={`text-gray-500 font-wsans text-2xl `}>
-              {crates?.length
-                ? `Click on a crate in the list on the right to view`
-                : `Click on the "Add Crate" button to add your first Crate!`}
-            </span>
-          </div>
         )}
       </div>
       <div
@@ -116,7 +91,6 @@ export const CrateSettings = (props: {}) => {
               } overflow-hidden shrink-0 w-full aspect-square`}
               onClick={() => {
                 setViewingCrate(crate);
-                setCreateCrate(false);
               }}
               key={`crate-slot-${crate._id}`}
             >
@@ -137,33 +111,6 @@ export const CrateSettings = (props: {}) => {
               </div>
             </div>
           ))}
-          <div
-            className={`card rounded-3xl shadow-lg relative shrink-0 z-10 h-fit group hover:scale-105 ease-in duration-200 cursor-pointer opacity-80 hover:opacity-100 border-2 border-dashed ${
-              createCrate ? `border-indigo-500` : `border-gray-100/20`
-            } overflow-hidden shrink-0 w-full aspect-square`}
-            onClick={() => {
-              setViewingCrate(null);
-              setCreateCrate(true);
-            }}
-            key={`crate-slot-addCrate`}
-          >
-            <img
-              src={`/images/crates/chest.png`}
-              alt="chest"
-              className={`object-cover grow-0 h-full w-auto z-10 opacity-25 contrast-50 brightness-50 blur-sm invert`}
-            />
-            <div
-              className={`bg-gradient-to-t from-gray-900/90 via-gray-900/70 to-gray-900/20 w-full h-full absolute top-0 left-0 z-20 group-hover:opacity-50 transition-all`}
-            />
-            <div
-              className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col z-30 items-center justify-center ${
-                createCrate ? `text-indigo-400` : `text-gray-50/40`
-              }`}
-            >
-              <PlusIcon className={`w-10 h-10 `} />
-              <h3 className={`font-wsans font-extrabold text-sm`}>Add Crate</h3>
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ export const useAPIProp = <T>(
   APIPath?: string,
   guildID?: string,
   requestInit?: RequestInit,
-  cacheable?: boolean
+  cacheable?: boolean,
 ) => {
   const [value, setValue] = useState(undefined as null | undefined | T);
   const [error, setError] = useState(undefined as null | undefined | string);
@@ -37,7 +37,8 @@ export const useAPIProp = <T>(
 
   useEffect(() => {
     update();
-  }, [APIPath, requestInit, user]);
+    console.log("useAPIProp", APIPath, guildID, requestInit, cacheable,user);
+  }, [APIPath, requestInit, user.user]);
   return [value, update, error] as [
     null | undefined | T,
     () => Promise<void>,

@@ -34,7 +34,7 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
     return null;
   }
   return (
-    <div className="w-fit shrink-0 max-w-full z-40">
+    <div className={`w-fit shrink-0 max-w-full z-40`}>
       <div
         className={`absolute w-screen h-screen bg-black/80 z-40 hidden ${
           open ? "lg:block" : " pointer-events-none"
@@ -115,6 +115,12 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
                   <CurrencyDollarIcon className={`w-6 h-6 md:w-4 md:h-4`} />
                 }
                 route={`/app/guild/${guildID}/shop`}
+                // disabled={"Coming soon!"}
+              />
+              <GuildSidebarModule
+                name="Crates"
+                icon={<GiftIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
+                route={`/app/guild/${guildID}/crates`}
                 // disabled={"Coming soon!"}
               />
             </div>
