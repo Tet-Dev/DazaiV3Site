@@ -1,3 +1,4 @@
+import { Switch } from "@headlessui/react";
 import {
   ExclamationTriangleIcon,
   PencilIcon,
@@ -31,6 +32,12 @@ export const ViewCrate = (props: {
       [key in Rarity]: number | string;
     }
   );
+  // showCrateDetails,
+  // showRates,
+  // showDrops,
+  const [showDrops, setShowDrops] = useState(false);
+  const [showCrateDetails, setShowCrateDetails] = useState(false);
+  const [showRates, setShowRates] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -47,6 +54,9 @@ export const ViewCrate = (props: {
     setCrateDescription(crate.description);
     setCrateItems(crate.items);
     setCrateDropRates(crate.dropRates);
+    setShowCrateDetails(crate.showCrateDetails);
+    setShowRates(crate.showRates);
+    setShowDrops(crate.showDrops);
   }, [crate, editMode]);
 
   return editMode ? (
@@ -109,6 +119,7 @@ export const ViewCrate = (props: {
           />
         </div> */}
       </div>
+
       <div className={`flex flex-col gap-2 relative`}>
         <span className={`text-gray-300 font-wsans font-medium`}>
           Crate Description
@@ -416,17 +427,75 @@ export const ViewCrate = (props: {
           </div>
         </div>
       </div>
+      <div
+        className={`flex flex-col gap-4 p-6 bg-gray-850 rounded-3xl shadow-inner`}
+      >
+        <span className={`text-gray-300 font-wsans font-medium text-xl`}>
+          Crate Visibility Settings
+        </span>
+        <div
+          className={`flex flex-row gap-8 gap-y-4 relative font-normal text-gray-100/40 flex-wrap`}
+        >
+          <div className={`flex flex-row gap-2 items-center`}>
+            Show Crate Details (Name, Description)
+            <Switch
+              checked={showCrateDetails}
+              onChange={setShowCrateDetails}
+              className={`${
+                showCrateDetails ? "bg-indigo-500" : "bg-gray-200/10"
+              } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
+            >
+              <span
+                className={`${
+                  showCrateDetails ? "translate-x-6" : "translate-x-1"
+                } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+              />
+            </Switch>
+          </div>
+          <div className={`flex flex-row gap-2 items-center`}>
+            Show Drop Rates
+            <Switch
+              checked={showRates}
+              onChange={setShowRates}
+              className={`${
+                showRates ? "bg-indigo-500" : "bg-gray-200/10"
+              } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
+            >
+              <span
+                className={`${
+                  showRates ? "translate-x-6" : "translate-x-1"
+                } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+              />
+            </Switch>
+          </div>
+          <div className={`flex flex-row gap-2 items-center`}>
+            Show Drops
+            <Switch
+              checked={showDrops}
+              onChange={setShowDrops}
+              className={`${
+                showDrops ? "bg-indigo-500" : "bg-gray-200/10"
+              } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
+            >
+              <span
+                className={`${
+                  showDrops ? "translate-x-6" : "translate-x-1"
+                } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+              />
+            </Switch>
+          </div>
+        </div>
+      </div>
+
       <div className={`flex flex-row gap-4 justify-start w-full`}>
         <button
           className={`rounded-2xl px-4 py-2 border border-gray-50/10 w-fit bg-gray-50/5 flex flex-row gap-2 items-center hover:bg-indigo-500 hover:border-transparent transition-all`}
           onClick={async () => {
             setUpdating(true);
-            const guildShardURL = await getGuildShardURL(
-              crate.guild as string
-            );
+            const guildShardURL = await getGuildShardURL(crate.guild as string);
 
             const res = await fetcher(
-              `${guildShardURL}/guilds/${crate.guild}/settings/crates/${crate._id}`,
+              `${guildShardURL}/guilds/${crate.guild}/settings/crates/${crate._id}?reveal=1`,
               {
                 method: "PATCH",
                 headers: {
@@ -476,7 +545,9 @@ export const ViewCrate = (props: {
         visible={selectCardModalVisible}
         onClose={() => setSelectCardModalVisible(false)}
       >
-        <div className={`flex flex-col gap-4 p-6 w-[90vw] max-w-[75ch] max-h-[80vh] overflow-auto`}>
+        <div
+          className={`flex flex-col gap-4 p-6 w-[90vw] max-w-[75ch] max-h-[80vh] overflow-auto`}
+        >
           <h1 className={`text-2xl font-poppins font-bold`}>
             Select a Card to Add
           </h1>
@@ -656,7 +727,10 @@ export const ViewCrate = (props: {
             .map((id) => cardMap.get(id)!)
             .sort((a, b) => rarityValue[a.rarity] - rarityValue[b.rarity])
             .map((card) => (
-              <SettingsCardRenderer card={card} key={`crate-item-view-${card._id}`} />
+              <SettingsCardRenderer
+                card={card}
+                key={`crate-item-view-${card._id}`}
+              />
             ))}
         </div>
       </div>

@@ -7,7 +7,7 @@ import { ViewRankCard } from "../../../../../components/Dashboard/Settings/RankC
 import { useDiscordUser } from "../../../../../utils/hooks/useDiscordUser";
 import { useAPIProp } from "../../../../../utils/hooks/useProp";
 import { getGuildShardURL } from "../../../../../utils/ShardLib";
-import { CardRarity, CardType } from "../../../../../utils/types";
+import { Rarity, CardType } from "../../../../../utils/types";
 
 export const RankCardSettings = (props: {
   guild: string;
@@ -36,11 +36,11 @@ export const RankCardSettings = (props: {
   return (
     <div
       className={`relative grid grid-cols-12 ${
-        user ? `2xl:ml-2 gap-8 2xl:gap-0 ml-[5%]` : `ml-[5%] gap-8`
+        user ? ` gap-8 2xl:gap-0` : ` gap-8`
       } relative`}
     >
       <div
-        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all`}
+        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all px-4`}
       >
         <h1 className={`text-3xl font-bold font-poppins`}>
           Server-Wide Custom Rank Cards
@@ -149,14 +149,14 @@ export const RankCardSettings = (props: {
 //   //     name: "Sunset Dazai",
 //   //     description: "Dazai with a sunset background",
 //   //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
-//   //     rarity: CardRarity.LEGENDARY,
+//   //     rarity: Rarity.LEGENDARY,
 //   //   });
 //   //   cards?.push({
 //   //     _id: "63e3f70bf538f8e190963d8f",
 //   //     name: "Dazai Thousand",
 //   //     description: "The 1000 server milestone celebration card",
 //   //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
-//   //     rarity: CardRarity.EVENT_RARE,
+//   //     rarity: Rarity.EVENT_RARE,
 //   //   });
 //   return {
 //     props: {

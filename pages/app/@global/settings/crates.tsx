@@ -13,7 +13,7 @@ export const CrateSettings = (props: {}) => {
   const router = useRouter();
   const guildID = `@global`;
   const [crates, updateCrates] = useAPIProp<CrateTemplate[]>(
-    `/guilds/${guildID}/settings/crates`,
+    `/guilds/${guildID}/settings/crates?reveal=1`,
     guildID
   );
   const [cards, updateCards] = useAPIProp<CardType[]>(

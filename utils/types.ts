@@ -158,6 +158,9 @@ export type CrateTemplate = {
   guild?: string;
   count?: number | [number, number] | null;
   packURL?: string;
+  showDrops?: boolean;
+  showRates?: boolean;
+  showCrateDetails?: boolean;
 };
 
 export const rarityWordMap = {

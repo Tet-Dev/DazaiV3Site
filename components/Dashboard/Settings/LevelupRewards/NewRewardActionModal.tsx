@@ -58,7 +58,7 @@ export const NewRewardActionModal = (props: {
       );
       const cards = (await guildCards.json()) as CardType[];
       const crates = await fetcher(
-        `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/crates`,
+        `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/crates?reveal=1`,
         {
           method: "GET",
           headers: {
