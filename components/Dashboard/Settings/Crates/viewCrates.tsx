@@ -431,7 +431,7 @@ export const ViewCrate = (props: {
           Crate Visibility Details
         </span>
         <span className={`text-gray-500 font-wsans text-xs -mt-2`}>
-          Determines what information is shown to non-admin users (eg. can they see the crate's name, description, etc.)
+          Determines what information is shown to non-admin users (eg. can they see the crate&apos;s name, description, etc.)
         </span>
         <div
           className={`flex flex-row gap-8 gap-y-4 relative font-normal text-gray-100/40 flex-wrap`}
@@ -744,7 +744,7 @@ export const ViewCrate = (props: {
           Crate Visibility Details
         </span>
         <span className={`text-gray-500 font-wsans text-xs -mt-2`}>
-          Determines what information is shown to non-admin users (eg. can they see the crate's name, description, etc.)
+          Determines what information is shown to non-admin users (eg. can they see the crate&apos;s name, description, etc.)
         </span>
         <div
           className={`flex flex-row gap-8 gap-y-4 relative font-normal text-gray-100/80 flex-wrap opacity-50 cursor-not-allowed`}
