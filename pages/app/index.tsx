@@ -11,6 +11,7 @@ import { clientID } from "../../utils/constants";
 import { useDiscordUser } from "../../utils/hooks/useDiscordUser";
 import Link from "next/link";
 import { promptLogin } from "../../utils/helpers/promptLogin";
+import { renderUsername, RenderUsernameOptions } from "../../utils/renderUsername";
 
 const DashboardIndex = () => {
   const guilds = useAllGuilds();
@@ -120,12 +121,12 @@ const DashboardIndex = () => {
                   <span
                     className={`text-4xl lg:text-xl font-poppins font-bold text-gray-50 text-center`}
                   >
-                    {user?.username}
+                    {renderUsername(user,RenderUsernameOptions.UsernameOnly)}
                   </span>
                   <span
                     className={`text-base font-poppins font-medium text-gray-400 text-center`}
                   >
-                    #{user?.discriminator}
+                    {renderUsername(user,RenderUsernameOptions.DiscriminatorOnly)}
                   </span>
                 </div>
               </div>

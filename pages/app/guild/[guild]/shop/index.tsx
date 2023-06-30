@@ -50,11 +50,11 @@ export const GuildInventoryPage = (props: {
   return (
     <div
       className={`relative ${
-        user ? `2xl:ml-2 gap-8 2xl:gap-0 ml-[5%]` : `ml-[5%] gap-8`
+        user ? `2xl:ml-2 2xl:mr-4 gap-8 2xl:gap-0 ml-[5%] mr-[10%]` : `ml-[5%] mr-[10%] gap-8`
       } relative flex flex-col items-center`}
     >
       <div
-        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[150ch] w-fit pb-8`}
+        className={`col-span-8 relative h-screen flex flex-col gap-6 pt-8 overflow-auto transition-all max-w-[180ch] w-fit pb-8`}
       >
         <div className={`flex flex-col gap-4`}>
           <div className={`flex flex-row gap-16 items-center`}>
@@ -66,7 +66,7 @@ export const GuildInventoryPage = (props: {
             </div>
           </div>
         </div>
-        <div className={`w-full flex flex-wrap gap-8`}>
+        <div className={`w-full gap-8 grid 3xl:grid-cols-2 4xl:grid-cols-3 grid-cols-4 xl:grid-cols-1`}>
           {shop.shopItems.map((item) => {
             return (
               <ShopOfferRenderer

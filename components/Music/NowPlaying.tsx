@@ -15,6 +15,7 @@ import { NotificationsClass } from "../../utils/classes/NotificationsClass";
 import { fetcher } from "../../utils/discordFetcher";
 import { useDiscordUser } from "../../utils/hooks/useDiscordUser";
 import { msToFormat } from "../../utils/parseTime";
+import { renderUsername } from "../../utils/renderUsername";
 import { getGuildShardURL } from "../../utils/ShardLib";
 import { MusicTrack } from "../../utils/types";
 import { MusicThumbnailRenderer } from "./MusicThumbnailRenderer";
@@ -86,7 +87,7 @@ export const GuildMusicNowPlaying = (props: {
             className={`relative w-full h-full p-1 z-40 rounded-3xl flex flex-row gap-2`}
           >
             <div
-              className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 p-2 text-gray-400 bg-black hover:bg-white hover:text-gray-900 rounded-full`}
+              className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 p-2 text-gray-400 bg-black hover:bg-white hover:text-gray-900 rounded-full lg:block hidden`}
               onClick={() => setShowNP(!showNP)}
             >
               <ChevronDownIcon className={`w-6 h-6`} />
@@ -271,8 +272,7 @@ export const GuildMusicNowPlaying = (props: {
                 className={`w-10 h-10 rounded-full`}
               />
               <div className={`text-base font-medium font-wsans`}>
-                {musicData.track?.requestedBy?.username}#
-                {musicData.track?.requestedBy?.discriminator}
+                {renderUsername(musicData.track?.requestedBy)}
               </div>
             </div>
           </div>

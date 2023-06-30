@@ -28,7 +28,7 @@ export const ShopOfferRenderer = (props: {
   };
   return (
     <div
-      className={`bg-gray-800 p-6 rounded-3xl flex w-[400px] max-w-full flex-col gap-2`}
+      className={`bg-gray-800 p-6 rounded-3xl flex min-w-[400px] xl:col-span-1 max-w-full flex-col gap-2`}
     >
       <h1 className={`font-poppins font-bold text-white text-xl`}>
         {shopItem.name}

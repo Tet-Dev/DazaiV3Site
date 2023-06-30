@@ -7,6 +7,7 @@ import { APIGuild, APIRole, APIUser } from "discord-api-types/v10";
 import localforage from "localforage";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
+import { renderUsername } from "../../../utils/renderUsername";
 import { BotGuildData } from "../../../utils/types";
 
 export const GuildSidebarUser = (props: {
@@ -67,7 +68,7 @@ export const GuildSidebarUser = (props: {
               });
             }}
           >
-            Log out of {user?.username}#{user?.discriminator}
+            Log out of {renderUsername(user)}
           </div>
         </div>
       </div>
@@ -99,7 +100,7 @@ export const GuildSidebarUser = (props: {
               skeleton && `blur-sm animate-pulse`
             }`}
           >
-            {user ? `${user?.username}#${user?.discriminator}` : `00000#0000`}
+            {renderUsername(user)}
           </div>
           {!global && (
             <div

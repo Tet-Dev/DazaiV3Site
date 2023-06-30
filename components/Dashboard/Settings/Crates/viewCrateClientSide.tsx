@@ -81,7 +81,7 @@ export const ViewCrateClientside = (props: {
         </span>
         {crateDropRates.common !== -1 ? (
           <div
-            className={`grid grid-cols-3 xl:grid-cols-2 gap-4 place-items-center`}
+            className={`grid grid-cols-3 xl:grid-cols-2 gap-4 place-items-end`}
           >
             <div className={`flex flex-row gap-2 items-center`}>
               <span

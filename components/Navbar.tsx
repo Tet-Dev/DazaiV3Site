@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { clientID } from "../utils/constants";
 import { useDiscordUser } from "../utils/hooks/useDiscordUser";
+import { renderUsername } from "../utils/renderUsername";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ export const Navbar = () => {
         <div
           className={`absolute bottom-0 translate-y-[calc(100%+1rem)] -translate-x-1/2 lg:translate-x-0 lg:origin-top-left left-0 w-max bg-gray-900 p-2 text-white rounded-lg scale-0 origin-top group-hover:scale-100 duration-200 transition-all`}
         >
-          Signed in as {user?.username}#{user?.discriminator}
+          Signed in as {renderUsername(user)}
         </div>
       </div>
       <div

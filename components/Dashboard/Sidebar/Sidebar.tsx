@@ -5,6 +5,7 @@ import { GuildSidebarModule } from "./SidebarModule";
 import {
   ArchiveBoxIcon,
   Bars3Icon,
+  CogIcon,
   CurrencyDollarIcon,
   GiftIcon,
   HomeIcon,
@@ -123,6 +124,12 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
                 route={`/app/guild/${guildID}/crates`}
                 // disabled={"Coming soon!"}
               />
+              <GuildSidebarModule
+                name="Server Settings"
+                icon={<CogIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
+                route={`/app/guild/${guildID}/settings`}
+                // disabled={"Coming soon!"}
+              />
             </div>
             {guildData?.hasAdmin && (
               <div className={`flex flex-col gap-6`}>
@@ -165,14 +172,20 @@ export const GuildSidebar = (props: { guildID: string | undefined }) => {
                     route={`/app/guild/${guildID}/settings/leveluprewards`}
                     // disabled={"Coming soon!"}
                   />
-                  <GuildSidebarModule
+                  {/* <GuildSidebarModule
                     name="Permissions"
                     icon={
                       <ShieldCheckIcon className={`w-6 h-6 md:w-4 md:h-4`} />
                     }
                     route={`/app/guild/${guildID}/permissions`}
                     disabled={"Coming soon!"}
-                  />
+                  /> */}
+                  {/* <GuildSidebarModule
+                    name="Server Administrator Settings"
+                    icon={<CogIcon className={`w-6 h-6 md:w-4 md:h-4`} />}
+                    route={`/app/guild/${guildID}/settings`}
+                    // disabled={"Coming soon!"}
+                  /> */}
                 </div>
               </div>
             )}

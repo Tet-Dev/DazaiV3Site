@@ -1,5 +1,9 @@
 import { BiMedal } from "react-icons/bi";
 import { FaCrown } from "react-icons/fa";
+import {
+  renderUsername,
+  RenderUsernameOptions,
+} from "../../utils/renderUsername";
 import { GuildLeaderboardEntry } from "../../utils/types";
 
 const formatLargeNumber = (num: number) => {
@@ -67,9 +71,12 @@ export const LeaderboardEntry = (props: {
       />
       <div className={`flex flex-col gap-3 md:gap-1 flex-grow z-10`}>
         <div className={`text-xl font-poppins font-medium md:text-base`}>
-          {entry.user.username}
+          {renderUsername(entry.user, RenderUsernameOptions.UsernameOnly)}
           <span className={`text-gray-400 text-base font-wsans md:text-sm`}>
-            #{entry.user.discriminator}
+            {renderUsername(
+              entry.user,
+              RenderUsernameOptions.DiscriminatorOnly
+            )}
           </span>
         </div>
         <div className={`flex flex-col gap-1`}>

@@ -6,6 +6,7 @@ import { clientID } from "../../utils/constants";
 import { fetcher } from "../../utils/discordFetcher";
 import { useDiscordUser } from "../../utils/hooks/useDiscordUser";
 import { msToFormat } from "../../utils/parseTime";
+import { renderUsername } from "../../utils/renderUsername";
 import { getGuildShardURL } from "../../utils/ShardLib";
 import { MusicTrack } from "../../utils/types";
 import { MusicModal } from "./MusicModal";
@@ -13,7 +14,7 @@ import { MusicThumbnailRenderer } from "./MusicThumbnailRenderer";
 
 export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
   const { queue } = props;
-  const {user} = useDiscordUser();
+  const { user } = useDiscordUser();
   const router = useRouter();
   const guildID = router.query.guild as string;
   const [location, setLocation] = useState("");
@@ -71,7 +72,7 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
         <div className={`flex flex-col gap-4`}>
           {queue?.map((track, i) => (
             <div
-              className={`relative w-full h-32 lg:h-fit bg-gray-800 rounded-3xl p-4 overflow-hidden flex flex-col gap-4`}
+              className={`relative w-full min-h-32 lg:h-fit bg-gray-800 rounded-3xl p-4 overflow-hidden flex flex-col gap-4`}
               key={`guild-queue-${track.url}-${i}`}
             >
               <div
@@ -108,7 +109,7 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
                     {track.author}
                   </span>
                   <div
-                    className={`absolute flex flex-row gap-6 bottom-0 right-0 items-center lg:hidden`}
+                    className={`absolute xl:relative flex flex-row gap-2 bottom-0 right-0 items-center lg:hidden`}
                   >
                     <div
                       className={`flex flex-row gap-2  bg-gray-900 pr-4 p-1 rounded-2xl items-center opacity-80`}
@@ -118,10 +119,10 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
                         src={track.requestedBy?.avatar}
                       />
                       <span className={`text-sm font-wsans`}>
-                        {track.requestedBy?.username}#
-                        {track.requestedBy?.discriminator}
+                        {renderUsername(track.requestedBy)}
                       </span>
                     </div>
+                    <div className={`xl:grow h-full xl:block hidden`} />
                     <span
                       className={`text-sm font-mono bg-gray-900/50 p-1.5 w-20 text-center rounded-2xl items-center opacity-80 h-fit`}
                     >
@@ -129,7 +130,7 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
                     </span>
                     {user && (
                       <span
-                        className={`text-sm font-wsans bg-red-900/50 hover:bg-red-500 p-1.5 w-20 text-center rounded-2xl items-center opacity-80 h-fit cursor-pointer z-30`}
+                        className={`text-sm font-wsans bg-red-900/50 hover:bg-red-500 p-1.5 w-20 text-center rounded-2xl items-center opacity-80 h-fit cursor-pointer z-10`}
                         onClick={() => {
                           fetcher(
                             `${getGuildShardURL(
@@ -175,8 +176,7 @@ export const GuildMusicQueue = (props: { queue: MusicTrack[] }) => {
                     src={track.requestedBy?.avatar}
                   />
                   <span className={`text-sm font-wsans`}>
-                    {track.requestedBy?.username}#
-                    {track.requestedBy?.discriminator}
+                    {renderUsername(track.requestedBy)}
                   </span>
                 </div>
                 <span
