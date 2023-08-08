@@ -147,7 +147,7 @@ export const AllCratesPage = (props: { crates: Crate[]; guildID: string }) => {
                   checked={noAnim}
                   onChange={setNoAnim}
                   className={`${
-                    noAnim ? "bg-indigo-500" : "bg-gray-900"
+                    noAnim ? "bg-indigo-500" : "bg-gray-200/10"
                   } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
                 >
                   <span

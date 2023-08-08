@@ -159,7 +159,7 @@ export const GuildInventoryPage = (props: {
                   checked={stack}
                   onChange={setStack}
                   className={`${
-                    stack ? "bg-indigo-500" : "bg-gray-200"
+                    stack ? "bg-indigo-500" : "bg-gray-200/10"
                   } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
                 >
                   <span
@@ -179,7 +179,7 @@ export const GuildInventoryPage = (props: {
               checked={stack}
               onChange={setStack}
               className={`${
-                stack ? "bg-indigo-500" : "bg-gray-900"
+                stack ? "bg-indigo-500" : "bg-gray-200/10"
               } relative inline-flex h-6 w-11 items-center rounded-full transition-all`}
             >
               <span
