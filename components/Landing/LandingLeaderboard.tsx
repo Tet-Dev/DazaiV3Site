@@ -41,7 +41,7 @@ export const LandingLeaderboard = () => {
         >
           <div className="p-1 h-fit -rotate-6 relative w-1/2 z-10">
             <img
-              src="/images/landing/leaderboard.png"
+              src="/images/landing/leaderboard.webp"
               className={`w-auto h-full rounded-2xl`}
             />
             <div
@@ -53,7 +53,7 @@ export const LandingLeaderboard = () => {
           >
             <div className={`relative`}>
               <video
-                src="/images/landing/rankcards/rankcard.mp4"
+                src="/images/landing/rankcards/rankCard.mp4"
                 autoPlay
                 loop
                 muted
@@ -69,7 +69,7 @@ export const LandingLeaderboard = () => {
           >
             <div className={`relative`}>
               <img
-                src="/images/landing/rankcards/card2.png"
+                src="/images/landing/rankcards/card2.webp"
                 className={`w-full h-auto rounded-xl z-10 brightness-90 blur-[0.5px]`}
               />
               <div
@@ -82,7 +82,7 @@ export const LandingLeaderboard = () => {
           >
             <div className={`relative`}>
               <img
-                src="/images/landing/rankcards/card1.png"
+                src="/images/landing/rankcards/card1.webp"
                 className={`w-full h-auto rounded-xl z-10 brightness-90 blur-[0.5px]`}
               />
               <div
