@@ -61,7 +61,7 @@ export const SettingsPage = () => {
             </h2>
             <div className="flex flex-row gap-4 items-center">
               <span className="text-gray-400 font-wsans">
-                Enable Dazai's XP and Leveling System
+                Enable Dazai&lpos;s XP and Leveling System
               </span>
               {/* <Switch
                 checked={0}
