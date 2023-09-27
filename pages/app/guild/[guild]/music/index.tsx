@@ -77,7 +77,7 @@ const GuildDashboard = (props: {
       const data = await res.json();
       setMusicData(data);
     };
-    const interval = setInterval(poll, 1000);
+    const interval = setInterval(poll, 250);
     return () => clearInterval(interval);
   }, [guildID]);
   // useEffect(() => {
