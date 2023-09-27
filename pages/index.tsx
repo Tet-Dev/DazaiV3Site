@@ -9,6 +9,7 @@ import { LandingCustomRankCards } from "../components/Landing/LandingCustomRankC
 import { Navbar } from "../components/Navbar";
 import { useLandingTimer } from "../utils/hooks/useLandingTimer";
 import { LandingLeaderboard } from "../components/Landing/LandingLeaderboard";
+import { GetServerSideProps } from "next";
 
 const LandingPage = () => {
   const paraRef = useRef<IParallax | null>(null);
@@ -33,3 +34,17 @@ const LandingPage = () => {
   );
 };
 export default LandingPage;
+// export const getServerSideProps: GetServerSideProps= async (ctx) => {
+//   const { guild } = ctx.;
+//   if (!ctx) {
+//     return {
+//       redirect: {
+//         destination: "/app",
+//         permanent: false,
+//       },
+//     };
+//   }
+//   return {
+//     props: {},
+//   };
+// }
