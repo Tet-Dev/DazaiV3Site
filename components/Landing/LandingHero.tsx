@@ -52,7 +52,7 @@ export const LandingHero = () => {
           className={`absolute top-0 left-0 w-full h-full z-10 transition-all duration-500 ease-out overflow-hidden`}
         >
           <img
-            src="/images/landing/landingbgsmall.jpg"
+            src="/images/landing/landingbgsmall.webp"
             alt="hero-bg"
             className={`w-full h-full object-cover ${
               update >= 3 ? `opacity-10 blur-sm` : `opacity-0`
@@ -72,7 +72,7 @@ export const LandingHero = () => {
             }`}
           >
             <img
-              src="/images/landing/dazaiFull.jpeg"
+              src="/images/landing/dazaiFull.webp"
               width={256}
               height={256}
               alt=""
