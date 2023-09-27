@@ -82,7 +82,7 @@ export const LandingHero = () => {
             `}
             />
             <img
-              src="/images/landing/dazaiTrans.png"
+              src="/images/landing/dazaiTrans.webp"
               width={256}
               height={256}
               alt=""

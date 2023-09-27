@@ -65,7 +65,7 @@ export const GlobalSidebar = () => {
         >
           <div className={`flex flex-row gap-4 items-center w-full`}>
             <img
-              src={`/images/landing/dazaiTrans.png`}
+              src={`/images/landing/dazaiTrans.webp`}
               className={`rounded-3xl w-8 h-8 flex flex-row items-center justify-center bg-gray-850 2xl:hidden`}
             />
             <div className={`flex flex-col gap-2`}>

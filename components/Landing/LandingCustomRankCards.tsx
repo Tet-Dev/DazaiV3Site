@@ -78,7 +78,7 @@ export const LandingCustomRankCards = () => {
           </div>
 
           <img
-            src="/images/landing/cardEx.png"
+            src="/images/landing/cardEx.webp"
             className={`absolute bottom-0 translate-y-1/4 right-0 w-auto h-full rounded-2xl rotate-6`}
           />
         </div>

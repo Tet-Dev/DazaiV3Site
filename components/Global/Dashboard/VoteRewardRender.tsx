@@ -52,7 +52,7 @@ const VoteRewardEntryCrate = (props: {
         className={`w-full h-full overflow-hidden flex items-center justify-center`}
       >
         <img
-          src={`/images/crates/chest2.png`}
+          src={`/images/crates/chest2.webp`}
           alt="chest"
           className={`object-cover grow-0 h-[200%] w-auto z-10 blur-sm group-hover:blur-0 transition-all duration-300 group-hover:animate-bounce-mini2`}
         />

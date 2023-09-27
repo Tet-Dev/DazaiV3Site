@@ -77,7 +77,7 @@ const DashboardIndex = () => {
               className={`w-full h-48 lg:h-32 md:h-16 rounded-3xl  absolute`}
             >
               <img
-                src={"/images/landing/landingbgsmall.png"}
+                src={"/images/landing/landingbgsmall.webp"}
                 className={`w-full h-full object-center object-cover blur-xl rounded-3xl group-hover:opacity-50 brightness-50 transition-all opacity-0`}
               />
             </div>
@@ -85,7 +85,7 @@ const DashboardIndex = () => {
               className={`w-full h-48 lg:h-32 md:h-16 rounded-3xl overflow-hidden absolute`}
             >
               <img
-                src={"/images/landing/landingbgsmall.png"}
+                src={"/images/landing/landingbgsmall.webp"}
                 className={`w-full h-full object-center object-cover blur-lg brightness-50 grayscale group-hover:grayscale-[0.7] group-hover:brightness-75 transition-all`}
               />
             </div>
@@ -105,7 +105,7 @@ const DashboardIndex = () => {
                       `https://cdn.discordapp.com/avatars/${user?.id}/${
                         user?.avatar
                       }${
-                        user?.avatar.startsWith("a_") ? ".gif" : ".png"
+                        user?.avatar.startsWith("a_") ? ".gif" : ".webp"
                       }?size=128`
                     })`,
                   }}

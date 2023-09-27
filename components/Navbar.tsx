@@ -29,8 +29,8 @@ export const Navbar = () => {
             user?.avatar
               ? `https://cdn.discordapp.com/avatars/${user?.id}/${
                   user?.avatar
-                }${user?.avatar.startsWith("a_") ? ".gif" : ".png"}?size=256`
-              : `/images/landing/dazai.png`
+                }${user?.avatar.startsWith("a_") ? ".gif" : ".webp"}?size=256`
+              : `/images/landing/dazai.webp`
           })`,
         }}
       >

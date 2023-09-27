@@ -121,7 +121,7 @@ export const CrateSettings = (props: {}) => {
               key={`crate-slot-${crate._id}`}
             >
               <img
-                src={`/images/crates/chest.png`}
+                src={`/images/crates/chest.webp`}
                 alt="chest"
                 className={`object-cover grow-0 h-full w-auto z-10`}
               />
@@ -148,7 +148,7 @@ export const CrateSettings = (props: {}) => {
             key={`crate-slot-addCrate`}
           >
             <img
-              src={`/images/crates/chest.png`}
+              src={`/images/crates/chest.webp`}
               alt="chest"
               className={`object-cover grow-0 h-full w-auto z-10 opacity-25 contrast-50 brightness-50 blur-sm invert`}
             />

@@ -89,7 +89,7 @@ export const GuildSidebarUser = (props: {
             backgroundImage: `url(${
               user?.avatar &&
               `https://cdn.discordapp.com/avatars/${user?.id}/${user?.avatar}${
-                user?.avatar.startsWith("a_") ? ".gif" : ".png"
+                user?.avatar.startsWith("a_") ? ".gif" : ".webp"
               }?size=256`
             })`,
           }}

@@ -34,7 +34,7 @@ export const DashboardCard = (props: {
       >
         {skeleton ? (
           <img
-            src={"/images/landing/landingbg.png"}
+            src={"/images/landing/landingbg.webp"}
             className={`w-full h-full object-center object-cover contrast-50 grayscale animate-pulse`}
           />
         ) : (
@@ -43,8 +43,8 @@ export const DashboardCard = (props: {
               guild?.icon
                 ? guild?.icon?.match(/http(s)?:\/\//)
                   ? guild.icon
-                  : `https://cdn.discordapp.com/icons/${guild?.id}/${guild?.icon}.png?size=512`
-                : "/images/landing/landingbgsmall.png"
+                  : `https://cdn.discordapp.com/icons/${guild?.id}/${guild?.icon}.webp?size=512`
+                : "/images/landing/landingbgsmall.webp"
             }
             className={`w-full h-full object-center object-cover`}
           />

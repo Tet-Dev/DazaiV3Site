@@ -95,7 +95,7 @@ export const CrateSettings = (props: {}) => {
               key={`crate-slot-${crate._id}`}
             >
               <img
-                src={`/images/crates/chest.png`}
+                src={`/images/crates/chest.webp`}
                 alt="chest"
                 className={`object-cover grow-0 h-full w-auto z-10`}
               />
