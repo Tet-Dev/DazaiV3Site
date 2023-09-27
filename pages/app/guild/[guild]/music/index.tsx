@@ -1,6 +1,6 @@
 "use client";
 
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -34,6 +34,7 @@ type MusicData = {
   error?: string;
 };
 const GuildDashboard = (props: {
+  data: MusicData;
   // guild: string;
   // musicData: {
   //   track?: MusicTrack;
@@ -47,9 +48,9 @@ const GuildDashboard = (props: {
   // const { musicData: md, joinableChannels } = props;
   const router = useRouter();
   const guildID = router.query.guild as string;
-  const [musicData, setMusicData] = useState(null as null | MusicData);
+  const [musicData, setMusicData] = useState(props.data as null | MusicData);
   const [position, setPosition] = useState(0);
-  const {user} = useDiscordUser();
+  const { user } = useDiscordUser();
   useEffect(() => {
     if (musicData?.status !== "playing") return;
     console.log("setting position", musicData.position);
@@ -183,3 +184,32 @@ const GuildDashboard = (props: {
 // };
 
 export default GuildDashboard;
+
+export const getServerSideProps= async (
+  ctx: GetServerSidePropsContext
+) => {
+  if (!ctx.query.guild || typeof ctx.query.guild !== "string") {
+    return {};
+  }
+  const { guild } = ctx.query;
+  const res = await fetch(
+    `${getGuildShardURL(guild)}/guilds/${guild}/music/status`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const data = (await res.json()) as MusicData;
+  if (data.error) {
+    return {
+      props: {},
+    };
+  }
+  return {
+    props: {
+      data,
+    },
+  };
+};
