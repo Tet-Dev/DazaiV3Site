@@ -1,4 +1,3 @@
-"use client";
 import { IParallax, Parallax, ParallaxLayer } from "@react-spring/parallax";
 import Image from "next/image";
 import Link from "next/link";

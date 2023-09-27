@@ -7,17 +7,23 @@ import { ViewCrateClientside } from "../../../../components/Dashboard/Settings/C
 import { ViewCrate } from "../../../../components/Dashboard/Settings/Crates/viewCrates";
 import { useDiscordUser } from "../../../../utils/hooks/useDiscordUser";
 import { useAPIProp } from "../../../../utils/hooks/useProp";
+import { getGuildShardURL } from "../../../../utils/ShardLib";
 import { CrateTemplate, CardType } from "../../../../utils/types";
-export const CrateSettings = (props: {}) => {
+export const CrateSettings = (props: {
+  guildID: string;
+  crates: CrateTemplate[];
+  cards: CardType[];
+  viewingCrate: CrateTemplate | null;
+}) => {
   const router = useRouter();
   const guildID = router.query.guild as string;
   const [crates, updateCrates] = useAPIProp<CrateTemplate[]>(
     guildID ? `/guilds/${guildID}/settings/crates` : undefined,
-    guildID
+    guildID,undefined,undefined,props.crates
   );
   const [cards, updateCards] = useAPIProp<CardType[]>(
     guildID ? `/guilds/${guildID}/settings/cards` : undefined,
-    guildID
+    guildID,undefined,undefined,props.cards
   );
 
   const [viewingCrate, setViewingCrate] = useState(
@@ -117,53 +123,53 @@ export const CrateSettings = (props: {}) => {
   );
 };
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const guildID = context.query.guild as string;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const guildID = context.query.guild as string;
 
-//   const guildCards = await fetch(
-//     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,
-//     {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     }
-//   );
-//   const cards = (await guildCards.json()) as CardType[];
-//   const crates = await fetch(
-//     `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/crates`,
-//     {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     }
-//   );
-//   const cratesJSON = (await crates?.json()) as CrateTemplate[];
-//   //   cards.push({
-//   //     _id: "63e3f70bf538f8e190963d88",
-//   //     name: "Sunset Dazai",
-//   //     description: "Dazai with a sunset background",
-//   //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
-//   //     rarity: CardRarity.LEGENDARY,
-//   //   });
-//   //   cards.push({
-//   //     _id: "63e3f70bf538f8e190963d8f",
-//   //     name: "Dazai Thousand",
-//   //     description: "The 1000 server milestone celebration card",
-//   //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
-//   //     rarity: CardRarity.EVENT_RARE,
-//   //   });
-//   let viewingCrate = (context.query.c as string)
-//     ? cratesJSON.find((crate) => crate._id === context.query.c)
-//     : null;
-//   return {
-//     props: {
-//       guildID,
-//       cards,
-//       crates: cratesJSON,
-//       viewingCrate,
-//     },
-//   };
-// };
+  const guildCards = await fetch(
+    `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const cards = (await guildCards.json()) as CardType[];
+  const crates = await fetch(
+    `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/crates`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const cratesJSON = (await crates?.json()) as CrateTemplate[];
+  //   cards.push({
+  //     _id: "63e3f70bf538f8e190963d88",
+  //     name: "Sunset Dazai",
+  //     description: "Dazai with a sunset background",
+  //     url: "https://assets.dazai.app/cards/_default/ani_dazai.gif",
+  //     rarity: CardRarity.LEGENDARY,
+  //   });
+  //   cards.push({
+  //     _id: "63e3f70bf538f8e190963d8f",
+  //     name: "Dazai Thousand",
+  //     description: "The 1000 server milestone celebration card",
+  //     url: "https://assets.dazai.app/cards/_default/dazai1000.png",
+  //     rarity: CardRarity.EVENT_RARE,
+  //   });
+  let viewingCrate = (context.query.c as string)
+    ? cratesJSON.find((crate) => crate._id === context.query.c)
+    : null;
+  return {
+    props: {
+      guildID,
+      cards,
+      crates: cratesJSON,
+      viewingCrate,
+    },
+  };
+};
 export default CrateSettings;

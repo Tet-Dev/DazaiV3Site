@@ -13,8 +13,9 @@ export const useAPIProp = <T>(
   guildID?: string,
   requestInit?: RequestInit,
   cacheable?: boolean,
+  defaultValue?: T
 ) => {
-  const [value, setValue] = useState(undefined as null | undefined | T);
+  const [value, setValue] = useState(defaultValue || undefined as null | undefined | T);
   const [error, setError] = useState(undefined as null | undefined | string);
   const user = useDiscordUser();
   const update = useCallback(async () => {
