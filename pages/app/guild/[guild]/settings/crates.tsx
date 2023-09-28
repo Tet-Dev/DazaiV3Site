@@ -12,14 +12,14 @@ import { CardType, CrateTemplate } from "../../../../../utils/types";
 export const CrateSettings = (props: {}) => {
   const router = useRouter();
   const guildID = router.query.guild as string;
-  const [crates, updateCrates] = useAPIProp<CrateTemplate[]>(
-    `/guilds/${guildID}/settings/crates?reveal=1`,
-    guildID
-  );
-  const [cards, updateCards] = useAPIProp<CardType[]>(
-    `/guilds/${guildID}/settings/cards?revealsecretrarecards=1`,
-    guildID
-  );
+  const [crates, updateCrates] = useAPIProp<CrateTemplate[]>({
+    APIPath: `/guilds/${guildID}/settings/crates?reveal=1`,
+    guildID,
+  });
+  const [cards, updateCards] = useAPIProp<CardType[]>({
+    APIPath: `/guilds/${guildID}/settings/cards?revealsecretrarecards=1`,
+    guildID,
+  });
 
   const [viewingCrate, setViewingCrate] = useState(
     null as CrateTemplate | null
@@ -77,7 +77,7 @@ export const CrateSettings = (props: {}) => {
           <CreateCrate
             onSave={async () => {
               setCreateCrate(false);
-              updateCrates()
+              updateCrates();
               setCreateCrate(false);
               setViewingCrate(null);
             }}

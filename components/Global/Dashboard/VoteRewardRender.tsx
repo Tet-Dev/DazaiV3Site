@@ -34,10 +34,10 @@ const VoteRewardEntryCrate = (props: {
   reward: LevelUpRewardCrateActionType;
 }) => {
   const { reward } = props;
-  const [crate, updateCrate] = useAPIProp<CrateTemplate>(
-    `/guilds/${`@global`}/settings/crate/${reward.crateID}`,
-    `@global`
-  );
+  const [crate, updateCrate] = useAPIProp<CrateTemplate>({
+    APIPath: `/guilds/${`@global`}/settings/crate/${reward.crateID}`,
+    guildID: `@global`,
+  });
   return (
     <div
       className={`flex flex-col gap-4 bg-gray-800 rounded-3xl relative h-48 grow border border-gray-100/5 group cursor-default`}
@@ -77,10 +77,10 @@ const VoteRewardEntryCard = (props: {
   reward: LevelUpRewardCardActionType;
 }) => {
   const { reward } = props;
-  const [card, updateCard] = useAPIProp<CardType>(
-    `/guilds/${`@global`}/settings/cards/${reward.cardID}`,
-    `@global`
-  );
+  const [card, updateCard] = useAPIProp<CardType>({
+    APIPath: `/guilds/${`@global`}/settings/cards/${reward.cardID}`,
+    guildID: `@global`,
+  });
   const [modalOpen, setmodalOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
   const router = useRouter();

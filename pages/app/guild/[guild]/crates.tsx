@@ -17,14 +17,16 @@ export const CrateSettings = (props: {
 }) => {
   const router = useRouter();
   const guildID = router.query.guild as string;
-  const [crates, updateCrates] = useAPIProp<CrateTemplate[]>(
-    guildID ? `/guilds/${guildID}/settings/crates` : undefined,
-    guildID,undefined,undefined,props.crates
-  );
-  const [cards, updateCards] = useAPIProp<CardType[]>(
-    guildID ? `/guilds/${guildID}/settings/cards` : undefined,
-    guildID,undefined,undefined,props.cards
-  );
+  const [crates, updateCrates] = useAPIProp<CrateTemplate[]>({
+    APIPath: guildID ? `/guilds/${guildID}/settings/crates` : undefined,
+    guildID,
+    defaultValue: props.crates,
+  });
+  const [cards, updateCards] = useAPIProp<CardType[]>({
+    APIPath: guildID ? `/guilds/${guildID}/settings/cards` : undefined,
+    guildID,
+    defaultValue: props.cards,
+  });
 
   const [viewingCrate, setViewingCrate] = useState(
     null as CrateTemplate | null

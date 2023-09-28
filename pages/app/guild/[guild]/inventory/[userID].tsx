@@ -30,15 +30,18 @@ export const GuildInventoryPage = (props: {
     guild: string;
     userID: string;
   };
-  const [inventory, updateInventory] = useAPIProp<GuildInventory>(
-    `/guilds/${guild}/inventory/${userID === "@me" ? `` : userID}`
-  );
-  const [guildCards, updateGuildCards] = useAPIProp<CardType[]>(
-    `/guilds/${guild}/settings/cards`
-  );
-  const [crates, updateCrates] = useAPIProp<Crate[]>(
-    userID === "@me" ? `/inventory/crates/` : `/inventory/crates/user/${userID}`
-  );
+  const [inventory, updateInventory] = useAPIProp<GuildInventory>({
+    APIPath: `/guilds/${guild}/inventory/${userID === "@me" ? `` : userID}`,
+  });
+  const [guildCards, updateGuildCards] = useAPIProp<CardType[]>({
+    APIPath: `/guilds/${guild}/settings/cards`,
+  });
+  const [crates, updateCrates] = useAPIProp<Crate[]>({
+    APIPath:
+      userID === "@me"
+        ? `/inventory/crates/`
+        : `/inventory/crates/user/${userID}`,
+  });
 
   const [viewingCard, setViewingCard] = useState(null as CardType | null);
   const [createCard, setCreateCard] = useState(false);
@@ -49,7 +52,7 @@ export const GuildInventoryPage = (props: {
   const [sortedGuildCards, setSortedGuildCards] = useState([] as CardType[]);
 
   const router = useRouter();
-  const {user} = useDiscordUser();
+  const { user } = useDiscordUser();
   useEffect(() => {
     if (
       (inventory?.viewingPerson?.id === user?.id && user) ||
@@ -116,7 +119,7 @@ export const GuildInventoryPage = (props: {
     setCards(
       c.sort((a, b) => {
         // sort by if guild is undefined, then rarity and then by name
-        if (a.card.guild === '@global' && b.card.guild !== '@global') {
+        if (a.card.guild === "@global" && b.card.guild !== "@global") {
           return 1;
         }
 

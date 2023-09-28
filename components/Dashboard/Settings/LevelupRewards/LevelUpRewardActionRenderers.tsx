@@ -62,10 +62,11 @@ export const LevelUpRewardActionCrate = (props: {
 }) => {
   const { action, guildID } = props;
   const router = useRouter();
-  const [crate, updateCrate] = useAPIProp<CrateTemplate>(
-    `/guilds/${guildID}/settings/crate/${action.crateID}`,
-    guildID
-  );
+  const [crate, updateCrate] = useAPIProp<CrateTemplate>({
+    APIPath: `/guilds/${guildID}/settings/crate/${action.crateID}?reveal=1`,
+    guildID,
+    cacheable: true,
+  });
   return (
     <div
       className={`bg-gray-900 px-4 rounded-3xl relative group cursor-pointer hover:bg-gray-750 transition-all p-1`}
@@ -100,10 +101,11 @@ export const LevelUpRewardActionCard = (props: {
 }) => {
   const { action, guildID } = props;
   const router = useRouter();
-  const [card, updateCard] = useAPIProp<CardType>(
-    `/guilds/${guildID}/settings/cards/${action.cardID}?revealsecretrarecards=1`,
-    guildID
-  );
+  const [card, updateCard] = useAPIProp<CardType>({
+    APIPath: `/guilds/${guildID}/settings/cards/${action.cardID}?revealsecretrarecards=1`,
+    guildID,
+    cacheable: true,
+  });
 
   return (
     <div
@@ -111,7 +113,9 @@ export const LevelUpRewardActionCard = (props: {
       onClick={() => {
         if (card) {
           router.push(
-            `/app${guildID !== `@global` ? `/guild`: ``}/${guildID}/settings/rankcards?card=${card._id}`
+            `/app${
+              guildID !== `@global` ? `/guild` : ``
+            }/${guildID}/settings/rankcards?card=${card._id}`
           );
         }
       }}

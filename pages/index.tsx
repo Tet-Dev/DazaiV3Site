@@ -35,7 +35,7 @@ const LandingPage = () => {
 export default LandingPage;
 // export const getServerSideProps: GetServerSideProps= async (ctx) => {
 //   const { guild } = ctx.;
-//   if (!ctx) {
+//   if (!ctx) {`
 //     return {
 //       redirect: {
 //         destination: "/app",

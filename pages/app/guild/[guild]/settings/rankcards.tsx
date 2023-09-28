@@ -17,10 +17,10 @@ export const RankCardSettings = (props: {
   const query = useRouter().query;
   const guild = query.guild as string;
   const selectedCard = query.card as string | undefined;
-  const [cards, updateCards] = useAPIProp<CardType[]>(
-    `/guilds/${guild}/settings/cards?revealsecretrarecards=1`,
-    guild
-  );
+  const [cards, updateCards] = useAPIProp<CardType[]>({
+    APIPath: `/guilds/${guild}/settings/cards?revealsecretrarecards=1`,
+    guildID: guild,
+  });
 
   const [viewingCard, setViewingCard] = useState(null as CardType | null);
   const [createCard, setCreateCard] = useState(false);

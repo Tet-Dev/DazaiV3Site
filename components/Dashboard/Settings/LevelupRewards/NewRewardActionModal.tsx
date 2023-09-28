@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { BiRectangle } from "react-icons/bi";
 import { fetcher } from "../../../../utils/discordFetcher";
 import { useGuildData } from "../../../../utils/hooks/useGuildData";
+import { useAPIProp } from "../../../../utils/hooks/useProp";
 import { getGuildShardURL } from "../../../../utils/ShardLib";
 import {
   CardType,
@@ -39,40 +40,38 @@ export const NewRewardActionModal = (props: {
   } as LevelUpRewardActionType);
   const guildData = useGuildData(guildID);
   const roles = guildData?.roles ?? [];
-  const [crateData, setCrateData] = useState(
-    undefined as CrateTemplate[] | undefined | null
-  );
-  const [cardData, setCardData] = useState(
-    undefined as CardType[] | undefined | null
-  );
-  useEffect(() => {
-    (async () => {
-      const guildCards = await fetcher(
-        `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/cards?revealsecretrarecards=1`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const cards = (await guildCards.json()) as CardType[];
-      const crates = await fetcher(
-        `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/crates?reveal=1`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const cratesJSON = (await crates.json()) as CrateTemplate[];
-      setCrateData(cratesJSON);
-      setCardData(cards);
-    })();
+  // const [crateData, setCrateData] = useState(
+  //   undefined as CrateTemplate[] | undefined | null
+  // );
+  const [cardData, setCardData] = useAPIProp<CardType[]>({
+    APIPath: `/guilds/${guildID}/settings/cards?revealsecretrarecards=1`,
+    guildID,
+    cacheable: true,
+  });
+  const [crateData, setCrateData] = useAPIProp<CrateTemplate[]>({
+    APIPath: `/guilds/${guildID}/settings/crates?reveal=1`,
+    guildID,
+    cacheable: true,
+  });
+  // useEffect(() => {
+  //   (async () => {
+  //     const cards = (await guildCards.json()) as CardType[];
+  //     const crates = await fetcher(
+  //       `${getGuildShardURL(guildID)}/guilds/${guildID}/settings/crates?reveal=1`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     const cratesJSON = (await crates.json()) as CrateTemplate[];
+  //     setCrateData(cratesJSON);
+  //     setCardData(cards);
+  //   })();
 
-    return () => {};
-  }, []);
+  //   return () => {};
+  // }, []);
   const items = (
     actionConstructor.type === "role"
       ? roles
@@ -90,12 +89,12 @@ export const NewRewardActionModal = (props: {
             ),
           }))
       : actionConstructor.type === "crate"
-      ? crateData!.map((crate) => ({
+      ? crateData?.map((crate) => ({
           id: crate._id,
           name: crate.name,
           image: ArchiveBoxIcon,
         }))
-      : cardData!.map((card) => ({
+      : cardData?.map((card) => ({
           id: card._id,
           name: card.name,
           image: (props) => (
@@ -107,6 +106,7 @@ export const NewRewardActionModal = (props: {
           ),
         }))
   ) as SelectMenuItem[];
+  // if (!cardData || !crateData) return null;
   return (
     <Modal visible={open} onClose={onClose} title="Add Reward Action">
       <div className={`flex flex-col gap-4 p-6 w-[90vw] max-w-[75ch]`}>

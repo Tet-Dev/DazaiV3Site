@@ -12,10 +12,10 @@ import { CardRarity, CardType } from "../../../../utils/types";
 export const RankCardSettings = (props: {}) => {
   const guild = `@global`;
   const selectedCard = useRouter().query.card as string | undefined;
-  const [cards, updateCards] = useAPIProp<CardType[]>(
-    `/guilds/${guild}/settings/cards?revealsecretrarecards=1`,
-    guild
-  );
+  const [cards, updateCards] = useAPIProp<CardType[]>({
+    APIPath: `/guilds/${guild}/settings/cards?revealsecretrarecards=1`,
+    guildID: guild,
+  });
 
   const [viewingCard, setViewingCard] = useState(null as CardType | null);
   const [createCard, setCreateCard] = useState(false);

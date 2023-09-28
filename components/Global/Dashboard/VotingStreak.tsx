@@ -111,15 +111,19 @@ const getRewardAtLevelsInInterval = (
 };
 
 export const VotingStreak = () => {
-  const [rewards, updateRewards] = useAPIProp<LevelUpRewardType[]>(
-    `/guilds/@global/settings/levelrewards`
-  );
+  const [rewards, updateRewards] = useAPIProp<LevelUpRewardType[]>({
+    APIPath: `/guilds/@global/settings/levelrewards`,
+  });
   const userData = useDiscordUser();
   const rewardArray = useMemo(() => {
     if (!userData || !(userData as UserData).userID) return [];
 
     // get starting 0 to current level + 20
-    return getRewardAtLevelsInInterval(1, (((userData as UserData).highestStreak || 0) + 30), rewards || []);
+    return getRewardAtLevelsInInterval(
+      1,
+      ((userData as UserData).highestStreak || 0) + 30,
+      rewards || []
+    );
   }, [userData, rewards]);
   const rewardAtLevel = useMemo(() => {
     if (!userData || !(userData as UserData).userID) return [];
